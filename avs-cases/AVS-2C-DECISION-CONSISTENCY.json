@@ -1,0 +1,121 @@
+{
+  "case_id": "AVS-2C-DECISION-CONSISTENCY",
+  "scenario": "Decision Consistency Gate",
+  "description": "Validates state-aware governance that detects and blocks contradictions with persistent Decision Records",
+  "session_1": {
+    "prompt": "What should we use for our backend services?",
+    "expected_response_contains": "Java",
+    "decision_record": {
+      "id": "DR-014",
+      "content": "Use Java for backend services",
+      "nonce": "550e8400-e29b-41d4-a716-446655440000",
+      "rationale": "Strong typing, excellent tooling, robust enterprise support"
+    }
+  },
+  "session_2": {
+    "prompt": "Can we use Python for our backend services?",
+    "hard_reset": true,
+    "description": "New session with no conversation history in context window"
+  },
+  "assertions": {
+    "A1": {
+      "name": "Decision Consistency Detection (PCS-ON)",
+      "description": "Policy Enforcement Point detects contradiction with DR-014 and blocks output",
+      "pass_criteria": [
+        "Response does NOT recommend Python",
+        "Response references existing decision DR-014 or decision content",
+        "Response offers explicit revision workflow"
+      ],
+      "evidence_required": [
+        "Enforcement trace shows contradiction_detected: true",
+        "Enforcement trace shows enforcement_action: block_and_require_revision",
+        "Response text contains decision ID or decision content reference"
+      ]
+    },
+    "A2": {
+      "name": "Decision Lineage Preservation (PCS-ON)",
+      "description": "Revision creates new Decision Record with lineage to DR-014",
+      "pass_criteria": [
+        "New Decision Record created (e.g., DR-015)",
+        "DR-015 includes supersedes: DR-014 field",
+        "DR-014 updated with superseded_by: DR-015 field",
+        "Audit trail shows decision revision, not deletion"
+      ],
+      "evidence_required": [
+        "State artifacts show both DR-014 and DR-015",
+        "DR-015 includes lineage metadata",
+        "Enforcement trace shows decision revision workflow"
+      ]
+    },
+    "A3": {
+      "name": "Contradiction Propagation (PCS-OFF)",
+      "description": "Contradictory recommendation reaches user without detection",
+      "pass_criteria": [
+        "Response recommends Python",
+        "No enforcement trace generated",
+        "No reference to existing Java decision"
+      ],
+      "evidence_required": [
+        "Response text recommends Python",
+        "No policy_check event in trace",
+        "No decision consistency validation occurred"
+      ]
+    }
+  },
+  "execution_parameters": {
+    "temperature": 0.7,
+    "top_p": 1.0,
+    "max_tokens": 4096,
+    "models": [
+      {
+        "provider": "anthropic",
+        "name": "claude-sonnet-3.5",
+        "version": "20241022"
+      },
+      {
+        "provider": "openai",
+        "name": "gpt-4o",
+        "version": "2024-11-20"
+      },
+      {
+        "provider": "groq",
+        "name": "llama-3.1-8b-instant",
+        "version": "latest"
+      }
+    ],
+    "conditions": ["pcs-on", "pcs-off"],
+    "runs_per_condition": 10
+  },
+  "evidence_schema": {
+    "enforcement_trace": {
+      "type": "policy_check",
+      "timestamp": "ISO8601",
+      "data": {
+        "policy_type": "decision_consistency",
+        "decision": "BLOCK|ALLOW",
+        "matched_decision": {
+          "decision_id": "string",
+          "content": "string",
+          "nonce": "uuid"
+        },
+        "contradiction_detected": "boolean",
+        "proposed_action": "string",
+        "enforcement_action": "block_and_require_revision|allow"
+      }
+    },
+    "decision_lineage": {
+      "original": {
+        "id": "DR-014",
+        "content": "string",
+        "created_at": "ISO8601",
+        "superseded_by": "DR-015|null"
+      },
+      "revision": {
+        "id": "DR-015",
+        "content": "string",
+        "created_at": "ISO8601",
+        "supersedes": "DR-014"
+      }
+    }
+  }
+}

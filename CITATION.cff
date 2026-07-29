@@ -1,0 +1,20 @@
+cff-version: 1.2.0
+message: "Citation information for this work."
+title: "The Model is Not the Mind: From Stateless Inference to Long-Horizon Cognition"
+authors:
+  - family-names: Mansfield
+    given-names: Stephen
+type: software
+version: v2.0
+doi: 10.5281/zenodo.21071446
+date-released: 2026-07-01
+url: "https://github.com/persistra-ai/persistra-cts"
+repository-code: "https://github.com/persistra-ai/persistra-cts"
+keywords:
+  - cognitive architecture
+  - AI systems
+  - persistent state
+  - conformance testing
+  - substrate architecture
+license: "SEE LICENSE FILE"
+abstract: "Conformance Test Suite for the Persistent Cognitive Substrate (PCS) architecture, validating cognitive state persistence, governance enforcement, and cross-model continuity."

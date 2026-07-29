@@ -1,0 +1,24 @@
+{
+  "decisions": [
+    {
+      "id": "DR-001",
+      "namespace": "avs2a-test1",
+      "statement": "Use PostgreSQL for persistence",
+      "metadata": null,
+      "timestamp": "2026-07-25T21:16:16.259Z"
+    }
+  ],
+  "policies": [
+    {
+      "id": "POL-1",
+      "constraint": "No hardcoded credentials",
+      "metadata": null,
+      "namespace": "avs2a-test1",
+      "createdAt": 1785014176260,
+      "_legacy": true
+    }
+  ],
+  "runtimeState": {
+    "lastSeenModel": null
+  }
+}

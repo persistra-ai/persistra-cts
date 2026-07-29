@@ -1,0 +1,58 @@
+name: 📚 Documentation Issue
+description: Report an issue with documentation (unclear, incorrect, or missing)
+title: "[Docs]: "
+labels: ["documentation", "needs-triage"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for helping improve our documentation!
+
+  - type: dropdown
+    id: doc-type
+    attributes:
+      label: Documentation Type
+      description: What type of documentation issue is this?
+      options:
+        - Unclear / Confusing
+        - Incorrect / Outdated
+        - Missing / Incomplete
+        - Broken Link
+        - Typo / Grammar
+        - Other
+    validations:
+      required: true
+
+  - type: textarea
+    id: location
+    attributes:
+      label: Document Location
+      description: Which document(s) are affected?
+      placeholder: |
+        - File: README.md
+        - Section: Quick Start
+        - Line: 42
+    validations:
+      required: true
+
+  - type: textarea
+    id: issue
+    attributes:
+      label: Issue Description
+      description: What's wrong with the documentation?
+      placeholder: Describe the issue clearly
+    validations:
+      required: true
+
+  - type: textarea
+    id: suggestion
+    attributes:
+      label: Suggested Improvement
+      description: How should the documentation be improved?
+      placeholder: Provide specific suggestions if possible
+
+  - type: textarea
+    id: additional
+    attributes:
+      label: Additional Context
+      description: Any other context (screenshots, examples, etc.)

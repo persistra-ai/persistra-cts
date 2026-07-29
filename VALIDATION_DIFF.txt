@@ -1,0 +1,1795 @@
+# Validation Diff: persistra-cts
+# Validated commit: c0e0134 (2026-07-21, Round 6, Saad Muzafar)
+# Release commit: [current HEAD after cleanup]
+
+## Post-Validation Changes (3 commits, 2026-07-23)
+1. VALIDATION_DIFF.txt added (documentation of this diff)
+2. RELEASE.md added (unified release identity)
+3. Internal development artifacts removed (runs/, audit-artifacts/, test-data/, .env.example)
+
+ .env.example                                       |   22 -
+ ARCHITECTURE_INVARIANTS.md                         |    4 +-
+ ARCHITECTURE_OVERVIEW.md                           |   79 +-
+ CLAIMS_BOUNDARY.md                                 |   25 +-
+ ENGINEERING_ENTRY_POINT.md                         |    8 +-
+ EVIDENCE_CONTRACT_v0.1.0.md                        |    2 -
+ EXECUTIVE_SUMMARY.md                               |   12 +-
+ FAQ.md                                             |   16 +-
+ INTELLECTUAL_PROPERTY_NOTICE.md                    |    4 +-
+ LICENSE                                            |    6 +-
+ LICENSE_DEPLOYMENT_SUMMARY.md                      |  335 -----
+ OPTIONAL_TESTS.md                                  |    4 +-
+ PASTE_CONDITION.md                                 |    2 +-
+ PLATFORM_ECONOMICS.md                              |    2 +-
+ PRIMITIVE_LAYER_SPECIFICATION.md                   |    4 +-
+ README.md                                          |   12 +-
+ RELEASE.md                                         |   27 +
+ RUNTIME_TRACE_CONTRACT_V1.md                       |    2 +-
+ SECURITY.md                                        |    4 +-
+ THE_PERSISTRA_ARCHITECTURE.md                      |   16 +-
+ VALIDATION_DIFF.txt                                |  100 ++
+ audit-artifacts/evs10/MANIFEST.sha256              |    6 -
+ audit-artifacts/evs10/SUMMARY.txt                  |   35 -
+ audit-artifacts/evs10/evs10-results.json           |  136 --
+ audit-artifacts/evs10/pcs-off-trace.json           |   16 -
+ audit-artifacts/evs10/phase1-shuffled-trace.json   |   35 -
+ audit-artifacts/evs10/phase1-trace.json            |   35 -
+ audit-artifacts/evs10/phase2-trace.json            |   35 -
+ audit-artifacts/evs10/phase3-trace.json            |   37 -
+ audit-artifacts/evs11/MANIFEST.sha256              |   11 -
+ audit-artifacts/evs11/SUMMARY.txt                  |   35 -
+ audit-artifacts/evs11/assertions.json              |  103 --
+ audit-artifacts/evs11/audit.log                    |   13 -
+ audit-artifacts/evs11/pcs-off-exec-trace.json      |   45 -
+ audit-artifacts/evs11/pcs-off-trace.json           |   45 -
+ audit-artifacts/evs11/phase1-replay-trace.json     |   58 -
+ audit-artifacts/evs11/phase1-trace.json            |   58 -
+ audit-artifacts/evs11/phase2-trace.json            |   66 -
+ audit-artifacts/evs11/phase3-trace.json            |   73 -
+ demo/ACTS_1-5_COMPLETE.md                          |  372 ------
+ demo/ACTS_1-7_COMPLETE.md                          |  444 ------
+ demo/ACTS_1-8_COMPLETE.md                          |  452 -------
+ demo/ACTS_1-9_COMPLETE.md                          |   51 +-
+ demo/BUYER_READINESS_VALIDATION.md                 |  315 -----
+ demo/DEMO_EXECUTION_GUIDE.md                       |  347 -----
+ demo/README.md                                     |   12 +-
+ demo/THE_KILLER_MOMENT.md                          |  398 ------
+ demo/WEEKS_1-2_IMPLEMENTATION_PLAN.md              |  473 -------
+ docs/CANONICAL_STATE.md                            |   10 +-
+ docs/CONFORMANCE_LEVELS.md                         |    2 +-
+ docs/PCS_ARCHITECTURE.md                           |    4 +-
+ evs/ATTACK_VECTORS.md                              |  392 ------
+ evs/EVS10_CONTEXTUAL_SALIENCE.md                   |    8 +-
+ evs/EVS11_META_PROGRAMMING.md                      |    4 +-
+ evs/EVS3_ENGINE_REPLACEMENT.md                     |   12 +-
+ evs/EVS5_DETERMINISTIC_REPRODUCTION.md             |    6 +-
+ evs/EVS7_SEMANTIC_RETRIEVAL.md                     |    8 +-
+ evs/EVS8_VISION_ANCHOR_PERSISTENCE.md              |    6 +-
+ evs/EVS9_AIR_GAPPED_OPERATION.md                   |    4 +-
+ evs/README.md                                      |   61 +-
+ runs/2026-03-01-3models/avs-2c-summary.json        | 1407 --------------------
+ .../pcs-off/run-0001/outputs/decision_record.json  |   10 -
+ .../run-0001/outputs/enforcement_trace.json        |    3 -
+ .../pcs-off/run-0001/outputs/final_user_output.txt |   52 -
+ .../pcs-off/run-0001/outputs/session1_output.txt   |   58 -
+ .../outputs/session2_extracted_commitment.json     |    9 -
+ .../pcs-off/run-0001/outputs/session2_output.txt   |   52 -
+ .../run-0001/outputs/session2_raw_model_output.txt |   52 -
+ .../claude-sonnet-4-6/pcs-off/run-0001/run.json    |   19 -
+ .../pcs-off/run-0002/outputs/decision_record.json  |   10 -
+ .../run-0002/outputs/enforcement_trace.json        |    3 -
+ .../pcs-off/run-0002/outputs/final_user_output.txt |   51 -
+ .../pcs-off/run-0002/outputs/session1_output.txt   |   61 -
+ .../outputs/session2_extracted_commitment.json     |    9 -
+ .../pcs-off/run-0002/outputs/session2_output.txt   |   51 -
+ .../run-0002/outputs/session2_raw_model_output.txt |   51 -
+ .../claude-sonnet-4-6/pcs-off/run-0002/run.json    |   19 -
+ .../pcs-off/run-0003/outputs/decision_record.json  |   10 -
+ .../run-0003/outputs/enforcement_trace.json        |    3 -
+ .../pcs-off/run-0003/outputs/final_user_output.txt |   52 -
+ .../pcs-off/run-0003/outputs/session1_output.txt   |   66 -
+ .../outputs/session2_extracted_commitment.json     |    9 -
+ .../pcs-off/run-0003/outputs/session2_output.txt   |   52 -
+ .../run-0003/outputs/session2_raw_model_output.txt |   52 -
+ .../claude-sonnet-4-6/pcs-off/run-0003/run.json    |   19 -
+ .../pcs-off/run-0004/outputs/decision_record.json  |   10 -
+ .../run-0004/outputs/enforcement_trace.json        |    3 -
+ .../pcs-off/run-0004/outputs/final_user_output.txt |   51 -
+ .../pcs-off/run-0004/outputs/session1_output.txt   |   56 -
+ .../outputs/session2_extracted_commitment.json     |    9 -
+ .../pcs-off/run-0004/outputs/session2_output.txt   |   51 -
+ .../run-0004/outputs/session2_raw_model_output.txt |   51 -
+ .../claude-sonnet-4-6/pcs-off/run-0004/run.json    |   19 -
+ .../pcs-off/run-0005/outputs/decision_record.json  |   10 -
+ .../run-0005/outputs/enforcement_trace.json        |    3 -
+ .../pcs-off/run-0005/outputs/final_user_output.txt |   58 -
+ .../pcs-off/run-0005/outputs/session1_output.txt   |   65 -
+ .../outputs/session2_extracted_commitment.json     |    9 -
+ .../pcs-off/run-0005/outputs/session2_output.txt   |   58 -
+ .../run-0005/outputs/session2_raw_model_output.txt |   58 -
+ .../claude-sonnet-4-6/pcs-off/run-0005/run.json    |   19 -
+ .../pcs-on/run-0001/outputs/decision_record.json   |   10 -
+ .../pcs-on/run-0001/outputs/enforcement_trace.json |   15 -
+ .../run-0001/outputs/enforcement_trace_legacy.json |   15 -
+ .../pcs-on/run-0001/outputs/final_user_output.txt  |    5 -
+ .../pcs-on/run-0001/outputs/session1_output.txt    |   53 -
+ .../outputs/session2_extracted_commitment.json     |    5 -
+ .../pcs-on/run-0001/outputs/session2_output.txt    |    5 -
+ .../run-0001/outputs/session2_raw_model_output.txt |   49 -
+ .../claude-sonnet-4-6/pcs-on/run-0001/run.json     |   19 -
+ .../pcs-on/run-0002/outputs/decision_record.json   |   10 -
+ .../pcs-on/run-0002/outputs/enforcement_trace.json |   15 -
+ .../run-0002/outputs/enforcement_trace_legacy.json |   15 -
+ .../pcs-on/run-0002/outputs/final_user_output.txt  |    5 -
+ .../pcs-on/run-0002/outputs/session1_output.txt    |   51 -
+ .../outputs/session2_extracted_commitment.json     |    5 -
+ .../pcs-on/run-0002/outputs/session2_output.txt    |    5 -
+ .../run-0002/outputs/session2_raw_model_output.txt |   49 -
+ .../claude-sonnet-4-6/pcs-on/run-0002/run.json     |   19 -
+ .../pcs-on/run-0003/outputs/decision_record.json   |   10 -
+ .../pcs-on/run-0003/outputs/enforcement_trace.json |   15 -
+ .../run-0003/outputs/enforcement_trace_legacy.json |   15 -
+ .../pcs-on/run-0003/outputs/final_user_output.txt  |    5 -
+ .../pcs-on/run-0003/outputs/session1_output.txt    |   57 -
+ .../outputs/session2_extracted_commitment.json     |    5 -
+ .../pcs-on/run-0003/outputs/session2_output.txt    |    5 -
+ .../run-0003/outputs/session2_raw_model_output.txt |   51 -
+ .../claude-sonnet-4-6/pcs-on/run-0003/run.json     |   19 -
+ .../pcs-on/run-0004/outputs/decision_record.json   |   10 -
+ .../pcs-on/run-0004/outputs/enforcement_trace.json |   15 -
+ .../run-0004/outputs/enforcement_trace_legacy.json |   15 -
+ .../pcs-on/run-0004/outputs/final_user_output.txt  |    5 -
+ .../pcs-on/run-0004/outputs/session1_output.txt    |   53 -
+ .../outputs/session2_extracted_commitment.json     |    5 -
+ .../pcs-on/run-0004/outputs/session2_output.txt    |    5 -
+ .../run-0004/outputs/session2_raw_model_output.txt |   51 -
+ .../claude-sonnet-4-6/pcs-on/run-0004/run.json     |   19 -
+ .../pcs-on/run-0005/outputs/decision_record.json   |   10 -
+ .../pcs-on/run-0005/outputs/enforcement_trace.json |   15 -
+ .../run-0005/outputs/enforcement_trace_legacy.json |   15 -
+ .../pcs-on/run-0005/outputs/final_user_output.txt  |    5 -
+ .../pcs-on/run-0005/outputs/session1_output.txt    |   60 -
+ .../outputs/session2_extracted_commitment.json     |    5 -
+ .../pcs-on/run-0005/outputs/session2_output.txt    |    5 -
+ .../run-0005/outputs/session2_raw_model_output.txt |   51 -
+ .../claude-sonnet-4-6/pcs-on/run-0005/run.json     |   19 -
+ .../pcs-off/run-0001/outputs/decision_record.json  |   10 -
+ .../run-0001/outputs/enforcement_trace.json        |    3 -
+ .../pcs-off/run-0001/outputs/final_user_output.txt |   27 -
+ .../pcs-off/run-0001/outputs/session1_output.txt   |   29 -
+ .../outputs/session2_extracted_commitment.json     |    9 -
+ .../pcs-off/run-0001/outputs/session2_output.txt   |   27 -
+ .../run-0001/outputs/session2_raw_model_output.txt |   27 -
+ .../llama-3.1-8b-instant/pcs-off/run-0001/run.json |   19 -
+ .../pcs-off/run-0002/outputs/decision_record.json  |   10 -
+ .../run-0002/outputs/enforcement_trace.json        |    3 -
+ .../pcs-off/run-0002/outputs/final_user_output.txt |   29 -
+ .../pcs-off/run-0002/outputs/session1_output.txt   |   27 -
+ .../outputs/session2_extracted_commitment.json     |    9 -
+ .../pcs-off/run-0002/outputs/session2_output.txt   |   29 -
+ .../run-0002/outputs/session2_raw_model_output.txt |   29 -
+ .../llama-3.1-8b-instant/pcs-off/run-0002/run.json |   19 -
+ .../pcs-off/run-0003/outputs/decision_record.json  |   10 -
+ .../run-0003/outputs/enforcement_trace.json        |    3 -
+ .../pcs-off/run-0003/outputs/final_user_output.txt |   22 -
+ .../pcs-off/run-0003/outputs/session1_output.txt   |   28 -
+ .../outputs/session2_extracted_commitment.json     |    9 -
+ .../pcs-off/run-0003/outputs/session2_output.txt   |   22 -
+ .../run-0003/outputs/session2_raw_model_output.txt |   22 -
+ .../llama-3.1-8b-instant/pcs-off/run-0003/run.json |   19 -
+ .../pcs-off/run-0004/outputs/decision_record.json  |   10 -
+ .../run-0004/outputs/enforcement_trace.json        |    3 -
+ .../pcs-off/run-0004/outputs/final_user_output.txt |   27 -
+ .../pcs-off/run-0004/outputs/session1_output.txt   |   31 -
+ .../outputs/session2_extracted_commitment.json     |    9 -
+ .../pcs-off/run-0004/outputs/session2_output.txt   |   27 -
+ .../run-0004/outputs/session2_raw_model_output.txt |   27 -
+ .../llama-3.1-8b-instant/pcs-off/run-0004/run.json |   19 -
+ .../pcs-off/run-0005/outputs/decision_record.json  |   10 -
+ .../run-0005/outputs/enforcement_trace.json        |    3 -
+ .../pcs-off/run-0005/outputs/final_user_output.txt |   31 -
+ .../pcs-off/run-0005/outputs/session1_output.txt   |   22 -
+ .../outputs/session2_extracted_commitment.json     |    9 -
+ .../pcs-off/run-0005/outputs/session2_output.txt   |   31 -
+ .../run-0005/outputs/session2_raw_model_output.txt |   31 -
+ .../llama-3.1-8b-instant/pcs-off/run-0005/run.json |   19 -
+ .../pcs-on/run-0001/outputs/decision_record.json   |   10 -
+ .../pcs-on/run-0001/outputs/enforcement_trace.json |   15 -
+ .../run-0001/outputs/enforcement_trace_legacy.json |   15 -
+ .../pcs-on/run-0001/outputs/final_user_output.txt  |    5 -
+ .../pcs-on/run-0001/outputs/session1_output.txt    |   28 -
+ .../outputs/session2_extracted_commitment.json     |    5 -
+ .../pcs-on/run-0001/outputs/session2_output.txt    |    5 -
+ .../run-0001/outputs/session2_raw_model_output.txt |   28 -
+ .../llama-3.1-8b-instant/pcs-on/run-0001/run.json  |   19 -
+ .../pcs-on/run-0002/outputs/decision_record.json   |   10 -
+ .../pcs-on/run-0002/outputs/enforcement_trace.json |   15 -
+ .../run-0002/outputs/enforcement_trace_legacy.json |   15 -
+ .../pcs-on/run-0002/outputs/final_user_output.txt  |    5 -
+ .../pcs-on/run-0002/outputs/session1_output.txt    |   30 -
+ .../outputs/session2_extracted_commitment.json     |    5 -
+ .../pcs-on/run-0002/outputs/session2_output.txt    |    5 -
+ .../run-0002/outputs/session2_raw_model_output.txt |   27 -
+ .../llama-3.1-8b-instant/pcs-on/run-0002/run.json  |   19 -
+ .../pcs-on/run-0003/outputs/decision_record.json   |   10 -
+ .../pcs-on/run-0003/outputs/enforcement_trace.json |   15 -
+ .../run-0003/outputs/enforcement_trace_legacy.json |   15 -
+ .../pcs-on/run-0003/outputs/final_user_output.txt  |    5 -
+ .../pcs-on/run-0003/outputs/session1_output.txt    |   30 -
+ .../outputs/session2_extracted_commitment.json     |    5 -
+ .../pcs-on/run-0003/outputs/session2_output.txt    |    5 -
+ .../run-0003/outputs/session2_raw_model_output.txt |   27 -
+ .../llama-3.1-8b-instant/pcs-on/run-0003/run.json  |   19 -
+ .../pcs-on/run-0004/outputs/decision_record.json   |   10 -
+ .../pcs-on/run-0004/outputs/enforcement_trace.json |   15 -
+ .../run-0004/outputs/enforcement_trace_legacy.json |   15 -
+ .../pcs-on/run-0004/outputs/final_user_output.txt  |    5 -
+ .../pcs-on/run-0004/outputs/session1_output.txt    |   28 -
+ .../outputs/session2_extracted_commitment.json     |    5 -
+ .../pcs-on/run-0004/outputs/session2_output.txt    |    5 -
+ .../run-0004/outputs/session2_raw_model_output.txt |   29 -
+ .../llama-3.1-8b-instant/pcs-on/run-0004/run.json  |   19 -
+ .../pcs-on/run-0005/outputs/decision_record.json   |   10 -
+ .../pcs-on/run-0005/outputs/enforcement_trace.json |   15 -
+ .../run-0005/outputs/enforcement_trace_legacy.json |   15 -
+ .../pcs-on/run-0005/outputs/final_user_output.txt  |    5 -
+ .../pcs-on/run-0005/outputs/session1_output.txt    |   27 -
+ .../outputs/session2_extracted_commitment.json     |    5 -
+ .../pcs-on/run-0005/outputs/session2_output.txt    |    5 -
+ .../run-0005/outputs/session2_raw_model_output.txt |   20 -
+ .../llama-3.1-8b-instant/pcs-on/run-0005/run.json  |   19 -
+ runs/2026-03-01-final/avs-2c-summary.json          | 1407 --------------------
+ .../pcs-off/run-0001/outputs/decision_record.json  |   10 -
+ .../run-0001/outputs/enforcement_trace.json        |    3 -
+ .../pcs-off/run-0001/outputs/final_user_output.txt |   54 -
+ .../pcs-off/run-0001/outputs/session1_output.txt   |   57 -
+ .../outputs/session2_extracted_commitment.json     |    9 -
+ .../pcs-off/run-0001/outputs/session2_output.txt   |   54 -
+ .../run-0001/outputs/session2_raw_model_output.txt |   54 -
+ .../claude-sonnet-4-6/pcs-off/run-0001/run.json    |   19 -
+ .../pcs-off/run-0002/outputs/decision_record.json  |   10 -
+ .../run-0002/outputs/enforcement_trace.json        |    3 -
+ .../pcs-off/run-0002/outputs/final_user_output.txt |   52 -
+ .../pcs-off/run-0002/outputs/session1_output.txt   |   60 -
+ .../outputs/session2_extracted_commitment.json     |    9 -
+ .../pcs-off/run-0002/outputs/session2_output.txt   |   52 -
+ .../run-0002/outputs/session2_raw_model_output.txt |   52 -
+ .../claude-sonnet-4-6/pcs-off/run-0002/run.json    |   19 -
+ .../pcs-off/run-0003/outputs/decision_record.json  |   10 -
+ .../run-0003/outputs/enforcement_trace.json        |    3 -
+ .../pcs-off/run-0003/outputs/final_user_output.txt |   51 -
+ .../pcs-off/run-0003/outputs/session1_output.txt   |   65 -
+ .../outputs/session2_extracted_commitment.json     |    9 -
+ .../pcs-off/run-0003/outputs/session2_output.txt   |   51 -
+ .../run-0003/outputs/session2_raw_model_output.txt |   51 -
+ .../claude-sonnet-4-6/pcs-off/run-0003/run.json    |   19 -
+ .../pcs-off/run-0004/outputs/decision_record.json  |   10 -
+ .../run-0004/outputs/enforcement_trace.json        |    3 -
+ .../pcs-off/run-0004/outputs/final_user_output.txt |   48 -
+ .../pcs-off/run-0004/outputs/session1_output.txt   |   64 -
+ .../outputs/session2_extracted_commitment.json     |    9 -
+ .../pcs-off/run-0004/outputs/session2_output.txt   |   48 -
+ .../run-0004/outputs/session2_raw_model_output.txt |   48 -
+ .../claude-sonnet-4-6/pcs-off/run-0004/run.json    |   19 -
+ .../pcs-off/run-0005/outputs/decision_record.json  |   10 -
+ .../run-0005/outputs/enforcement_trace.json        |    3 -
+ .../pcs-off/run-0005/outputs/final_user_output.txt |   40 -
+ .../pcs-off/run-0005/outputs/session1_output.txt   |   51 -
+ .../outputs/session2_extracted_commitment.json     |    9 -
+ .../pcs-off/run-0005/outputs/session2_output.txt   |   40 -
+ .../run-0005/outputs/session2_raw_model_output.txt |   40 -
+ .../claude-sonnet-4-6/pcs-off/run-0005/run.json    |   19 -
+ .../pcs-on/run-0001/outputs/decision_record.json   |   10 -
+ .../pcs-on/run-0001/outputs/enforcement_trace.json |   15 -
+ .../run-0001/outputs/enforcement_trace_legacy.json |   15 -
+ .../pcs-on/run-0001/outputs/final_user_output.txt  |    5 -
+ .../pcs-on/run-0001/outputs/session1_output.txt    |   65 -
+ .../outputs/session2_extracted_commitment.json     |    5 -
+ .../pcs-on/run-0001/outputs/session2_output.txt    |    5 -
+ .../run-0001/outputs/session2_raw_model_output.txt |   50 -
+ .../claude-sonnet-4-6/pcs-on/run-0001/run.json     |   19 -
+ .../pcs-on/run-0002/outputs/decision_record.json   |   10 -
+ .../pcs-on/run-0002/outputs/enforcement_trace.json |   15 -
+ .../run-0002/outputs/enforcement_trace_legacy.json |   15 -
+ .../pcs-on/run-0002/outputs/final_user_output.txt  |    5 -
+ .../pcs-on/run-0002/outputs/session1_output.txt    |   54 -
+ .../outputs/session2_extracted_commitment.json     |    5 -
+ .../pcs-on/run-0002/outputs/session2_output.txt    |    5 -
+ .../run-0002/outputs/session2_raw_model_output.txt |   51 -
+ .../claude-sonnet-4-6/pcs-on/run-0002/run.json     |   19 -
+ .../pcs-on/run-0003/outputs/decision_record.json   |   10 -
+ .../pcs-on/run-0003/outputs/enforcement_trace.json |   15 -
+ .../run-0003/outputs/enforcement_trace_legacy.json |   15 -
+ .../pcs-on/run-0003/outputs/final_user_output.txt  |    5 -
+ .../pcs-on/run-0003/outputs/session1_output.txt    |   50 -
+ .../outputs/session2_extracted_commitment.json     |    5 -
+ .../pcs-on/run-0003/outputs/session2_output.txt    |    5 -
+ .../run-0003/outputs/session2_raw_model_output.txt |   46 -
+ .../claude-sonnet-4-6/pcs-on/run-0003/run.json     |   19 -
+ .../pcs-on/run-0004/outputs/decision_record.json   |   10 -
+ .../pcs-on/run-0004/outputs/enforcement_trace.json |   15 -
+ .../run-0004/outputs/enforcement_trace_legacy.json |   15 -
+ .../pcs-on/run-0004/outputs/final_user_output.txt  |    5 -
+ .../pcs-on/run-0004/outputs/session1_output.txt    |   49 -
+ .../outputs/session2_extracted_commitment.json     |    5 -
+ .../pcs-on/run-0004/outputs/session2_output.txt    |    5 -
+ .../run-0004/outputs/session2_raw_model_output.txt |   51 -
+ .../claude-sonnet-4-6/pcs-on/run-0004/run.json     |   19 -
+ .../pcs-on/run-0005/outputs/decision_record.json   |   10 -
+ .../pcs-on/run-0005/outputs/enforcement_trace.json |   15 -
+ .../run-0005/outputs/enforcement_trace_legacy.json |   15 -
+ .../pcs-on/run-0005/outputs/final_user_output.txt  |    5 -
+ .../pcs-on/run-0005/outputs/session1_output.txt    |   64 -
+ .../outputs/session2_extracted_commitment.json     |    5 -
+ .../pcs-on/run-0005/outputs/session2_output.txt    |    5 -
+ .../run-0005/outputs/session2_raw_model_output.txt |   53 -
+ .../claude-sonnet-4-6/pcs-on/run-0005/run.json     |   19 -
+ .../pcs-off/run-0001/outputs/decision_record.json  |   10 -
+ .../run-0001/outputs/enforcement_trace.json        |    3 -
+ .../pcs-off/run-0001/outputs/final_user_output.txt |   27 -
+ .../pcs-off/run-0001/outputs/session1_output.txt   |   32 -
+ .../outputs/session2_extracted_commitment.json     |    9 -
+ .../pcs-off/run-0001/outputs/session2_output.txt   |   27 -
+ .../run-0001/outputs/session2_raw_model_output.txt |   27 -
+ .../llama-3.1-8b-instant/pcs-off/run-0001/run.json |   19 -
+ .../pcs-off/run-0002/outputs/decision_record.json  |   10 -
+ .../run-0002/outputs/enforcement_trace.json        |    3 -
+ .../pcs-off/run-0002/outputs/final_user_output.txt |   31 -
+ .../pcs-off/run-0002/outputs/session1_output.txt   |   23 -
+ .../outputs/session2_extracted_commitment.json     |    9 -
+ .../pcs-off/run-0002/outputs/session2_output.txt   |   31 -
+ .../run-0002/outputs/session2_raw_model_output.txt |   31 -
+ .../llama-3.1-8b-instant/pcs-off/run-0002/run.json |   19 -
+ .../pcs-off/run-0003/outputs/decision_record.json  |   10 -
+ .../run-0003/outputs/enforcement_trace.json        |    3 -
+ .../pcs-off/run-0003/outputs/final_user_output.txt |   32 -
+ .../pcs-off/run-0003/outputs/session1_output.txt   |   27 -
+ .../outputs/session2_extracted_commitment.json     |    9 -
+ .../pcs-off/run-0003/outputs/session2_output.txt   |   32 -
+ .../run-0003/outputs/session2_raw_model_output.txt |   32 -
+ .../llama-3.1-8b-instant/pcs-off/run-0003/run.json |   19 -
+ .../pcs-off/run-0004/outputs/decision_record.json  |   10 -
+ .../run-0004/outputs/enforcement_trace.json        |    3 -
+ .../pcs-off/run-0004/outputs/final_user_output.txt |   30 -
+ .../pcs-off/run-0004/outputs/session1_output.txt   |   25 -
+ .../outputs/session2_extracted_commitment.json     |    9 -
+ .../pcs-off/run-0004/outputs/session2_output.txt   |   30 -
+ .../run-0004/outputs/session2_raw_model_output.txt |   30 -
+ .../llama-3.1-8b-instant/pcs-off/run-0004/run.json |   19 -
+ .../pcs-off/run-0005/outputs/decision_record.json  |   10 -
+ .../run-0005/outputs/enforcement_trace.json        |    3 -
+ .../pcs-off/run-0005/outputs/final_user_output.txt |   32 -
+ .../pcs-off/run-0005/outputs/session1_output.txt   |   27 -
+ .../outputs/session2_extracted_commitment.json     |    9 -
+ .../pcs-off/run-0005/outputs/session2_output.txt   |   32 -
+ .../run-0005/outputs/session2_raw_model_output.txt |   32 -
+ .../llama-3.1-8b-instant/pcs-off/run-0005/run.json |   19 -
+ .../pcs-on/run-0001/outputs/decision_record.json   |   10 -
+ .../pcs-on/run-0001/outputs/enforcement_trace.json |   15 -
+ .../run-0001/outputs/enforcement_trace_legacy.json |   15 -
+ .../pcs-on/run-0001/outputs/final_user_output.txt  |    5 -
+ .../pcs-on/run-0001/outputs/session1_output.txt    |   27 -
+ .../outputs/session2_extracted_commitment.json     |    5 -
+ .../pcs-on/run-0001/outputs/session2_output.txt    |    5 -
+ .../run-0001/outputs/session2_raw_model_output.txt |   28 -
+ .../llama-3.1-8b-instant/pcs-on/run-0001/run.json  |   19 -
+ .../pcs-on/run-0002/outputs/decision_record.json   |   10 -
+ .../pcs-on/run-0002/outputs/enforcement_trace.json |   15 -
+ .../run-0002/outputs/enforcement_trace_legacy.json |   15 -
+ .../pcs-on/run-0002/outputs/final_user_output.txt  |    5 -
+ .../pcs-on/run-0002/outputs/session1_output.txt    |   31 -
+ .../outputs/session2_extracted_commitment.json     |    5 -
+ .../pcs-on/run-0002/outputs/session2_output.txt    |    5 -
+ .../run-0002/outputs/session2_raw_model_output.txt |   30 -
+ .../llama-3.1-8b-instant/pcs-on/run-0002/run.json  |   19 -
+ .../pcs-on/run-0003/outputs/decision_record.json   |   10 -
+ .../pcs-on/run-0003/outputs/enforcement_trace.json |   15 -
+ .../run-0003/outputs/enforcement_trace_legacy.json |   15 -
+ .../pcs-on/run-0003/outputs/final_user_output.txt  |    5 -
+ .../pcs-on/run-0003/outputs/session1_output.txt    |   30 -
+ .../outputs/session2_extracted_commitment.json     |    5 -
+ .../pcs-on/run-0003/outputs/session2_output.txt    |    5 -
+ .../run-0003/outputs/session2_raw_model_output.txt |   31 -
+ .../llama-3.1-8b-instant/pcs-on/run-0003/run.json  |   19 -
+ .../pcs-on/run-0004/outputs/decision_record.json   |   10 -
+ .../pcs-on/run-0004/outputs/enforcement_trace.json |   15 -
+ .../run-0004/outputs/enforcement_trace_legacy.json |   15 -
+ .../pcs-on/run-0004/outputs/final_user_output.txt  |    5 -
+ .../pcs-on/run-0004/outputs/session1_output.txt    |   33 -
+ .../outputs/session2_extracted_commitment.json     |    5 -
+ .../pcs-on/run-0004/outputs/session2_output.txt    |    5 -
+ .../run-0004/outputs/session2_raw_model_output.txt |   31 -
+ .../llama-3.1-8b-instant/pcs-on/run-0004/run.json  |   19 -
+ .../pcs-on/run-0005/outputs/decision_record.json   |   10 -
+ .../pcs-on/run-0005/outputs/enforcement_trace.json |   15 -
+ .../run-0005/outputs/enforcement_trace_legacy.json |   15 -
+ .../pcs-on/run-0005/outputs/final_user_output.txt  |    5 -
+ .../pcs-on/run-0005/outputs/session1_output.txt    |   29 -
+ .../outputs/session2_extracted_commitment.json     |    5 -
+ .../pcs-on/run-0005/outputs/session2_output.txt    |    5 -
+ .../run-0005/outputs/session2_raw_model_output.txt |   33 -
+ .../llama-3.1-8b-instant/pcs-on/run-0005/run.json  |   19 -
+ runs/2026-03-01-gpt-test/avs-2c-summary.json       | 1407 --------------------
+ .../pcs-off/run-0001/outputs/decision_record.json  |   10 -
+ .../run-0001/outputs/enforcement_trace.json        |    3 -
+ .../pcs-off/run-0001/outputs/final_user_output.txt |   45 -
+ .../pcs-off/run-0001/outputs/session1_output.txt   |   52 -
+ .../outputs/session2_extracted_commitment.json     |    9 -
+ .../pcs-off/run-0001/outputs/session2_output.txt   |   45 -
+ .../run-0001/outputs/session2_raw_model_output.txt |   45 -
+ .../claude-sonnet-4-6/pcs-off/run-0001/run.json    |   19 -
+ .../pcs-off/run-0002/outputs/decision_record.json  |   10 -
+ .../run-0002/outputs/enforcement_trace.json        |    3 -
+ .../pcs-off/run-0002/outputs/final_user_output.txt |   51 -
+ .../pcs-off/run-0002/outputs/session1_output.txt   |   50 -
+ .../outputs/session2_extracted_commitment.json     |    9 -
+ .../pcs-off/run-0002/outputs/session2_output.txt   |   51 -
+ .../run-0002/outputs/session2_raw_model_output.txt |   51 -
+ .../claude-sonnet-4-6/pcs-off/run-0002/run.json    |   19 -
+ .../pcs-off/run-0003/outputs/decision_record.json  |   10 -
+ .../run-0003/outputs/enforcement_trace.json        |    3 -
+ .../pcs-off/run-0003/outputs/final_user_output.txt |   50 -
+ .../pcs-off/run-0003/outputs/session1_output.txt   |   61 -
+ .../outputs/session2_extracted_commitment.json     |    9 -
+ .../pcs-off/run-0003/outputs/session2_output.txt   |   50 -
+ .../run-0003/outputs/session2_raw_model_output.txt |   50 -
+ .../claude-sonnet-4-6/pcs-off/run-0003/run.json    |   19 -
+ .../pcs-off/run-0004/outputs/decision_record.json  |   10 -
+ .../run-0004/outputs/enforcement_trace.json        |    3 -
+ .../pcs-off/run-0004/outputs/final_user_output.txt |   49 -
+ .../pcs-off/run-0004/outputs/session1_output.txt   |   63 -
+ .../outputs/session2_extracted_commitment.json     |    9 -
+ .../pcs-off/run-0004/outputs/session2_output.txt   |   49 -
+ .../run-0004/outputs/session2_raw_model_output.txt |   49 -
+ .../claude-sonnet-4-6/pcs-off/run-0004/run.json    |   19 -
+ .../pcs-off/run-0005/outputs/decision_record.json  |   10 -
+ .../run-0005/outputs/enforcement_trace.json        |    3 -
+ .../pcs-off/run-0005/outputs/final_user_output.txt |   51 -
+ .../pcs-off/run-0005/outputs/session1_output.txt   |   51 -
+ .../outputs/session2_extracted_commitment.json     |    9 -
+ .../pcs-off/run-0005/outputs/session2_output.txt   |   51 -
+ .../run-0005/outputs/session2_raw_model_output.txt |   51 -
+ .../claude-sonnet-4-6/pcs-off/run-0005/run.json    |   19 -
+ .../pcs-on/run-0001/outputs/decision_record.json   |   10 -
+ .../pcs-on/run-0001/outputs/enforcement_trace.json |   15 -
+ .../run-0001/outputs/enforcement_trace_legacy.json |   15 -
+ .../pcs-on/run-0001/outputs/final_user_output.txt  |    5 -
+ .../pcs-on/run-0001/outputs/session1_output.txt    |   53 -
+ .../outputs/session2_extracted_commitment.json     |    5 -
+ .../pcs-on/run-0001/outputs/session2_output.txt    |    5 -
+ .../run-0001/outputs/session2_raw_model_output.txt |   51 -
+ .../claude-sonnet-4-6/pcs-on/run-0001/run.json     |   19 -
+ .../pcs-on/run-0002/outputs/decision_record.json   |   10 -
+ .../pcs-on/run-0002/outputs/enforcement_trace.json |   15 -
+ .../run-0002/outputs/enforcement_trace_legacy.json |   15 -
+ .../pcs-on/run-0002/outputs/final_user_output.txt  |    5 -
+ .../pcs-on/run-0002/outputs/session1_output.txt    |   50 -
+ .../outputs/session2_extracted_commitment.json     |    5 -
+ .../pcs-on/run-0002/outputs/session2_output.txt    |    5 -
+ .../run-0002/outputs/session2_raw_model_output.txt |   51 -
+ .../claude-sonnet-4-6/pcs-on/run-0002/run.json     |   19 -
+ .../pcs-on/run-0003/outputs/decision_record.json   |   10 -
+ .../pcs-on/run-0003/outputs/enforcement_trace.json |   15 -
+ .../run-0003/outputs/enforcement_trace_legacy.json |   15 -
+ .../pcs-on/run-0003/outputs/final_user_output.txt  |    5 -
+ .../pcs-on/run-0003/outputs/session1_output.txt    |   49 -
+ .../outputs/session2_extracted_commitment.json     |    5 -
+ .../pcs-on/run-0003/outputs/session2_output.txt    |    5 -
+ .../run-0003/outputs/session2_raw_model_output.txt |   51 -
+ .../claude-sonnet-4-6/pcs-on/run-0003/run.json     |   19 -
+ .../pcs-on/run-0004/outputs/decision_record.json   |   10 -
+ .../pcs-on/run-0004/outputs/enforcement_trace.json |   15 -
+ .../run-0004/outputs/enforcement_trace_legacy.json |   15 -
+ .../pcs-on/run-0004/outputs/final_user_output.txt  |    5 -
+ .../pcs-on/run-0004/outputs/session1_output.txt    |   58 -
+ .../outputs/session2_extracted_commitment.json     |    5 -
+ .../pcs-on/run-0004/outputs/session2_output.txt    |    5 -
+ .../run-0004/outputs/session2_raw_model_output.txt |   51 -
+ .../claude-sonnet-4-6/pcs-on/run-0004/run.json     |   19 -
+ .../pcs-on/run-0005/outputs/decision_record.json   |   10 -
+ .../pcs-on/run-0005/outputs/enforcement_trace.json |   15 -
+ .../run-0005/outputs/enforcement_trace_legacy.json |   15 -
+ .../pcs-on/run-0005/outputs/final_user_output.txt  |    5 -
+ .../pcs-on/run-0005/outputs/session1_output.txt    |   66 -
+ .../outputs/session2_extracted_commitment.json     |    5 -
+ .../pcs-on/run-0005/outputs/session2_output.txt    |    5 -
+ .../run-0005/outputs/session2_raw_model_output.txt |   51 -
+ .../claude-sonnet-4-6/pcs-on/run-0005/run.json     |   19 -
+ .../pcs-off/run-0001/outputs/decision_record.json  |   10 -
+ .../run-0001/outputs/enforcement_trace.json        |    3 -
+ .../pcs-off/run-0001/outputs/final_user_output.txt |   26 -
+ .../pcs-off/run-0001/outputs/session1_output.txt   |   23 -
+ .../outputs/session2_extracted_commitment.json     |    9 -
+ .../pcs-off/run-0001/outputs/session2_output.txt   |   26 -
+ .../run-0001/outputs/session2_raw_model_output.txt |   26 -
+ .../llama-3.1-8b-instant/pcs-off/run-0001/run.json |   19 -
+ .../pcs-off/run-0002/outputs/decision_record.json  |   10 -
+ .../run-0002/outputs/enforcement_trace.json        |    3 -
+ .../pcs-off/run-0002/outputs/final_user_output.txt |   23 -
+ .../pcs-off/run-0002/outputs/session1_output.txt   |   28 -
+ .../outputs/session2_extracted_commitment.json     |    9 -
+ .../pcs-off/run-0002/outputs/session2_output.txt   |   23 -
+ .../run-0002/outputs/session2_raw_model_output.txt |   23 -
+ .../llama-3.1-8b-instant/pcs-off/run-0002/run.json |   19 -
+ .../pcs-off/run-0003/outputs/decision_record.json  |   10 -
+ .../run-0003/outputs/enforcement_trace.json        |    3 -
+ .../pcs-off/run-0003/outputs/final_user_output.txt |   29 -
+ .../pcs-off/run-0003/outputs/session1_output.txt   |   34 -
+ .../outputs/session2_extracted_commitment.json     |    9 -
+ .../pcs-off/run-0003/outputs/session2_output.txt   |   29 -
+ .../run-0003/outputs/session2_raw_model_output.txt |   29 -
+ .../llama-3.1-8b-instant/pcs-off/run-0003/run.json |   19 -
+ .../pcs-off/run-0004/outputs/decision_record.json  |   10 -
+ .../run-0004/outputs/enforcement_trace.json        |    3 -
+ .../pcs-off/run-0004/outputs/final_user_output.txt |   26 -
+ .../pcs-off/run-0004/outputs/session1_output.txt   |   31 -
+ .../outputs/session2_extracted_commitment.json     |    9 -
+ .../pcs-off/run-0004/outputs/session2_output.txt   |   26 -
+ .../run-0004/outputs/session2_raw_model_output.txt |   26 -
+ .../llama-3.1-8b-instant/pcs-off/run-0004/run.json |   19 -
+ .../pcs-off/run-0005/outputs/decision_record.json  |   10 -
+ .../run-0005/outputs/enforcement_trace.json        |    3 -
+ .../pcs-off/run-0005/outputs/final_user_output.txt |   31 -
+ .../pcs-off/run-0005/outputs/session1_output.txt   |   24 -
+ .../outputs/session2_extracted_commitment.json     |    9 -
+ .../pcs-off/run-0005/outputs/session2_output.txt   |   31 -
+ .../run-0005/outputs/session2_raw_model_output.txt |   31 -
+ .../llama-3.1-8b-instant/pcs-off/run-0005/run.json |   19 -
+ .../pcs-on/run-0001/outputs/decision_record.json   |   10 -
+ .../pcs-on/run-0001/outputs/enforcement_trace.json |   15 -
+ .../run-0001/outputs/enforcement_trace_legacy.json |   15 -
+ .../pcs-on/run-0001/outputs/final_user_output.txt  |    5 -
+ .../pcs-on/run-0001/outputs/session1_output.txt    |   27 -
+ .../outputs/session2_extracted_commitment.json     |    5 -
+ .../pcs-on/run-0001/outputs/session2_output.txt    |    5 -
+ .../run-0001/outputs/session2_raw_model_output.txt |   27 -
+ .../llama-3.1-8b-instant/pcs-on/run-0001/run.json  |   19 -
+ .../pcs-on/run-0002/outputs/decision_record.json   |   10 -
+ .../pcs-on/run-0002/outputs/enforcement_trace.json |   15 -
+ .../run-0002/outputs/enforcement_trace_legacy.json |   15 -
+ .../pcs-on/run-0002/outputs/final_user_output.txt  |    5 -
+ .../pcs-on/run-0002/outputs/session1_output.txt    |   27 -
+ .../outputs/session2_extracted_commitment.json     |    5 -
+ .../pcs-on/run-0002/outputs/session2_output.txt    |    5 -
+ .../run-0002/outputs/session2_raw_model_output.txt |   25 -
+ .../llama-3.1-8b-instant/pcs-on/run-0002/run.json  |   19 -
+ .../pcs-on/run-0003/outputs/decision_record.json   |   10 -
+ .../pcs-on/run-0003/outputs/enforcement_trace.json |   15 -
+ .../run-0003/outputs/enforcement_trace_legacy.json |   15 -
+ .../pcs-on/run-0003/outputs/final_user_output.txt  |    5 -
+ .../pcs-on/run-0003/outputs/session1_output.txt    |   25 -
+ .../outputs/session2_extracted_commitment.json     |    5 -
+ .../pcs-on/run-0003/outputs/session2_output.txt    |    5 -
+ .../run-0003/outputs/session2_raw_model_output.txt |   29 -
+ .../llama-3.1-8b-instant/pcs-on/run-0003/run.json  |   19 -
+ .../pcs-on/run-0004/outputs/decision_record.json   |   10 -
+ .../pcs-on/run-0004/outputs/enforcement_trace.json |   15 -
+ .../run-0004/outputs/enforcement_trace_legacy.json |   15 -
+ .../pcs-on/run-0004/outputs/final_user_output.txt  |    5 -
+ .../pcs-on/run-0004/outputs/session1_output.txt    |   34 -
+ .../outputs/session2_extracted_commitment.json     |    5 -
+ .../pcs-on/run-0004/outputs/session2_output.txt    |    5 -
+ .../run-0004/outputs/session2_raw_model_output.txt |   25 -
+ .../llama-3.1-8b-instant/pcs-on/run-0004/run.json  |   19 -
+ .../pcs-on/run-0005/outputs/decision_record.json   |   10 -
+ .../pcs-on/run-0005/outputs/enforcement_trace.json |   15 -
+ .../run-0005/outputs/enforcement_trace_legacy.json |   15 -
+ .../pcs-on/run-0005/outputs/final_user_output.txt  |    5 -
+ .../pcs-on/run-0005/outputs/session1_output.txt    |   26 -
+ .../outputs/session2_extracted_commitment.json     |    5 -
+ .../pcs-on/run-0005/outputs/session2_output.txt    |    5 -
+ .../run-0005/outputs/session2_raw_model_output.txt |   27 -
+ .../llama-3.1-8b-instant/pcs-on/run-0005/run.json  |   19 -
+ runs/2026-03-01-hardened/avs-2c-summary.json       |  227 ----
+ runs/2026-03-01-structural/avs-2c-summary.json     | 1367 -------------------
+ .../pcs-off/run-0001/outputs/session1_output.txt   |   36 -
+ .../pcs-off/run-0001/outputs/session2_output.txt   |   37 -
+ .../claude-sonnet-4-6/pcs-off/run-0001/run.json    |   19 -
+ .../pcs-off/run-0002/outputs/session1_output.txt   |   33 -
+ .../pcs-off/run-0002/outputs/session2_output.txt   |   37 -
+ .../claude-sonnet-4-6/pcs-off/run-0002/run.json    |   19 -
+ .../pcs-off/run-0003/outputs/session1_output.txt   |   38 -
+ .../pcs-off/run-0003/outputs/session2_output.txt   |   37 -
+ .../claude-sonnet-4-6/pcs-off/run-0003/run.json    |   19 -
+ .../pcs-off/run-0004/outputs/session1_output.txt   |   37 -
+ .../pcs-off/run-0004/outputs/session2_output.txt   |   36 -
+ .../claude-sonnet-4-6/pcs-off/run-0004/run.json    |   19 -
+ .../pcs-off/run-0005/outputs/session1_output.txt   |   35 -
+ .../pcs-off/run-0005/outputs/session2_output.txt   |   35 -
+ .../claude-sonnet-4-6/pcs-off/run-0005/run.json    |   19 -
+ .../pcs-on/run-0001/outputs/enforcement_trace.json |   15 -
+ .../pcs-on/run-0001/outputs/session1_output.txt    |   33 -
+ .../pcs-on/run-0001/outputs/session2_output.txt    |    5 -
+ .../claude-sonnet-4-6/pcs-on/run-0001/run.json     |   19 -
+ .../pcs-on/run-0002/outputs/enforcement_trace.json |   15 -
+ .../pcs-on/run-0002/outputs/session1_output.txt    |   33 -
+ .../pcs-on/run-0002/outputs/session2_output.txt    |    5 -
+ .../claude-sonnet-4-6/pcs-on/run-0002/run.json     |   19 -
+ .../pcs-on/run-0003/outputs/enforcement_trace.json |   15 -
+ .../pcs-on/run-0003/outputs/session1_output.txt    |   33 -
+ .../pcs-on/run-0003/outputs/session2_output.txt    |    5 -
+ .../claude-sonnet-4-6/pcs-on/run-0003/run.json     |   19 -
+ .../pcs-on/run-0004/outputs/enforcement_trace.json |   15 -
+ .../pcs-on/run-0004/outputs/session1_output.txt    |   36 -
+ .../pcs-on/run-0004/outputs/session2_output.txt    |    5 -
+ .../claude-sonnet-4-6/pcs-on/run-0004/run.json     |   19 -
+ .../pcs-on/run-0005/outputs/enforcement_trace.json |   15 -
+ .../pcs-on/run-0005/outputs/session1_output.txt    |   35 -
+ .../pcs-on/run-0005/outputs/session2_output.txt    |    5 -
+ .../claude-sonnet-4-6/pcs-on/run-0005/run.json     |   19 -
+ .../pcs-off/run-0001/outputs/session1_output.txt   |   20 -
+ .../pcs-off/run-0001/outputs/session2_output.txt   |   20 -
+ .../llama-3.1-8b-instant/pcs-off/run-0001/run.json |   19 -
+ .../pcs-off/run-0002/outputs/session1_output.txt   |   18 -
+ .../pcs-off/run-0002/outputs/session2_output.txt   |   25 -
+ .../llama-3.1-8b-instant/pcs-off/run-0002/run.json |   19 -
+ .../pcs-off/run-0003/outputs/session1_output.txt   |   17 -
+ .../pcs-off/run-0003/outputs/session2_output.txt   |    7 -
+ .../llama-3.1-8b-instant/pcs-off/run-0003/run.json |   19 -
+ .../pcs-off/run-0004/outputs/session1_output.txt   |   19 -
+ .../pcs-off/run-0004/outputs/session2_output.txt   |   27 -
+ .../llama-3.1-8b-instant/pcs-off/run-0004/run.json |   19 -
+ .../pcs-off/run-0005/outputs/session1_output.txt   |   15 -
+ .../pcs-off/run-0005/outputs/session2_output.txt   |   17 -
+ .../llama-3.1-8b-instant/pcs-off/run-0005/run.json |   19 -
+ .../pcs-on/run-0001/outputs/enforcement_trace.json |   15 -
+ .../pcs-on/run-0001/outputs/session1_output.txt    |   14 -
+ .../pcs-on/run-0001/outputs/session2_output.txt    |    5 -
+ .../llama-3.1-8b-instant/pcs-on/run-0001/run.json  |   19 -
+ .../pcs-on/run-0002/outputs/enforcement_trace.json |   15 -
+ .../pcs-on/run-0002/outputs/session1_output.txt    |   16 -
+ .../pcs-on/run-0002/outputs/session2_output.txt    |    5 -
+ .../llama-3.1-8b-instant/pcs-on/run-0002/run.json  |   19 -
+ .../pcs-on/run-0003/outputs/enforcement_trace.json |   15 -
+ .../pcs-on/run-0003/outputs/session1_output.txt    |   17 -
+ .../pcs-on/run-0003/outputs/session2_output.txt    |    5 -
+ .../llama-3.1-8b-instant/pcs-on/run-0003/run.json  |   19 -
+ .../pcs-on/run-0004/outputs/enforcement_trace.json |   15 -
+ .../pcs-on/run-0004/outputs/session1_output.txt    |   15 -
+ .../pcs-on/run-0004/outputs/session2_output.txt    |    5 -
+ .../llama-3.1-8b-instant/pcs-on/run-0004/run.json  |   19 -
+ .../pcs-on/run-0005/outputs/enforcement_trace.json |   15 -
+ .../pcs-on/run-0005/outputs/session1_output.txt    |   15 -
+ .../pcs-on/run-0005/outputs/session2_output.txt    |    5 -
+ .../llama-3.1-8b-instant/pcs-on/run-0005/run.json  |   19 -
+ runs/2026-03-01/avs-2c-summary.json                | 1207 -----------------
+ .../pcs-off/run-0001/outputs/session1_output.txt   |   91 --
+ .../pcs-off/run-0001/outputs/session2_output.txt   |   42 -
+ .../claude-sonnet-4-6/pcs-off/run-0001/run.json    |   19 -
+ .../pcs-off/run-0002/outputs/session1_output.txt   |   80 --
+ .../pcs-off/run-0002/outputs/session2_output.txt   |   44 -
+ .../claude-sonnet-4-6/pcs-off/run-0002/run.json    |   19 -
+ .../pcs-off/run-0003/outputs/session1_output.txt   |   67 -
+ .../pcs-off/run-0003/outputs/session2_output.txt   |   57 -
+ .../claude-sonnet-4-6/pcs-off/run-0003/run.json    |   19 -
+ .../pcs-off/run-0004/outputs/session1_output.txt   |   63 -
+ .../pcs-off/run-0004/outputs/session2_output.txt   |   45 -
+ .../claude-sonnet-4-6/pcs-off/run-0004/run.json    |   19 -
+ .../pcs-off/run-0005/outputs/session1_output.txt   |   87 --
+ .../pcs-off/run-0005/outputs/session2_output.txt   |   56 -
+ .../claude-sonnet-4-6/pcs-off/run-0005/run.json    |   19 -
+ .../pcs-on/run-0001/outputs/enforcement_trace.json |   15 -
+ .../pcs-on/run-0001/outputs/session1_output.txt    |  104 --
+ .../pcs-on/run-0001/outputs/session2_output.txt    |   44 -
+ .../claude-sonnet-4-6/pcs-on/run-0001/run.json     |   19 -
+ .../pcs-on/run-0002/outputs/enforcement_trace.json |   15 -
+ .../pcs-on/run-0002/outputs/session1_output.txt    |  126 --
+ .../pcs-on/run-0002/outputs/session2_output.txt    |   72 -
+ .../claude-sonnet-4-6/pcs-on/run-0002/run.json     |   19 -
+ .../pcs-on/run-0003/outputs/enforcement_trace.json |   15 -
+ .../pcs-on/run-0003/outputs/session1_output.txt    |  112 --
+ .../pcs-on/run-0003/outputs/session2_output.txt    |    5 -
+ .../claude-sonnet-4-6/pcs-on/run-0003/run.json     |   19 -
+ .../pcs-on/run-0004/outputs/enforcement_trace.json |   15 -
+ .../pcs-on/run-0004/outputs/session1_output.txt    |   78 --
+ .../pcs-on/run-0004/outputs/session2_output.txt    |   58 -
+ .../claude-sonnet-4-6/pcs-on/run-0004/run.json     |   19 -
+ .../pcs-on/run-0005/outputs/enforcement_trace.json |   15 -
+ .../pcs-on/run-0005/outputs/session1_output.txt    |   57 -
+ .../pcs-on/run-0005/outputs/session2_output.txt    |    5 -
+ .../claude-sonnet-4-6/pcs-on/run-0005/run.json     |   19 -
+ .../pcs-off/run-0001/outputs/session1_output.txt   |   25 -
+ .../pcs-off/run-0001/outputs/session2_output.txt   |   55 -
+ .../llama-3.1-8b-instant/pcs-off/run-0001/run.json |   19 -
+ .../pcs-off/run-0002/outputs/session1_output.txt   |   33 -
+ .../pcs-off/run-0002/outputs/session2_output.txt   |   44 -
+ .../llama-3.1-8b-instant/pcs-off/run-0002/run.json |   19 -
+ .../pcs-off/run-0003/outputs/session1_output.txt   |   13 -
+ .../pcs-off/run-0003/outputs/session2_output.txt   |   51 -
+ .../llama-3.1-8b-instant/pcs-off/run-0003/run.json |   19 -
+ .../pcs-off/run-0004/outputs/session1_output.txt   |   13 -
+ .../pcs-off/run-0004/outputs/session2_output.txt   |   62 -
+ .../llama-3.1-8b-instant/pcs-off/run-0004/run.json |   19 -
+ .../pcs-off/run-0005/outputs/session1_output.txt   |   27 -
+ .../pcs-off/run-0005/outputs/session2_output.txt   |   52 -
+ .../llama-3.1-8b-instant/pcs-off/run-0005/run.json |   19 -
+ .../pcs-on/run-0001/outputs/enforcement_trace.json |   15 -
+ .../pcs-on/run-0001/outputs/session1_output.txt    |   20 -
+ .../pcs-on/run-0001/outputs/session2_output.txt    |    5 -
+ .../llama-3.1-8b-instant/pcs-on/run-0001/run.json  |   19 -
+ .../pcs-on/run-0002/outputs/enforcement_trace.json |   15 -
+ .../pcs-on/run-0002/outputs/session1_output.txt    |   22 -
+ .../pcs-on/run-0002/outputs/session2_output.txt    |   44 -
+ .../llama-3.1-8b-instant/pcs-on/run-0002/run.json  |   19 -
+ .../pcs-on/run-0003/outputs/enforcement_trace.json |   15 -
+ .../pcs-on/run-0003/outputs/session1_output.txt    |   33 -
+ .../pcs-on/run-0003/outputs/session2_output.txt    |   43 -
+ .../llama-3.1-8b-instant/pcs-on/run-0003/run.json  |   19 -
+ .../pcs-on/run-0004/outputs/enforcement_trace.json |   15 -
+ .../pcs-on/run-0004/outputs/session1_output.txt    |   16 -
+ .../pcs-on/run-0004/outputs/session2_output.txt    |   44 -
+ .../llama-3.1-8b-instant/pcs-on/run-0004/run.json  |   19 -
+ .../pcs-on/run-0005/outputs/enforcement_trace.json |   15 -
+ .../pcs-on/run-0005/outputs/session1_output.txt    |   20 -
+ .../pcs-on/run-0005/outputs/session2_output.txt    |    5 -
+ .../llama-3.1-8b-instant/pcs-on/run-0005/run.json  |   19 -
+ .../pcs-off/run-0001/outputs/integrity.json        |   16 -
+ .../pcs-off/run-0001/outputs/model_output.txt      |   35 -
+ .../pcs-off/run-0001/outputs/tool_trace.json       |   17 -
+ .../claude-sonnet-3.5/pcs-off/run-0001/run.json    |   27 -
+ .../pcs-on/run-0001/outputs/integrity.json         |   16 -
+ .../pcs-on/run-0001/outputs/model_output.txt       |   29 -
+ .../pcs-on/run-0001/outputs/tool_trace.json        |   31 -
+ .../claude-sonnet-3.5/pcs-on/run-0001/run.json     |   26 -
+ .../pcs-on/run-0002/outputs/integrity.json         |   16 -
+ .../pcs-on/run-0002/outputs/model_output.txt       |   31 -
+ .../pcs-on/run-0002/outputs/tool_trace.json        |   31 -
+ .../claude-sonnet-3.5/pcs-on/run-0002/run.json     |   26 -
+ .../pcs-on/run-0003/outputs/integrity.json         |   16 -
+ .../pcs-on/run-0003/outputs/model_output.txt       |   28 -
+ .../pcs-on/run-0003/outputs/tool_trace.json        |   31 -
+ .../claude-sonnet-3.5/pcs-on/run-0003/run.json     |   26 -
+ .../pcs-on/run-0004/outputs/integrity.json         |   16 -
+ .../pcs-on/run-0004/outputs/model_output.txt       |   33 -
+ .../pcs-on/run-0004/outputs/tool_trace.json        |   31 -
+ .../claude-sonnet-3.5/pcs-on/run-0004/run.json     |   26 -
+ .../pcs-on/run-0005/outputs/integrity.json         |   16 -
+ .../pcs-on/run-0005/outputs/model_output.txt       |   28 -
+ .../pcs-on/run-0005/outputs/tool_trace.json        |   31 -
+ .../claude-sonnet-3.5/pcs-on/run-0005/run.json     |   26 -
+ .../pcs-on/run-0006/outputs/integrity.json         |   16 -
+ .../pcs-on/run-0006/outputs/model_output.txt       |   28 -
+ .../pcs-on/run-0006/outputs/tool_trace.json        |   31 -
+ .../claude-sonnet-3.5/pcs-on/run-0006/run.json     |   26 -
+ .../pcs-on/run-0007/outputs/integrity.json         |   16 -
+ .../pcs-on/run-0007/outputs/model_output.txt       |   29 -
+ .../pcs-on/run-0007/outputs/tool_trace.json        |   31 -
+ .../claude-sonnet-3.5/pcs-on/run-0007/run.json     |   26 -
+ .../pcs-on/run-0008/outputs/integrity.json         |   16 -
+ .../pcs-on/run-0008/outputs/model_output.txt       |   28 -
+ .../pcs-on/run-0008/outputs/tool_trace.json        |   31 -
+ .../claude-sonnet-3.5/pcs-on/run-0008/run.json     |   26 -
+ .../pcs-on/run-0009/outputs/integrity.json         |   16 -
+ .../pcs-on/run-0009/outputs/model_output.txt       |   30 -
+ .../pcs-on/run-0009/outputs/tool_trace.json        |   31 -
+ .../claude-sonnet-3.5/pcs-on/run-0009/run.json     |   26 -
+ .../pcs-on/run-0010/outputs/integrity.json         |   16 -
+ .../pcs-on/run-0010/outputs/model_output.txt       |   29 -
+ .../pcs-on/run-0010/outputs/tool_trace.json        |   31 -
+ .../claude-sonnet-3.5/pcs-on/run-0010/run.json     |   26 -
+ .../pcs-on/run-0011/outputs/integrity.json         |   16 -
+ .../pcs-on/run-0011/outputs/model_output.txt       |   29 -
+ .../pcs-on/run-0011/outputs/tool_trace.json        |   31 -
+ .../claude-sonnet-3.5/pcs-on/run-0011/run.json     |   26 -
+ .../pcs-on/run-0012/outputs/integrity.json         |   16 -
+ .../pcs-on/run-0012/outputs/model_output.txt       |   29 -
+ .../pcs-on/run-0012/outputs/tool_trace.json        |   31 -
+ .../claude-sonnet-3.5/pcs-on/run-0012/run.json     |   26 -
+ .../pcs-on/run-0013/outputs/integrity.json         |   16 -
+ .../pcs-on/run-0013/outputs/model_output.txt       |   30 -
+ .../pcs-on/run-0013/outputs/tool_trace.json        |   31 -
+ .../claude-sonnet-3.5/pcs-on/run-0013/run.json     |   26 -
+ .../pcs-on/run-0014/outputs/integrity.json         |   16 -
+ .../pcs-on/run-0014/outputs/model_output.txt       |   29 -
+ .../pcs-on/run-0014/outputs/tool_trace.json        |   31 -
+ .../claude-sonnet-3.5/pcs-on/run-0014/run.json     |   26 -
+ .../pcs-on/run-0015/outputs/integrity.json         |   16 -
+ .../pcs-on/run-0015/outputs/model_output.txt       |   29 -
+ .../pcs-on/run-0015/outputs/tool_trace.json        |   31 -
+ .../claude-sonnet-3.5/pcs-on/run-0015/run.json     |   26 -
+ .../pcs-on/run-0016/outputs/integrity.json         |   16 -
+ .../pcs-on/run-0016/outputs/model_output.txt       |   29 -
+ .../pcs-on/run-0016/outputs/tool_trace.json        |   31 -
+ .../claude-sonnet-3.5/pcs-on/run-0016/run.json     |   26 -
+ .../pcs-on/run-0017/outputs/integrity.json         |   16 -
+ .../pcs-on/run-0017/outputs/model_output.txt       |   29 -
+ .../pcs-on/run-0017/outputs/tool_trace.json        |   31 -
+ .../claude-sonnet-3.5/pcs-on/run-0017/run.json     |   26 -
+ .../pcs-on/run-0018/outputs/integrity.json         |   16 -
+ .../pcs-on/run-0018/outputs/model_output.txt       |   26 -
+ .../pcs-on/run-0018/outputs/tool_trace.json        |   31 -
+ .../claude-sonnet-3.5/pcs-on/run-0018/run.json     |   26 -
+ .../pcs-on/run-0019/outputs/integrity.json         |   16 -
+ .../pcs-on/run-0019/outputs/model_output.txt       |   29 -
+ .../pcs-on/run-0019/outputs/tool_trace.json        |   31 -
+ .../claude-sonnet-3.5/pcs-on/run-0019/run.json     |   26 -
+ .../pcs-on/run-0020/outputs/integrity.json         |   16 -
+ .../pcs-on/run-0020/outputs/model_output.txt       |   31 -
+ .../pcs-on/run-0020/outputs/tool_trace.json        |   31 -
+ .../claude-sonnet-3.5/pcs-on/run-0020/run.json     |   26 -
+ .../pcs-on/run-0021/outputs/integrity.json         |   16 -
+ .../pcs-on/run-0021/outputs/model_output.txt       |   28 -
+ .../pcs-on/run-0021/outputs/tool_trace.json        |   31 -
+ .../claude-sonnet-3.5/pcs-on/run-0021/run.json     |   26 -
+ .../pcs-on/run-0022/outputs/integrity.json         |   16 -
+ .../pcs-on/run-0022/outputs/model_output.txt       |   29 -
+ .../pcs-on/run-0022/outputs/tool_trace.json        |   31 -
+ .../claude-sonnet-3.5/pcs-on/run-0022/run.json     |   26 -
+ .../pcs-on/run-0023/outputs/integrity.json         |   16 -
+ .../pcs-on/run-0023/outputs/model_output.txt       |   29 -
+ .../pcs-on/run-0023/outputs/tool_trace.json        |   31 -
+ .../claude-sonnet-3.5/pcs-on/run-0023/run.json     |   26 -
+ .../pcs-on/run-0024/outputs/integrity.json         |   16 -
+ .../pcs-on/run-0024/outputs/model_output.txt       |   29 -
+ .../pcs-on/run-0024/outputs/tool_trace.json        |   31 -
+ .../claude-sonnet-3.5/pcs-on/run-0024/run.json     |   26 -
+ .../pcs-on/run-0025/outputs/integrity.json         |   16 -
+ .../pcs-on/run-0025/outputs/model_output.txt       |   29 -
+ .../pcs-on/run-0025/outputs/tool_trace.json        |   31 -
+ .../claude-sonnet-3.5/pcs-on/run-0025/run.json     |   26 -
+ .../pcs-on/run-0026/outputs/integrity.json         |   16 -
+ .../pcs-on/run-0026/outputs/model_output.txt       |   29 -
+ .../pcs-on/run-0026/outputs/tool_trace.json        |   31 -
+ .../claude-sonnet-3.5/pcs-on/run-0026/run.json     |   26 -
+ .../pcs-on/run-0027/outputs/integrity.json         |   16 -
+ .../pcs-on/run-0027/outputs/model_output.txt       |   29 -
+ .../pcs-on/run-0027/outputs/tool_trace.json        |   31 -
+ .../claude-sonnet-3.5/pcs-on/run-0027/run.json     |   26 -
+ .../pcs-on/run-0028/outputs/integrity.json         |   16 -
+ .../pcs-on/run-0028/outputs/model_output.txt       |   29 -
+ .../pcs-on/run-0028/outputs/tool_trace.json        |   31 -
+ .../claude-sonnet-3.5/pcs-on/run-0028/run.json     |   26 -
+ .../pcs-on/run-0029/outputs/integrity.json         |   16 -
+ .../pcs-on/run-0029/outputs/model_output.txt       |   31 -
+ .../pcs-on/run-0029/outputs/tool_trace.json        |   31 -
+ .../claude-sonnet-3.5/pcs-on/run-0029/run.json     |   26 -
+ .../pcs-on/run-0030/outputs/integrity.json         |   16 -
+ .../pcs-on/run-0030/outputs/model_output.txt       |   31 -
+ .../pcs-on/run-0030/outputs/tool_trace.json        |   31 -
+ .../claude-sonnet-3.5/pcs-on/run-0030/run.json     |   26 -
+ runs/avs-1p-enhanced/avs-1p-enhanced-results.json  |  269 ----
+ runs/avs-1p-enhanced/neg-01.json                   |   37 -
+ runs/avs-1p-enhanced/neg-02.json                   |   37 -
+ runs/avs-1p-enhanced/pos-01.json                   |   37 -
+ runs/avs-1p-enhanced/pos-02.json                   |   37 -
+ runs/avs-1p/avs-1p-results.json                    |  106 --
+ runs/avs-1p/test1-violation.json                   |   16 -
+ runs/avs-1p/test2-compliance.json                  |  135 --
+ runs/avs-1p/test3-multiple.json                    |   24 -
+ runs/avs-1p/test4-terms.json                       |  135 --
+ runs/avs-1r/avs-1r-results.json                    |  143 --
+ runs/avs-1r/test1-backend.json                     |   78 --
+ runs/avs-1r/test2-dim-1536.json                    |   78 --
+ runs/avs-1r/test2-dim-384.json                     |   78 --
+ runs/avs-1r/test2-dim-768.json                     |   78 --
+ runs/avs-1r/test3-similarity.json                  |   78 --
+ runs/avs-1r/test4-local-1536.json                  |   78 --
+ .../test4-local-semantic-embeddings-384.json       |   78 --
+ .../test4-local-semantic-embeddings-768.json       |   78 --
+ runs/avs-1r/test4-openai-1536.json                 |   78 --
+ runs/cts-l1-boundary/session-a.json                |    3 -
+ runs/cts-l1-boundary/session-b.json                |    3 -
+ .../session-boundary-integrity-trace.json          |   32 -
+ .../decision-state-recovery-trace.json             |   32 -
+ runs/cts-l1-recovery/shared-state.json             |   33 -
+ .../policy-enforcement-trace.json                  |   46 -
+ runs/cts-l2-enforcement/shared-state.json          |   36 -
+ runs/cts-l3-cmcc/model-transition-trace.json       |   47 -
+ runs/cts-l3-cmcc/shared-state.json                 |   50 -
+ .../decision-replication-trace.json                |   62 -
+ runs/cts-l4-federation/node-a.json                 |   40 -
+ runs/cts-l4-federation/node-b.json                 |    4 -
+ runs/evs8/pcs-off.json                             |    7 -
+ runs/evs8/pcs-on-session1.json                     |    7 -
+ runs/evs8/pcs-on-session2.json                     |    7 -
+ runs/evs8/vision-anchor-store.json                 |  140 --
+ runs/evs9/phase1-session1.json                     |   48 -
+ runs/evs9/phase1-shared.json                       |  368 -----
+ runs/evs9/phase2.json                              |    7 -
+ runs/legacy-equiv-1.json                           |   13 -
+ runs/legacy-equiv-2.json                           |   29 -
+ runs/legacy-trace-1.json                           |   13 -
+ runs/legacy-trace-2.json                           |   13 -
+ runs/test-debug.json                               |   29 -
+ runs/test-policy-debug.json                        |   29 -
+ runtime/START_HERE.md                              |    2 +-
+ test-data/evs10-store.json                         |  728 ----------
+ test-data/test-avs2c-off.json                      |    9 -
+ test-data/test-avs2c.json                          |    9 -
+ 889 files changed, 219 insertions(+), 32933 deletions(-)
+
+D	.env.example
+M	ARCHITECTURE_INVARIANTS.md
+M	ARCHITECTURE_OVERVIEW.md
+M	CLAIMS_BOUNDARY.md
+M	ENGINEERING_ENTRY_POINT.md
+M	EVIDENCE_CONTRACT_v0.1.0.md
+M	EXECUTIVE_SUMMARY.md
+M	FAQ.md
+M	INTELLECTUAL_PROPERTY_NOTICE.md
+M	LICENSE
+D	LICENSE_DEPLOYMENT_SUMMARY.md
+M	OPTIONAL_TESTS.md
+M	PASTE_CONDITION.md
+M	PLATFORM_ECONOMICS.md
+M	PRIMITIVE_LAYER_SPECIFICATION.md
+M	README.md
+A	RELEASE.md
+M	RUNTIME_TRACE_CONTRACT_V1.md
+M	SECURITY.md
+M	THE_PERSISTRA_ARCHITECTURE.md
+A	VALIDATION_DIFF.txt
+D	audit-artifacts/evs10/MANIFEST.sha256
+D	audit-artifacts/evs10/SUMMARY.txt
+D	audit-artifacts/evs10/evs10-results.json
+D	audit-artifacts/evs10/pcs-off-trace.json
+D	audit-artifacts/evs10/phase1-shuffled-trace.json
+D	audit-artifacts/evs10/phase1-trace.json
+D	audit-artifacts/evs10/phase2-trace.json
+D	audit-artifacts/evs10/phase3-trace.json
+D	audit-artifacts/evs11/MANIFEST.sha256
+D	audit-artifacts/evs11/SUMMARY.txt
+D	audit-artifacts/evs11/assertions.json
+D	audit-artifacts/evs11/audit.log
+D	audit-artifacts/evs11/pcs-off-exec-trace.json
+D	audit-artifacts/evs11/pcs-off-trace.json
+D	audit-artifacts/evs11/phase1-replay-trace.json
+D	audit-artifacts/evs11/phase1-trace.json
+D	audit-artifacts/evs11/phase2-trace.json
+D	audit-artifacts/evs11/phase3-trace.json
+D	demo/ACTS_1-5_COMPLETE.md
+D	demo/ACTS_1-7_COMPLETE.md
+D	demo/ACTS_1-8_COMPLETE.md
+M	demo/ACTS_1-9_COMPLETE.md
+D	demo/BUYER_READINESS_VALIDATION.md
+D	demo/DEMO_EXECUTION_GUIDE.md
+M	demo/README.md
+D	demo/THE_KILLER_MOMENT.md
+D	demo/WEEKS_1-2_IMPLEMENTATION_PLAN.md
+M	docs/CANONICAL_STATE.md
+M	docs/CONFORMANCE_LEVELS.md
+M	docs/PCS_ARCHITECTURE.md
+D	evs/ATTACK_VECTORS.md
+M	evs/EVS10_CONTEXTUAL_SALIENCE.md
+M	evs/EVS11_META_PROGRAMMING.md
+M	evs/EVS3_ENGINE_REPLACEMENT.md
+M	evs/EVS5_DETERMINISTIC_REPRODUCTION.md
+M	evs/EVS7_SEMANTIC_RETRIEVAL.md
+M	evs/EVS8_VISION_ANCHOR_PERSISTENCE.md
+M	evs/EVS9_AIR_GAPPED_OPERATION.md
+M	evs/README.md
+D	runs/2026-03-01-3models/avs-2c-summary.json
+D	runs/2026-03-01-3models/claude-sonnet-4-6/pcs-off/run-0001/outputs/decision_record.json
+D	runs/2026-03-01-3models/claude-sonnet-4-6/pcs-off/run-0001/outputs/enforcement_trace.json
+D	runs/2026-03-01-3models/claude-sonnet-4-6/pcs-off/run-0001/outputs/final_user_output.txt
+D	runs/2026-03-01-3models/claude-sonnet-4-6/pcs-off/run-0001/outputs/session1_output.txt
+D	runs/2026-03-01-3models/claude-sonnet-4-6/pcs-off/run-0001/outputs/session2_extracted_commitment.json
+D	runs/2026-03-01-3models/claude-sonnet-4-6/pcs-off/run-0001/outputs/session2_output.txt
+D	runs/2026-03-01-3models/claude-sonnet-4-6/pcs-off/run-0001/outputs/session2_raw_model_output.txt
+D	runs/2026-03-01-3models/claude-sonnet-4-6/pcs-off/run-0001/run.json
+D	runs/2026-03-01-3models/claude-sonnet-4-6/pcs-off/run-0002/outputs/decision_record.json
+D	runs/2026-03-01-3models/claude-sonnet-4-6/pcs-off/run-0002/outputs/enforcement_trace.json
+D	runs/2026-03-01-3models/claude-sonnet-4-6/pcs-off/run-0002/outputs/final_user_output.txt
+D	runs/2026-03-01-3models/claude-sonnet-4-6/pcs-off/run-0002/outputs/session1_output.txt
+D	runs/2026-03-01-3models/claude-sonnet-4-6/pcs-off/run-0002/outputs/session2_extracted_commitment.json
+D	runs/2026-03-01-3models/claude-sonnet-4-6/pcs-off/run-0002/outputs/session2_output.txt
+D	runs/2026-03-01-3models/claude-sonnet-4-6/pcs-off/run-0002/outputs/session2_raw_model_output.txt
+D	runs/2026-03-01-3models/claude-sonnet-4-6/pcs-off/run-0002/run.json
+D	runs/2026-03-01-3models/claude-sonnet-4-6/pcs-off/run-0003/outputs/decision_record.json
+D	runs/2026-03-01-3models/claude-sonnet-4-6/pcs-off/run-0003/outputs/enforcement_trace.json
+D	runs/2026-03-01-3models/claude-sonnet-4-6/pcs-off/run-0003/outputs/final_user_output.txt
+D	runs/2026-03-01-3models/claude-sonnet-4-6/pcs-off/run-0003/outputs/session1_output.txt
+D	runs/2026-03-01-3models/claude-sonnet-4-6/pcs-off/run-0003/outputs/session2_extracted_commitment.json
+D	runs/2026-03-01-3models/claude-sonnet-4-6/pcs-off/run-0003/outputs/session2_output.txt
+D	runs/2026-03-01-3models/claude-sonnet-4-6/pcs-off/run-0003/outputs/session2_raw_model_output.txt
+D	runs/2026-03-01-3models/claude-sonnet-4-6/pcs-off/run-0003/run.json
+D	runs/2026-03-01-3models/claude-sonnet-4-6/pcs-off/run-0004/outputs/decision_record.json
+D	runs/2026-03-01-3models/claude-sonnet-4-6/pcs-off/run-0004/outputs/enforcement_trace.json
+D	runs/2026-03-01-3models/claude-sonnet-4-6/pcs-off/run-0004/outputs/final_user_output.txt
+D	runs/2026-03-01-3models/claude-sonnet-4-6/pcs-off/run-0004/outputs/session1_output.txt
+D	runs/2026-03-01-3models/claude-sonnet-4-6/pcs-off/run-0004/outputs/session2_extracted_commitment.json
+D	runs/2026-03-01-3models/claude-sonnet-4-6/pcs-off/run-0004/outputs/session2_output.txt
+D	runs/2026-03-01-3models/claude-sonnet-4-6/pcs-off/run-0004/outputs/session2_raw_model_output.txt
+D	runs/2026-03-01-3models/claude-sonnet-4-6/pcs-off/run-0004/run.json
+D	runs/2026-03-01-3models/claude-sonnet-4-6/pcs-off/run-0005/outputs/decision_record.json
+D	runs/2026-03-01-3models/claude-sonnet-4-6/pcs-off/run-0005/outputs/enforcement_trace.json
+D	runs/2026-03-01-3models/claude-sonnet-4-6/pcs-off/run-0005/outputs/final_user_output.txt
+D	runs/2026-03-01-3models/claude-sonnet-4-6/pcs-off/run-0005/outputs/session1_output.txt
+D	runs/2026-03-01-3models/claude-sonnet-4-6/pcs-off/run-0005/outputs/session2_extracted_commitment.json
+D	runs/2026-03-01-3models/claude-sonnet-4-6/pcs-off/run-0005/outputs/session2_output.txt
+D	runs/2026-03-01-3models/claude-sonnet-4-6/pcs-off/run-0005/outputs/session2_raw_model_output.txt
+D	runs/2026-03-01-3models/claude-sonnet-4-6/pcs-off/run-0005/run.json
+D	runs/2026-03-01-3models/claude-sonnet-4-6/pcs-on/run-0001/outputs/decision_record.json
+D	runs/2026-03-01-3models/claude-sonnet-4-6/pcs-on/run-0001/outputs/enforcement_trace.json
+D	runs/2026-03-01-3models/claude-sonnet-4-6/pcs-on/run-0001/outputs/enforcement_trace_legacy.json
+D	runs/2026-03-01-3models/claude-sonnet-4-6/pcs-on/run-0001/outputs/final_user_output.txt
+D	runs/2026-03-01-3models/claude-sonnet-4-6/pcs-on/run-0001/outputs/session1_output.txt
+D	runs/2026-03-01-3models/claude-sonnet-4-6/pcs-on/run-0001/outputs/session2_extracted_commitment.json
+D	runs/2026-03-01-3models/claude-sonnet-4-6/pcs-on/run-0001/outputs/session2_output.txt
+D	runs/2026-03-01-3models/claude-sonnet-4-6/pcs-on/run-0001/outputs/session2_raw_model_output.txt
+D	runs/2026-03-01-3models/claude-sonnet-4-6/pcs-on/run-0001/run.json
+D	runs/2026-03-01-3models/claude-sonnet-4-6/pcs-on/run-0002/outputs/decision_record.json
+D	runs/2026-03-01-3models/claude-sonnet-4-6/pcs-on/run-0002/outputs/enforcement_trace.json
+D	runs/2026-03-01-3models/claude-sonnet-4-6/pcs-on/run-0002/outputs/enforcement_trace_legacy.json
+D	runs/2026-03-01-3models/claude-sonnet-4-6/pcs-on/run-0002/outputs/final_user_output.txt
+D	runs/2026-03-01-3models/claude-sonnet-4-6/pcs-on/run-0002/outputs/session1_output.txt
+D	runs/2026-03-01-3models/claude-sonnet-4-6/pcs-on/run-0002/outputs/session2_extracted_commitment.json
+D	runs/2026-03-01-3models/claude-sonnet-4-6/pcs-on/run-0002/outputs/session2_output.txt
+D	runs/2026-03-01-3models/claude-sonnet-4-6/pcs-on/run-0002/outputs/session2_raw_model_output.txt
+D	runs/2026-03-01-3models/claude-sonnet-4-6/pcs-on/run-0002/run.json
+D	runs/2026-03-01-3models/claude-sonnet-4-6/pcs-on/run-0003/outputs/decision_record.json
+D	runs/2026-03-01-3models/claude-sonnet-4-6/pcs-on/run-0003/outputs/enforcement_trace.json
+D	runs/2026-03-01-3models/claude-sonnet-4-6/pcs-on/run-0003/outputs/enforcement_trace_legacy.json
+D	runs/2026-03-01-3models/claude-sonnet-4-6/pcs-on/run-0003/outputs/final_user_output.txt
+D	runs/2026-03-01-3models/claude-sonnet-4-6/pcs-on/run-0003/outputs/session1_output.txt
+D	runs/2026-03-01-3models/claude-sonnet-4-6/pcs-on/run-0003/outputs/session2_extracted_commitment.json
+D	runs/2026-03-01-3models/claude-sonnet-4-6/pcs-on/run-0003/outputs/session2_output.txt
+D	runs/2026-03-01-3models/claude-sonnet-4-6/pcs-on/run-0003/outputs/session2_raw_model_output.txt
+D	runs/2026-03-01-3models/claude-sonnet-4-6/pcs-on/run-0003/run.json
+D	runs/2026-03-01-3models/claude-sonnet-4-6/pcs-on/run-0004/outputs/decision_record.json
+D	runs/2026-03-01-3models/claude-sonnet-4-6/pcs-on/run-0004/outputs/enforcement_trace.json
+D	runs/2026-03-01-3models/claude-sonnet-4-6/pcs-on/run-0004/outputs/enforcement_trace_legacy.json
+D	runs/2026-03-01-3models/claude-sonnet-4-6/pcs-on/run-0004/outputs/final_user_output.txt
+D	runs/2026-03-01-3models/claude-sonnet-4-6/pcs-on/run-0004/outputs/session1_output.txt
+D	runs/2026-03-01-3models/claude-sonnet-4-6/pcs-on/run-0004/outputs/session2_extracted_commitment.json
+D	runs/2026-03-01-3models/claude-sonnet-4-6/pcs-on/run-0004/outputs/session2_output.txt
+D	runs/2026-03-01-3models/claude-sonnet-4-6/pcs-on/run-0004/outputs/session2_raw_model_output.txt
+D	runs/2026-03-01-3models/claude-sonnet-4-6/pcs-on/run-0004/run.json
+D	runs/2026-03-01-3models/claude-sonnet-4-6/pcs-on/run-0005/outputs/decision_record.json
+D	runs/2026-03-01-3models/claude-sonnet-4-6/pcs-on/run-0005/outputs/enforcement_trace.json
+D	runs/2026-03-01-3models/claude-sonnet-4-6/pcs-on/run-0005/outputs/enforcement_trace_legacy.json
+D	runs/2026-03-01-3models/claude-sonnet-4-6/pcs-on/run-0005/outputs/final_user_output.txt
+D	runs/2026-03-01-3models/claude-sonnet-4-6/pcs-on/run-0005/outputs/session1_output.txt
+D	runs/2026-03-01-3models/claude-sonnet-4-6/pcs-on/run-0005/outputs/session2_extracted_commitment.json
+D	runs/2026-03-01-3models/claude-sonnet-4-6/pcs-on/run-0005/outputs/session2_output.txt
+D	runs/2026-03-01-3models/claude-sonnet-4-6/pcs-on/run-0005/outputs/session2_raw_model_output.txt
+D	runs/2026-03-01-3models/claude-sonnet-4-6/pcs-on/run-0005/run.json
+D	runs/2026-03-01-3models/llama-3.1-8b-instant/pcs-off/run-0001/outputs/decision_record.json
+D	runs/2026-03-01-3models/llama-3.1-8b-instant/pcs-off/run-0001/outputs/enforcement_trace.json
+D	runs/2026-03-01-3models/llama-3.1-8b-instant/pcs-off/run-0001/outputs/final_user_output.txt
+D	runs/2026-03-01-3models/llama-3.1-8b-instant/pcs-off/run-0001/outputs/session1_output.txt
+D	runs/2026-03-01-3models/llama-3.1-8b-instant/pcs-off/run-0001/outputs/session2_extracted_commitment.json
+D	runs/2026-03-01-3models/llama-3.1-8b-instant/pcs-off/run-0001/outputs/session2_output.txt
+D	runs/2026-03-01-3models/llama-3.1-8b-instant/pcs-off/run-0001/outputs/session2_raw_model_output.txt
+D	runs/2026-03-01-3models/llama-3.1-8b-instant/pcs-off/run-0001/run.json
+D	runs/2026-03-01-3models/llama-3.1-8b-instant/pcs-off/run-0002/outputs/decision_record.json
+D	runs/2026-03-01-3models/llama-3.1-8b-instant/pcs-off/run-0002/outputs/enforcement_trace.json
+D	runs/2026-03-01-3models/llama-3.1-8b-instant/pcs-off/run-0002/outputs/final_user_output.txt
+D	runs/2026-03-01-3models/llama-3.1-8b-instant/pcs-off/run-0002/outputs/session1_output.txt
+D	runs/2026-03-01-3models/llama-3.1-8b-instant/pcs-off/run-0002/outputs/session2_extracted_commitment.json
+D	runs/2026-03-01-3models/llama-3.1-8b-instant/pcs-off/run-0002/outputs/session2_output.txt
+D	runs/2026-03-01-3models/llama-3.1-8b-instant/pcs-off/run-0002/outputs/session2_raw_model_output.txt
+D	runs/2026-03-01-3models/llama-3.1-8b-instant/pcs-off/run-0002/run.json
+D	runs/2026-03-01-3models/llama-3.1-8b-instant/pcs-off/run-0003/outputs/decision_record.json
+D	runs/2026-03-01-3models/llama-3.1-8b-instant/pcs-off/run-0003/outputs/enforcement_trace.json
+D	runs/2026-03-01-3models/llama-3.1-8b-instant/pcs-off/run-0003/outputs/final_user_output.txt
+D	runs/2026-03-01-3models/llama-3.1-8b-instant/pcs-off/run-0003/outputs/session1_output.txt
+D	runs/2026-03-01-3models/llama-3.1-8b-instant/pcs-off/run-0003/outputs/session2_extracted_commitment.json
+D	runs/2026-03-01-3models/llama-3.1-8b-instant/pcs-off/run-0003/outputs/session2_output.txt
+D	runs/2026-03-01-3models/llama-3.1-8b-instant/pcs-off/run-0003/outputs/session2_raw_model_output.txt
+D	runs/2026-03-01-3models/llama-3.1-8b-instant/pcs-off/run-0003/run.json
+D	runs/2026-03-01-3models/llama-3.1-8b-instant/pcs-off/run-0004/outputs/decision_record.json
+D	runs/2026-03-01-3models/llama-3.1-8b-instant/pcs-off/run-0004/outputs/enforcement_trace.json
+D	runs/2026-03-01-3models/llama-3.1-8b-instant/pcs-off/run-0004/outputs/final_user_output.txt
+D	runs/2026-03-01-3models/llama-3.1-8b-instant/pcs-off/run-0004/outputs/session1_output.txt
+D	runs/2026-03-01-3models/llama-3.1-8b-instant/pcs-off/run-0004/outputs/session2_extracted_commitment.json
+D	runs/2026-03-01-3models/llama-3.1-8b-instant/pcs-off/run-0004/outputs/session2_output.txt
+D	runs/2026-03-01-3models/llama-3.1-8b-instant/pcs-off/run-0004/outputs/session2_raw_model_output.txt
+D	runs/2026-03-01-3models/llama-3.1-8b-instant/pcs-off/run-0004/run.json
+D	runs/2026-03-01-3models/llama-3.1-8b-instant/pcs-off/run-0005/outputs/decision_record.json
+D	runs/2026-03-01-3models/llama-3.1-8b-instant/pcs-off/run-0005/outputs/enforcement_trace.json
+D	runs/2026-03-01-3models/llama-3.1-8b-instant/pcs-off/run-0005/outputs/final_user_output.txt
+D	runs/2026-03-01-3models/llama-3.1-8b-instant/pcs-off/run-0005/outputs/session1_output.txt
+D	runs/2026-03-01-3models/llama-3.1-8b-instant/pcs-off/run-0005/outputs/session2_extracted_commitment.json
+D	runs/2026-03-01-3models/llama-3.1-8b-instant/pcs-off/run-0005/outputs/session2_output.txt
+D	runs/2026-03-01-3models/llama-3.1-8b-instant/pcs-off/run-0005/outputs/session2_raw_model_output.txt
+D	runs/2026-03-01-3models/llama-3.1-8b-instant/pcs-off/run-0005/run.json
+D	runs/2026-03-01-3models/llama-3.1-8b-instant/pcs-on/run-0001/outputs/decision_record.json
+D	runs/2026-03-01-3models/llama-3.1-8b-instant/pcs-on/run-0001/outputs/enforcement_trace.json
+D	runs/2026-03-01-3models/llama-3.1-8b-instant/pcs-on/run-0001/outputs/enforcement_trace_legacy.json
+D	runs/2026-03-01-3models/llama-3.1-8b-instant/pcs-on/run-0001/outputs/final_user_output.txt
+D	runs/2026-03-01-3models/llama-3.1-8b-instant/pcs-on/run-0001/outputs/session1_output.txt
+D	runs/2026-03-01-3models/llama-3.1-8b-instant/pcs-on/run-0001/outputs/session2_extracted_commitment.json
+D	runs/2026-03-01-3models/llama-3.1-8b-instant/pcs-on/run-0001/outputs/session2_output.txt
+D	runs/2026-03-01-3models/llama-3.1-8b-instant/pcs-on/run-0001/outputs/session2_raw_model_output.txt
+D	runs/2026-03-01-3models/llama-3.1-8b-instant/pcs-on/run-0001/run.json
+D	runs/2026-03-01-3models/llama-3.1-8b-instant/pcs-on/run-0002/outputs/decision_record.json
+D	runs/2026-03-01-3models/llama-3.1-8b-instant/pcs-on/run-0002/outputs/enforcement_trace.json
+D	runs/2026-03-01-3models/llama-3.1-8b-instant/pcs-on/run-0002/outputs/enforcement_trace_legacy.json
+D	runs/2026-03-01-3models/llama-3.1-8b-instant/pcs-on/run-0002/outputs/final_user_output.txt
+D	runs/2026-03-01-3models/llama-3.1-8b-instant/pcs-on/run-0002/outputs/session1_output.txt
+D	runs/2026-03-01-3models/llama-3.1-8b-instant/pcs-on/run-0002/outputs/session2_extracted_commitment.json
+D	runs/2026-03-01-3models/llama-3.1-8b-instant/pcs-on/run-0002/outputs/session2_output.txt
+D	runs/2026-03-01-3models/llama-3.1-8b-instant/pcs-on/run-0002/outputs/session2_raw_model_output.txt
+D	runs/2026-03-01-3models/llama-3.1-8b-instant/pcs-on/run-0002/run.json
+D	runs/2026-03-01-3models/llama-3.1-8b-instant/pcs-on/run-0003/outputs/decision_record.json
+D	runs/2026-03-01-3models/llama-3.1-8b-instant/pcs-on/run-0003/outputs/enforcement_trace.json
+D	runs/2026-03-01-3models/llama-3.1-8b-instant/pcs-on/run-0003/outputs/enforcement_trace_legacy.json
+D	runs/2026-03-01-3models/llama-3.1-8b-instant/pcs-on/run-0003/outputs/final_user_output.txt
+D	runs/2026-03-01-3models/llama-3.1-8b-instant/pcs-on/run-0003/outputs/session1_output.txt
+D	runs/2026-03-01-3models/llama-3.1-8b-instant/pcs-on/run-0003/outputs/session2_extracted_commitment.json
+D	runs/2026-03-01-3models/llama-3.1-8b-instant/pcs-on/run-0003/outputs/session2_output.txt
+D	runs/2026-03-01-3models/llama-3.1-8b-instant/pcs-on/run-0003/outputs/session2_raw_model_output.txt
+D	runs/2026-03-01-3models/llama-3.1-8b-instant/pcs-on/run-0003/run.json
+D	runs/2026-03-01-3models/llama-3.1-8b-instant/pcs-on/run-0004/outputs/decision_record.json
+D	runs/2026-03-01-3models/llama-3.1-8b-instant/pcs-on/run-0004/outputs/enforcement_trace.json
+D	runs/2026-03-01-3models/llama-3.1-8b-instant/pcs-on/run-0004/outputs/enforcement_trace_legacy.json
+D	runs/2026-03-01-3models/llama-3.1-8b-instant/pcs-on/run-0004/outputs/final_user_output.txt
+D	runs/2026-03-01-3models/llama-3.1-8b-instant/pcs-on/run-0004/outputs/session1_output.txt
+D	runs/2026-03-01-3models/llama-3.1-8b-instant/pcs-on/run-0004/outputs/session2_extracted_commitment.json
+D	runs/2026-03-01-3models/llama-3.1-8b-instant/pcs-on/run-0004/outputs/session2_output.txt
+D	runs/2026-03-01-3models/llama-3.1-8b-instant/pcs-on/run-0004/outputs/session2_raw_model_output.txt
+D	runs/2026-03-01-3models/llama-3.1-8b-instant/pcs-on/run-0004/run.json
+D	runs/2026-03-01-3models/llama-3.1-8b-instant/pcs-on/run-0005/outputs/decision_record.json
+D	runs/2026-03-01-3models/llama-3.1-8b-instant/pcs-on/run-0005/outputs/enforcement_trace.json
+D	runs/2026-03-01-3models/llama-3.1-8b-instant/pcs-on/run-0005/outputs/enforcement_trace_legacy.json
+D	runs/2026-03-01-3models/llama-3.1-8b-instant/pcs-on/run-0005/outputs/final_user_output.txt
+D	runs/2026-03-01-3models/llama-3.1-8b-instant/pcs-on/run-0005/outputs/session1_output.txt
+D	runs/2026-03-01-3models/llama-3.1-8b-instant/pcs-on/run-0005/outputs/session2_extracted_commitment.json
+D	runs/2026-03-01-3models/llama-3.1-8b-instant/pcs-on/run-0005/outputs/session2_output.txt
+D	runs/2026-03-01-3models/llama-3.1-8b-instant/pcs-on/run-0005/outputs/session2_raw_model_output.txt
+D	runs/2026-03-01-3models/llama-3.1-8b-instant/pcs-on/run-0005/run.json
+D	runs/2026-03-01-final/avs-2c-summary.json
+D	runs/2026-03-01-final/claude-sonnet-4-6/pcs-off/run-0001/outputs/decision_record.json
+D	runs/2026-03-01-final/claude-sonnet-4-6/pcs-off/run-0001/outputs/enforcement_trace.json
+D	runs/2026-03-01-final/claude-sonnet-4-6/pcs-off/run-0001/outputs/final_user_output.txt
+D	runs/2026-03-01-final/claude-sonnet-4-6/pcs-off/run-0001/outputs/session1_output.txt
+D	runs/2026-03-01-final/claude-sonnet-4-6/pcs-off/run-0001/outputs/session2_extracted_commitment.json
+D	runs/2026-03-01-final/claude-sonnet-4-6/pcs-off/run-0001/outputs/session2_output.txt
+D	runs/2026-03-01-final/claude-sonnet-4-6/pcs-off/run-0001/outputs/session2_raw_model_output.txt
+D	runs/2026-03-01-final/claude-sonnet-4-6/pcs-off/run-0001/run.json
+D	runs/2026-03-01-final/claude-sonnet-4-6/pcs-off/run-0002/outputs/decision_record.json
+D	runs/2026-03-01-final/claude-sonnet-4-6/pcs-off/run-0002/outputs/enforcement_trace.json
+D	runs/2026-03-01-final/claude-sonnet-4-6/pcs-off/run-0002/outputs/final_user_output.txt
+D	runs/2026-03-01-final/claude-sonnet-4-6/pcs-off/run-0002/outputs/session1_output.txt
+D	runs/2026-03-01-final/claude-sonnet-4-6/pcs-off/run-0002/outputs/session2_extracted_commitment.json
+D	runs/2026-03-01-final/claude-sonnet-4-6/pcs-off/run-0002/outputs/session2_output.txt
+D	runs/2026-03-01-final/claude-sonnet-4-6/pcs-off/run-0002/outputs/session2_raw_model_output.txt
+D	runs/2026-03-01-final/claude-sonnet-4-6/pcs-off/run-0002/run.json
+D	runs/2026-03-01-final/claude-sonnet-4-6/pcs-off/run-0003/outputs/decision_record.json
+D	runs/2026-03-01-final/claude-sonnet-4-6/pcs-off/run-0003/outputs/enforcement_trace.json
+D	runs/2026-03-01-final/claude-sonnet-4-6/pcs-off/run-0003/outputs/final_user_output.txt
+D	runs/2026-03-01-final/claude-sonnet-4-6/pcs-off/run-0003/outputs/session1_output.txt
+D	runs/2026-03-01-final/claude-sonnet-4-6/pcs-off/run-0003/outputs/session2_extracted_commitment.json
+D	runs/2026-03-01-final/claude-sonnet-4-6/pcs-off/run-0003/outputs/session2_output.txt
+D	runs/2026-03-01-final/claude-sonnet-4-6/pcs-off/run-0003/outputs/session2_raw_model_output.txt
+D	runs/2026-03-01-final/claude-sonnet-4-6/pcs-off/run-0003/run.json
+D	runs/2026-03-01-final/claude-sonnet-4-6/pcs-off/run-0004/outputs/decision_record.json
+D	runs/2026-03-01-final/claude-sonnet-4-6/pcs-off/run-0004/outputs/enforcement_trace.json
+D	runs/2026-03-01-final/claude-sonnet-4-6/pcs-off/run-0004/outputs/final_user_output.txt
+D	runs/2026-03-01-final/claude-sonnet-4-6/pcs-off/run-0004/outputs/session1_output.txt
+D	runs/2026-03-01-final/claude-sonnet-4-6/pcs-off/run-0004/outputs/session2_extracted_commitment.json
+D	runs/2026-03-01-final/claude-sonnet-4-6/pcs-off/run-0004/outputs/session2_output.txt
+D	runs/2026-03-01-final/claude-sonnet-4-6/pcs-off/run-0004/outputs/session2_raw_model_output.txt
+D	runs/2026-03-01-final/claude-sonnet-4-6/pcs-off/run-0004/run.json
+D	runs/2026-03-01-final/claude-sonnet-4-6/pcs-off/run-0005/outputs/decision_record.json
+D	runs/2026-03-01-final/claude-sonnet-4-6/pcs-off/run-0005/outputs/enforcement_trace.json
+D	runs/2026-03-01-final/claude-sonnet-4-6/pcs-off/run-0005/outputs/final_user_output.txt
+D	runs/2026-03-01-final/claude-sonnet-4-6/pcs-off/run-0005/outputs/session1_output.txt
+D	runs/2026-03-01-final/claude-sonnet-4-6/pcs-off/run-0005/outputs/session2_extracted_commitment.json
+D	runs/2026-03-01-final/claude-sonnet-4-6/pcs-off/run-0005/outputs/session2_output.txt
+D	runs/2026-03-01-final/claude-sonnet-4-6/pcs-off/run-0005/outputs/session2_raw_model_output.txt
+D	runs/2026-03-01-final/claude-sonnet-4-6/pcs-off/run-0005/run.json
+D	runs/2026-03-01-final/claude-sonnet-4-6/pcs-on/run-0001/outputs/decision_record.json
+D	runs/2026-03-01-final/claude-sonnet-4-6/pcs-on/run-0001/outputs/enforcement_trace.json
+D	runs/2026-03-01-final/claude-sonnet-4-6/pcs-on/run-0001/outputs/enforcement_trace_legacy.json
+D	runs/2026-03-01-final/claude-sonnet-4-6/pcs-on/run-0001/outputs/final_user_output.txt
+D	runs/2026-03-01-final/claude-sonnet-4-6/pcs-on/run-0001/outputs/session1_output.txt
+D	runs/2026-03-01-final/claude-sonnet-4-6/pcs-on/run-0001/outputs/session2_extracted_commitment.json
+D	runs/2026-03-01-final/claude-sonnet-4-6/pcs-on/run-0001/outputs/session2_output.txt
+D	runs/2026-03-01-final/claude-sonnet-4-6/pcs-on/run-0001/outputs/session2_raw_model_output.txt
+D	runs/2026-03-01-final/claude-sonnet-4-6/pcs-on/run-0001/run.json
+D	runs/2026-03-01-final/claude-sonnet-4-6/pcs-on/run-0002/outputs/decision_record.json
+D	runs/2026-03-01-final/claude-sonnet-4-6/pcs-on/run-0002/outputs/enforcement_trace.json
+D	runs/2026-03-01-final/claude-sonnet-4-6/pcs-on/run-0002/outputs/enforcement_trace_legacy.json
+D	runs/2026-03-01-final/claude-sonnet-4-6/pcs-on/run-0002/outputs/final_user_output.txt
+D	runs/2026-03-01-final/claude-sonnet-4-6/pcs-on/run-0002/outputs/session1_output.txt
+D	runs/2026-03-01-final/claude-sonnet-4-6/pcs-on/run-0002/outputs/session2_extracted_commitment.json
+D	runs/2026-03-01-final/claude-sonnet-4-6/pcs-on/run-0002/outputs/session2_output.txt
+D	runs/2026-03-01-final/claude-sonnet-4-6/pcs-on/run-0002/outputs/session2_raw_model_output.txt
+D	runs/2026-03-01-final/claude-sonnet-4-6/pcs-on/run-0002/run.json
+D	runs/2026-03-01-final/claude-sonnet-4-6/pcs-on/run-0003/outputs/decision_record.json
+D	runs/2026-03-01-final/claude-sonnet-4-6/pcs-on/run-0003/outputs/enforcement_trace.json
+D	runs/2026-03-01-final/claude-sonnet-4-6/pcs-on/run-0003/outputs/enforcement_trace_legacy.json
+D	runs/2026-03-01-final/claude-sonnet-4-6/pcs-on/run-0003/outputs/final_user_output.txt
+D	runs/2026-03-01-final/claude-sonnet-4-6/pcs-on/run-0003/outputs/session1_output.txt
+D	runs/2026-03-01-final/claude-sonnet-4-6/pcs-on/run-0003/outputs/session2_extracted_commitment.json
+D	runs/2026-03-01-final/claude-sonnet-4-6/pcs-on/run-0003/outputs/session2_output.txt
+D	runs/2026-03-01-final/claude-sonnet-4-6/pcs-on/run-0003/outputs/session2_raw_model_output.txt
+D	runs/2026-03-01-final/claude-sonnet-4-6/pcs-on/run-0003/run.json
+D	runs/2026-03-01-final/claude-sonnet-4-6/pcs-on/run-0004/outputs/decision_record.json
+D	runs/2026-03-01-final/claude-sonnet-4-6/pcs-on/run-0004/outputs/enforcement_trace.json
+D	runs/2026-03-01-final/claude-sonnet-4-6/pcs-on/run-0004/outputs/enforcement_trace_legacy.json
+D	runs/2026-03-01-final/claude-sonnet-4-6/pcs-on/run-0004/outputs/final_user_output.txt
+D	runs/2026-03-01-final/claude-sonnet-4-6/pcs-on/run-0004/outputs/session1_output.txt
+D	runs/2026-03-01-final/claude-sonnet-4-6/pcs-on/run-0004/outputs/session2_extracted_commitment.json
+D	runs/2026-03-01-final/claude-sonnet-4-6/pcs-on/run-0004/outputs/session2_output.txt
+D	runs/2026-03-01-final/claude-sonnet-4-6/pcs-on/run-0004/outputs/session2_raw_model_output.txt
+D	runs/2026-03-01-final/claude-sonnet-4-6/pcs-on/run-0004/run.json
+D	runs/2026-03-01-final/claude-sonnet-4-6/pcs-on/run-0005/outputs/decision_record.json
+D	runs/2026-03-01-final/claude-sonnet-4-6/pcs-on/run-0005/outputs/enforcement_trace.json
+D	runs/2026-03-01-final/claude-sonnet-4-6/pcs-on/run-0005/outputs/enforcement_trace_legacy.json
+D	runs/2026-03-01-final/claude-sonnet-4-6/pcs-on/run-0005/outputs/final_user_output.txt
+D	runs/2026-03-01-final/claude-sonnet-4-6/pcs-on/run-0005/outputs/session1_output.txt
+D	runs/2026-03-01-final/claude-sonnet-4-6/pcs-on/run-0005/outputs/session2_extracted_commitment.json
+D	runs/2026-03-01-final/claude-sonnet-4-6/pcs-on/run-0005/outputs/session2_output.txt
+D	runs/2026-03-01-final/claude-sonnet-4-6/pcs-on/run-0005/outputs/session2_raw_model_output.txt
+D	runs/2026-03-01-final/claude-sonnet-4-6/pcs-on/run-0005/run.json
+D	runs/2026-03-01-final/llama-3.1-8b-instant/pcs-off/run-0001/outputs/decision_record.json
+D	runs/2026-03-01-final/llama-3.1-8b-instant/pcs-off/run-0001/outputs/enforcement_trace.json
+D	runs/2026-03-01-final/llama-3.1-8b-instant/pcs-off/run-0001/outputs/final_user_output.txt
+D	runs/2026-03-01-final/llama-3.1-8b-instant/pcs-off/run-0001/outputs/session1_output.txt
+D	runs/2026-03-01-final/llama-3.1-8b-instant/pcs-off/run-0001/outputs/session2_extracted_commitment.json
+D	runs/2026-03-01-final/llama-3.1-8b-instant/pcs-off/run-0001/outputs/session2_output.txt
+D	runs/2026-03-01-final/llama-3.1-8b-instant/pcs-off/run-0001/outputs/session2_raw_model_output.txt
+D	runs/2026-03-01-final/llama-3.1-8b-instant/pcs-off/run-0001/run.json
+D	runs/2026-03-01-final/llama-3.1-8b-instant/pcs-off/run-0002/outputs/decision_record.json
+D	runs/2026-03-01-final/llama-3.1-8b-instant/pcs-off/run-0002/outputs/enforcement_trace.json
+D	runs/2026-03-01-final/llama-3.1-8b-instant/pcs-off/run-0002/outputs/final_user_output.txt
+D	runs/2026-03-01-final/llama-3.1-8b-instant/pcs-off/run-0002/outputs/session1_output.txt
+D	runs/2026-03-01-final/llama-3.1-8b-instant/pcs-off/run-0002/outputs/session2_extracted_commitment.json
+D	runs/2026-03-01-final/llama-3.1-8b-instant/pcs-off/run-0002/outputs/session2_output.txt
+D	runs/2026-03-01-final/llama-3.1-8b-instant/pcs-off/run-0002/outputs/session2_raw_model_output.txt
+D	runs/2026-03-01-final/llama-3.1-8b-instant/pcs-off/run-0002/run.json
+D	runs/2026-03-01-final/llama-3.1-8b-instant/pcs-off/run-0003/outputs/decision_record.json
+D	runs/2026-03-01-final/llama-3.1-8b-instant/pcs-off/run-0003/outputs/enforcement_trace.json
+D	runs/2026-03-01-final/llama-3.1-8b-instant/pcs-off/run-0003/outputs/final_user_output.txt
+D	runs/2026-03-01-final/llama-3.1-8b-instant/pcs-off/run-0003/outputs/session1_output.txt
+D	runs/2026-03-01-final/llama-3.1-8b-instant/pcs-off/run-0003/outputs/session2_extracted_commitment.json
+D	runs/2026-03-01-final/llama-3.1-8b-instant/pcs-off/run-0003/outputs/session2_output.txt
+D	runs/2026-03-01-final/llama-3.1-8b-instant/pcs-off/run-0003/outputs/session2_raw_model_output.txt
+D	runs/2026-03-01-final/llama-3.1-8b-instant/pcs-off/run-0003/run.json
+D	runs/2026-03-01-final/llama-3.1-8b-instant/pcs-off/run-0004/outputs/decision_record.json
+D	runs/2026-03-01-final/llama-3.1-8b-instant/pcs-off/run-0004/outputs/enforcement_trace.json
+D	runs/2026-03-01-final/llama-3.1-8b-instant/pcs-off/run-0004/outputs/final_user_output.txt
+D	runs/2026-03-01-final/llama-3.1-8b-instant/pcs-off/run-0004/outputs/session1_output.txt
+D	runs/2026-03-01-final/llama-3.1-8b-instant/pcs-off/run-0004/outputs/session2_extracted_commitment.json
+D	runs/2026-03-01-final/llama-3.1-8b-instant/pcs-off/run-0004/outputs/session2_output.txt
+D	runs/2026-03-01-final/llama-3.1-8b-instant/pcs-off/run-0004/outputs/session2_raw_model_output.txt
+D	runs/2026-03-01-final/llama-3.1-8b-instant/pcs-off/run-0004/run.json
+D	runs/2026-03-01-final/llama-3.1-8b-instant/pcs-off/run-0005/outputs/decision_record.json
+D	runs/2026-03-01-final/llama-3.1-8b-instant/pcs-off/run-0005/outputs/enforcement_trace.json
+D	runs/2026-03-01-final/llama-3.1-8b-instant/pcs-off/run-0005/outputs/final_user_output.txt
+D	runs/2026-03-01-final/llama-3.1-8b-instant/pcs-off/run-0005/outputs/session1_output.txt
+D	runs/2026-03-01-final/llama-3.1-8b-instant/pcs-off/run-0005/outputs/session2_extracted_commitment.json
+D	runs/2026-03-01-final/llama-3.1-8b-instant/pcs-off/run-0005/outputs/session2_output.txt
+D	runs/2026-03-01-final/llama-3.1-8b-instant/pcs-off/run-0005/outputs/session2_raw_model_output.txt
+D	runs/2026-03-01-final/llama-3.1-8b-instant/pcs-off/run-0005/run.json
+D	runs/2026-03-01-final/llama-3.1-8b-instant/pcs-on/run-0001/outputs/decision_record.json
+D	runs/2026-03-01-final/llama-3.1-8b-instant/pcs-on/run-0001/outputs/enforcement_trace.json
+D	runs/2026-03-01-final/llama-3.1-8b-instant/pcs-on/run-0001/outputs/enforcement_trace_legacy.json
+D	runs/2026-03-01-final/llama-3.1-8b-instant/pcs-on/run-0001/outputs/final_user_output.txt
+D	runs/2026-03-01-final/llama-3.1-8b-instant/pcs-on/run-0001/outputs/session1_output.txt
+D	runs/2026-03-01-final/llama-3.1-8b-instant/pcs-on/run-0001/outputs/session2_extracted_commitment.json
+D	runs/2026-03-01-final/llama-3.1-8b-instant/pcs-on/run-0001/outputs/session2_output.txt
+D	runs/2026-03-01-final/llama-3.1-8b-instant/pcs-on/run-0001/outputs/session2_raw_model_output.txt
+D	runs/2026-03-01-final/llama-3.1-8b-instant/pcs-on/run-0001/run.json
+D	runs/2026-03-01-final/llama-3.1-8b-instant/pcs-on/run-0002/outputs/decision_record.json
+D	runs/2026-03-01-final/llama-3.1-8b-instant/pcs-on/run-0002/outputs/enforcement_trace.json
+D	runs/2026-03-01-final/llama-3.1-8b-instant/pcs-on/run-0002/outputs/enforcement_trace_legacy.json
+D	runs/2026-03-01-final/llama-3.1-8b-instant/pcs-on/run-0002/outputs/final_user_output.txt
+D	runs/2026-03-01-final/llama-3.1-8b-instant/pcs-on/run-0002/outputs/session1_output.txt
+D	runs/2026-03-01-final/llama-3.1-8b-instant/pcs-on/run-0002/outputs/session2_extracted_commitment.json
+D	runs/2026-03-01-final/llama-3.1-8b-instant/pcs-on/run-0002/outputs/session2_output.txt
+D	runs/2026-03-01-final/llama-3.1-8b-instant/pcs-on/run-0002/outputs/session2_raw_model_output.txt
+D	runs/2026-03-01-final/llama-3.1-8b-instant/pcs-on/run-0002/run.json
+D	runs/2026-03-01-final/llama-3.1-8b-instant/pcs-on/run-0003/outputs/decision_record.json
+D	runs/2026-03-01-final/llama-3.1-8b-instant/pcs-on/run-0003/outputs/enforcement_trace.json
+D	runs/2026-03-01-final/llama-3.1-8b-instant/pcs-on/run-0003/outputs/enforcement_trace_legacy.json
+D	runs/2026-03-01-final/llama-3.1-8b-instant/pcs-on/run-0003/outputs/final_user_output.txt
+D	runs/2026-03-01-final/llama-3.1-8b-instant/pcs-on/run-0003/outputs/session1_output.txt
+D	runs/2026-03-01-final/llama-3.1-8b-instant/pcs-on/run-0003/outputs/session2_extracted_commitment.json
+D	runs/2026-03-01-final/llama-3.1-8b-instant/pcs-on/run-0003/outputs/session2_output.txt
+D	runs/2026-03-01-final/llama-3.1-8b-instant/pcs-on/run-0003/outputs/session2_raw_model_output.txt
+D	runs/2026-03-01-final/llama-3.1-8b-instant/pcs-on/run-0003/run.json
+D	runs/2026-03-01-final/llama-3.1-8b-instant/pcs-on/run-0004/outputs/decision_record.json
+D	runs/2026-03-01-final/llama-3.1-8b-instant/pcs-on/run-0004/outputs/enforcement_trace.json
+D	runs/2026-03-01-final/llama-3.1-8b-instant/pcs-on/run-0004/outputs/enforcement_trace_legacy.json
+D	runs/2026-03-01-final/llama-3.1-8b-instant/pcs-on/run-0004/outputs/final_user_output.txt
+D	runs/2026-03-01-final/llama-3.1-8b-instant/pcs-on/run-0004/outputs/session1_output.txt
+D	runs/2026-03-01-final/llama-3.1-8b-instant/pcs-on/run-0004/outputs/session2_extracted_commitment.json
+D	runs/2026-03-01-final/llama-3.1-8b-instant/pcs-on/run-0004/outputs/session2_output.txt
+D	runs/2026-03-01-final/llama-3.1-8b-instant/pcs-on/run-0004/outputs/session2_raw_model_output.txt
+D	runs/2026-03-01-final/llama-3.1-8b-instant/pcs-on/run-0004/run.json
+D	runs/2026-03-01-final/llama-3.1-8b-instant/pcs-on/run-0005/outputs/decision_record.json
+D	runs/2026-03-01-final/llama-3.1-8b-instant/pcs-on/run-0005/outputs/enforcement_trace.json
+D	runs/2026-03-01-final/llama-3.1-8b-instant/pcs-on/run-0005/outputs/enforcement_trace_legacy.json
+D	runs/2026-03-01-final/llama-3.1-8b-instant/pcs-on/run-0005/outputs/final_user_output.txt
+D	runs/2026-03-01-final/llama-3.1-8b-instant/pcs-on/run-0005/outputs/session1_output.txt
+D	runs/2026-03-01-final/llama-3.1-8b-instant/pcs-on/run-0005/outputs/session2_extracted_commitment.json
+D	runs/2026-03-01-final/llama-3.1-8b-instant/pcs-on/run-0005/outputs/session2_output.txt
+D	runs/2026-03-01-final/llama-3.1-8b-instant/pcs-on/run-0005/outputs/session2_raw_model_output.txt
+D	runs/2026-03-01-final/llama-3.1-8b-instant/pcs-on/run-0005/run.json
+D	runs/2026-03-01-gpt-test/avs-2c-summary.json
+D	runs/2026-03-01-gpt-test/claude-sonnet-4-6/pcs-off/run-0001/outputs/decision_record.json
+D	runs/2026-03-01-gpt-test/claude-sonnet-4-6/pcs-off/run-0001/outputs/enforcement_trace.json
+D	runs/2026-03-01-gpt-test/claude-sonnet-4-6/pcs-off/run-0001/outputs/final_user_output.txt
+D	runs/2026-03-01-gpt-test/claude-sonnet-4-6/pcs-off/run-0001/outputs/session1_output.txt
+D	runs/2026-03-01-gpt-test/claude-sonnet-4-6/pcs-off/run-0001/outputs/session2_extracted_commitment.json
+D	runs/2026-03-01-gpt-test/claude-sonnet-4-6/pcs-off/run-0001/outputs/session2_output.txt
+D	runs/2026-03-01-gpt-test/claude-sonnet-4-6/pcs-off/run-0001/outputs/session2_raw_model_output.txt
+D	runs/2026-03-01-gpt-test/claude-sonnet-4-6/pcs-off/run-0001/run.json
+D	runs/2026-03-01-gpt-test/claude-sonnet-4-6/pcs-off/run-0002/outputs/decision_record.json
+D	runs/2026-03-01-gpt-test/claude-sonnet-4-6/pcs-off/run-0002/outputs/enforcement_trace.json
+D	runs/2026-03-01-gpt-test/claude-sonnet-4-6/pcs-off/run-0002/outputs/final_user_output.txt
+D	runs/2026-03-01-gpt-test/claude-sonnet-4-6/pcs-off/run-0002/outputs/session1_output.txt
+D	runs/2026-03-01-gpt-test/claude-sonnet-4-6/pcs-off/run-0002/outputs/session2_extracted_commitment.json
+D	runs/2026-03-01-gpt-test/claude-sonnet-4-6/pcs-off/run-0002/outputs/session2_output.txt
+D	runs/2026-03-01-gpt-test/claude-sonnet-4-6/pcs-off/run-0002/outputs/session2_raw_model_output.txt
+D	runs/2026-03-01-gpt-test/claude-sonnet-4-6/pcs-off/run-0002/run.json
+D	runs/2026-03-01-gpt-test/claude-sonnet-4-6/pcs-off/run-0003/outputs/decision_record.json
+D	runs/2026-03-01-gpt-test/claude-sonnet-4-6/pcs-off/run-0003/outputs/enforcement_trace.json
+D	runs/2026-03-01-gpt-test/claude-sonnet-4-6/pcs-off/run-0003/outputs/final_user_output.txt
+D	runs/2026-03-01-gpt-test/claude-sonnet-4-6/pcs-off/run-0003/outputs/session1_output.txt
+D	runs/2026-03-01-gpt-test/claude-sonnet-4-6/pcs-off/run-0003/outputs/session2_extracted_commitment.json
+D	runs/2026-03-01-gpt-test/claude-sonnet-4-6/pcs-off/run-0003/outputs/session2_output.txt
+D	runs/2026-03-01-gpt-test/claude-sonnet-4-6/pcs-off/run-0003/outputs/session2_raw_model_output.txt
+D	runs/2026-03-01-gpt-test/claude-sonnet-4-6/pcs-off/run-0003/run.json
+D	runs/2026-03-01-gpt-test/claude-sonnet-4-6/pcs-off/run-0004/outputs/decision_record.json
+D	runs/2026-03-01-gpt-test/claude-sonnet-4-6/pcs-off/run-0004/outputs/enforcement_trace.json
+D	runs/2026-03-01-gpt-test/claude-sonnet-4-6/pcs-off/run-0004/outputs/final_user_output.txt
+D	runs/2026-03-01-gpt-test/claude-sonnet-4-6/pcs-off/run-0004/outputs/session1_output.txt
+D	runs/2026-03-01-gpt-test/claude-sonnet-4-6/pcs-off/run-0004/outputs/session2_extracted_commitment.json
+D	runs/2026-03-01-gpt-test/claude-sonnet-4-6/pcs-off/run-0004/outputs/session2_output.txt
+D	runs/2026-03-01-gpt-test/claude-sonnet-4-6/pcs-off/run-0004/outputs/session2_raw_model_output.txt
+D	runs/2026-03-01-gpt-test/claude-sonnet-4-6/pcs-off/run-0004/run.json
+D	runs/2026-03-01-gpt-test/claude-sonnet-4-6/pcs-off/run-0005/outputs/decision_record.json
+D	runs/2026-03-01-gpt-test/claude-sonnet-4-6/pcs-off/run-0005/outputs/enforcement_trace.json
+D	runs/2026-03-01-gpt-test/claude-sonnet-4-6/pcs-off/run-0005/outputs/final_user_output.txt
+D	runs/2026-03-01-gpt-test/claude-sonnet-4-6/pcs-off/run-0005/outputs/session1_output.txt
+D	runs/2026-03-01-gpt-test/claude-sonnet-4-6/pcs-off/run-0005/outputs/session2_extracted_commitment.json
+D	runs/2026-03-01-gpt-test/claude-sonnet-4-6/pcs-off/run-0005/outputs/session2_output.txt
+D	runs/2026-03-01-gpt-test/claude-sonnet-4-6/pcs-off/run-0005/outputs/session2_raw_model_output.txt
+D	runs/2026-03-01-gpt-test/claude-sonnet-4-6/pcs-off/run-0005/run.json
+D	runs/2026-03-01-gpt-test/claude-sonnet-4-6/pcs-on/run-0001/outputs/decision_record.json
+D	runs/2026-03-01-gpt-test/claude-sonnet-4-6/pcs-on/run-0001/outputs/enforcement_trace.json
+D	runs/2026-03-01-gpt-test/claude-sonnet-4-6/pcs-on/run-0001/outputs/enforcement_trace_legacy.json
+D	runs/2026-03-01-gpt-test/claude-sonnet-4-6/pcs-on/run-0001/outputs/final_user_output.txt
+D	runs/2026-03-01-gpt-test/claude-sonnet-4-6/pcs-on/run-0001/outputs/session1_output.txt
+D	runs/2026-03-01-gpt-test/claude-sonnet-4-6/pcs-on/run-0001/outputs/session2_extracted_commitment.json
+D	runs/2026-03-01-gpt-test/claude-sonnet-4-6/pcs-on/run-0001/outputs/session2_output.txt
+D	runs/2026-03-01-gpt-test/claude-sonnet-4-6/pcs-on/run-0001/outputs/session2_raw_model_output.txt
+D	runs/2026-03-01-gpt-test/claude-sonnet-4-6/pcs-on/run-0001/run.json
+D	runs/2026-03-01-gpt-test/claude-sonnet-4-6/pcs-on/run-0002/outputs/decision_record.json
+D	runs/2026-03-01-gpt-test/claude-sonnet-4-6/pcs-on/run-0002/outputs/enforcement_trace.json
+D	runs/2026-03-01-gpt-test/claude-sonnet-4-6/pcs-on/run-0002/outputs/enforcement_trace_legacy.json
+D	runs/2026-03-01-gpt-test/claude-sonnet-4-6/pcs-on/run-0002/outputs/final_user_output.txt
+D	runs/2026-03-01-gpt-test/claude-sonnet-4-6/pcs-on/run-0002/outputs/session1_output.txt
+D	runs/2026-03-01-gpt-test/claude-sonnet-4-6/pcs-on/run-0002/outputs/session2_extracted_commitment.json
+D	runs/2026-03-01-gpt-test/claude-sonnet-4-6/pcs-on/run-0002/outputs/session2_output.txt
+D	runs/2026-03-01-gpt-test/claude-sonnet-4-6/pcs-on/run-0002/outputs/session2_raw_model_output.txt
+D	runs/2026-03-01-gpt-test/claude-sonnet-4-6/pcs-on/run-0002/run.json
+D	runs/2026-03-01-gpt-test/claude-sonnet-4-6/pcs-on/run-0003/outputs/decision_record.json
+D	runs/2026-03-01-gpt-test/claude-sonnet-4-6/pcs-on/run-0003/outputs/enforcement_trace.json
+D	runs/2026-03-01-gpt-test/claude-sonnet-4-6/pcs-on/run-0003/outputs/enforcement_trace_legacy.json
+D	runs/2026-03-01-gpt-test/claude-sonnet-4-6/pcs-on/run-0003/outputs/final_user_output.txt
+D	runs/2026-03-01-gpt-test/claude-sonnet-4-6/pcs-on/run-0003/outputs/session1_output.txt
+D	runs/2026-03-01-gpt-test/claude-sonnet-4-6/pcs-on/run-0003/outputs/session2_extracted_commitment.json
+D	runs/2026-03-01-gpt-test/claude-sonnet-4-6/pcs-on/run-0003/outputs/session2_output.txt
+D	runs/2026-03-01-gpt-test/claude-sonnet-4-6/pcs-on/run-0003/outputs/session2_raw_model_output.txt
+D	runs/2026-03-01-gpt-test/claude-sonnet-4-6/pcs-on/run-0003/run.json
+D	runs/2026-03-01-gpt-test/claude-sonnet-4-6/pcs-on/run-0004/outputs/decision_record.json
+D	runs/2026-03-01-gpt-test/claude-sonnet-4-6/pcs-on/run-0004/outputs/enforcement_trace.json
+D	runs/2026-03-01-gpt-test/claude-sonnet-4-6/pcs-on/run-0004/outputs/enforcement_trace_legacy.json
+D	runs/2026-03-01-gpt-test/claude-sonnet-4-6/pcs-on/run-0004/outputs/final_user_output.txt
+D	runs/2026-03-01-gpt-test/claude-sonnet-4-6/pcs-on/run-0004/outputs/session1_output.txt
+D	runs/2026-03-01-gpt-test/claude-sonnet-4-6/pcs-on/run-0004/outputs/session2_extracted_commitment.json
+D	runs/2026-03-01-gpt-test/claude-sonnet-4-6/pcs-on/run-0004/outputs/session2_output.txt
+D	runs/2026-03-01-gpt-test/claude-sonnet-4-6/pcs-on/run-0004/outputs/session2_raw_model_output.txt
+D	runs/2026-03-01-gpt-test/claude-sonnet-4-6/pcs-on/run-0004/run.json
+D	runs/2026-03-01-gpt-test/claude-sonnet-4-6/pcs-on/run-0005/outputs/decision_record.json
+D	runs/2026-03-01-gpt-test/claude-sonnet-4-6/pcs-on/run-0005/outputs/enforcement_trace.json
+D	runs/2026-03-01-gpt-test/claude-sonnet-4-6/pcs-on/run-0005/outputs/enforcement_trace_legacy.json
+D	runs/2026-03-01-gpt-test/claude-sonnet-4-6/pcs-on/run-0005/outputs/final_user_output.txt
+D	runs/2026-03-01-gpt-test/claude-sonnet-4-6/pcs-on/run-0005/outputs/session1_output.txt
+D	runs/2026-03-01-gpt-test/claude-sonnet-4-6/pcs-on/run-0005/outputs/session2_extracted_commitment.json
+D	runs/2026-03-01-gpt-test/claude-sonnet-4-6/pcs-on/run-0005/outputs/session2_output.txt
+D	runs/2026-03-01-gpt-test/claude-sonnet-4-6/pcs-on/run-0005/outputs/session2_raw_model_output.txt
+D	runs/2026-03-01-gpt-test/claude-sonnet-4-6/pcs-on/run-0005/run.json
+D	runs/2026-03-01-gpt-test/llama-3.1-8b-instant/pcs-off/run-0001/outputs/decision_record.json
+D	runs/2026-03-01-gpt-test/llama-3.1-8b-instant/pcs-off/run-0001/outputs/enforcement_trace.json
+D	runs/2026-03-01-gpt-test/llama-3.1-8b-instant/pcs-off/run-0001/outputs/final_user_output.txt
+D	runs/2026-03-01-gpt-test/llama-3.1-8b-instant/pcs-off/run-0001/outputs/session1_output.txt
+D	runs/2026-03-01-gpt-test/llama-3.1-8b-instant/pcs-off/run-0001/outputs/session2_extracted_commitment.json
+D	runs/2026-03-01-gpt-test/llama-3.1-8b-instant/pcs-off/run-0001/outputs/session2_output.txt
+D	runs/2026-03-01-gpt-test/llama-3.1-8b-instant/pcs-off/run-0001/outputs/session2_raw_model_output.txt
+D	runs/2026-03-01-gpt-test/llama-3.1-8b-instant/pcs-off/run-0001/run.json
+D	runs/2026-03-01-gpt-test/llama-3.1-8b-instant/pcs-off/run-0002/outputs/decision_record.json
+D	runs/2026-03-01-gpt-test/llama-3.1-8b-instant/pcs-off/run-0002/outputs/enforcement_trace.json
+D	runs/2026-03-01-gpt-test/llama-3.1-8b-instant/pcs-off/run-0002/outputs/final_user_output.txt
+D	runs/2026-03-01-gpt-test/llama-3.1-8b-instant/pcs-off/run-0002/outputs/session1_output.txt
+D	runs/2026-03-01-gpt-test/llama-3.1-8b-instant/pcs-off/run-0002/outputs/session2_extracted_commitment.json
+D	runs/2026-03-01-gpt-test/llama-3.1-8b-instant/pcs-off/run-0002/outputs/session2_output.txt
+D	runs/2026-03-01-gpt-test/llama-3.1-8b-instant/pcs-off/run-0002/outputs/session2_raw_model_output.txt
+D	runs/2026-03-01-gpt-test/llama-3.1-8b-instant/pcs-off/run-0002/run.json
+D	runs/2026-03-01-gpt-test/llama-3.1-8b-instant/pcs-off/run-0003/outputs/decision_record.json
+D	runs/2026-03-01-gpt-test/llama-3.1-8b-instant/pcs-off/run-0003/outputs/enforcement_trace.json
+D	runs/2026-03-01-gpt-test/llama-3.1-8b-instant/pcs-off/run-0003/outputs/final_user_output.txt
+D	runs/2026-03-01-gpt-test/llama-3.1-8b-instant/pcs-off/run-0003/outputs/session1_output.txt
+D	runs/2026-03-01-gpt-test/llama-3.1-8b-instant/pcs-off/run-0003/outputs/session2_extracted_commitment.json
+D	runs/2026-03-01-gpt-test/llama-3.1-8b-instant/pcs-off/run-0003/outputs/session2_output.txt
+D	runs/2026-03-01-gpt-test/llama-3.1-8b-instant/pcs-off/run-0003/outputs/session2_raw_model_output.txt
+D	runs/2026-03-01-gpt-test/llama-3.1-8b-instant/pcs-off/run-0003/run.json
+D	runs/2026-03-01-gpt-test/llama-3.1-8b-instant/pcs-off/run-0004/outputs/decision_record.json
+D	runs/2026-03-01-gpt-test/llama-3.1-8b-instant/pcs-off/run-0004/outputs/enforcement_trace.json
+D	runs/2026-03-01-gpt-test/llama-3.1-8b-instant/pcs-off/run-0004/outputs/final_user_output.txt
+D	runs/2026-03-01-gpt-test/llama-3.1-8b-instant/pcs-off/run-0004/outputs/session1_output.txt
+D	runs/2026-03-01-gpt-test/llama-3.1-8b-instant/pcs-off/run-0004/outputs/session2_extracted_commitment.json
+D	runs/2026-03-01-gpt-test/llama-3.1-8b-instant/pcs-off/run-0004/outputs/session2_output.txt
+D	runs/2026-03-01-gpt-test/llama-3.1-8b-instant/pcs-off/run-0004/outputs/session2_raw_model_output.txt
+D	runs/2026-03-01-gpt-test/llama-3.1-8b-instant/pcs-off/run-0004/run.json
+D	runs/2026-03-01-gpt-test/llama-3.1-8b-instant/pcs-off/run-0005/outputs/decision_record.json
+D	runs/2026-03-01-gpt-test/llama-3.1-8b-instant/pcs-off/run-0005/outputs/enforcement_trace.json
+D	runs/2026-03-01-gpt-test/llama-3.1-8b-instant/pcs-off/run-0005/outputs/final_user_output.txt
+D	runs/2026-03-01-gpt-test/llama-3.1-8b-instant/pcs-off/run-0005/outputs/session1_output.txt
+D	runs/2026-03-01-gpt-test/llama-3.1-8b-instant/pcs-off/run-0005/outputs/session2_extracted_commitment.json
+D	runs/2026-03-01-gpt-test/llama-3.1-8b-instant/pcs-off/run-0005/outputs/session2_output.txt
+D	runs/2026-03-01-gpt-test/llama-3.1-8b-instant/pcs-off/run-0005/outputs/session2_raw_model_output.txt
+D	runs/2026-03-01-gpt-test/llama-3.1-8b-instant/pcs-off/run-0005/run.json
+D	runs/2026-03-01-gpt-test/llama-3.1-8b-instant/pcs-on/run-0001/outputs/decision_record.json
+D	runs/2026-03-01-gpt-test/llama-3.1-8b-instant/pcs-on/run-0001/outputs/enforcement_trace.json
+D	runs/2026-03-01-gpt-test/llama-3.1-8b-instant/pcs-on/run-0001/outputs/enforcement_trace_legacy.json
+D	runs/2026-03-01-gpt-test/llama-3.1-8b-instant/pcs-on/run-0001/outputs/final_user_output.txt
+D	runs/2026-03-01-gpt-test/llama-3.1-8b-instant/pcs-on/run-0001/outputs/session1_output.txt
+D	runs/2026-03-01-gpt-test/llama-3.1-8b-instant/pcs-on/run-0001/outputs/session2_extracted_commitment.json
+D	runs/2026-03-01-gpt-test/llama-3.1-8b-instant/pcs-on/run-0001/outputs/session2_output.txt
+D	runs/2026-03-01-gpt-test/llama-3.1-8b-instant/pcs-on/run-0001/outputs/session2_raw_model_output.txt
+D	runs/2026-03-01-gpt-test/llama-3.1-8b-instant/pcs-on/run-0001/run.json
+D	runs/2026-03-01-gpt-test/llama-3.1-8b-instant/pcs-on/run-0002/outputs/decision_record.json
+D	runs/2026-03-01-gpt-test/llama-3.1-8b-instant/pcs-on/run-0002/outputs/enforcement_trace.json
+D	runs/2026-03-01-gpt-test/llama-3.1-8b-instant/pcs-on/run-0002/outputs/enforcement_trace_legacy.json
+D	runs/2026-03-01-gpt-test/llama-3.1-8b-instant/pcs-on/run-0002/outputs/final_user_output.txt
+D	runs/2026-03-01-gpt-test/llama-3.1-8b-instant/pcs-on/run-0002/outputs/session1_output.txt
+D	runs/2026-03-01-gpt-test/llama-3.1-8b-instant/pcs-on/run-0002/outputs/session2_extracted_commitment.json
+D	runs/2026-03-01-gpt-test/llama-3.1-8b-instant/pcs-on/run-0002/outputs/session2_output.txt
+D	runs/2026-03-01-gpt-test/llama-3.1-8b-instant/pcs-on/run-0002/outputs/session2_raw_model_output.txt
+D	runs/2026-03-01-gpt-test/llama-3.1-8b-instant/pcs-on/run-0002/run.json
+D	runs/2026-03-01-gpt-test/llama-3.1-8b-instant/pcs-on/run-0003/outputs/decision_record.json
+D	runs/2026-03-01-gpt-test/llama-3.1-8b-instant/pcs-on/run-0003/outputs/enforcement_trace.json
+D	runs/2026-03-01-gpt-test/llama-3.1-8b-instant/pcs-on/run-0003/outputs/enforcement_trace_legacy.json
+D	runs/2026-03-01-gpt-test/llama-3.1-8b-instant/pcs-on/run-0003/outputs/final_user_output.txt
+D	runs/2026-03-01-gpt-test/llama-3.1-8b-instant/pcs-on/run-0003/outputs/session1_output.txt
+D	runs/2026-03-01-gpt-test/llama-3.1-8b-instant/pcs-on/run-0003/outputs/session2_extracted_commitment.json
+D	runs/2026-03-01-gpt-test/llama-3.1-8b-instant/pcs-on/run-0003/outputs/session2_output.txt
+D	runs/2026-03-01-gpt-test/llama-3.1-8b-instant/pcs-on/run-0003/outputs/session2_raw_model_output.txt
+D	runs/2026-03-01-gpt-test/llama-3.1-8b-instant/pcs-on/run-0003/run.json
+D	runs/2026-03-01-gpt-test/llama-3.1-8b-instant/pcs-on/run-0004/outputs/decision_record.json
+D	runs/2026-03-01-gpt-test/llama-3.1-8b-instant/pcs-on/run-0004/outputs/enforcement_trace.json
+D	runs/2026-03-01-gpt-test/llama-3.1-8b-instant/pcs-on/run-0004/outputs/enforcement_trace_legacy.json
+D	runs/2026-03-01-gpt-test/llama-3.1-8b-instant/pcs-on/run-0004/outputs/final_user_output.txt
+D	runs/2026-03-01-gpt-test/llama-3.1-8b-instant/pcs-on/run-0004/outputs/session1_output.txt
+D	runs/2026-03-01-gpt-test/llama-3.1-8b-instant/pcs-on/run-0004/outputs/session2_extracted_commitment.json
+D	runs/2026-03-01-gpt-test/llama-3.1-8b-instant/pcs-on/run-0004/outputs/session2_output.txt
+D	runs/2026-03-01-gpt-test/llama-3.1-8b-instant/pcs-on/run-0004/outputs/session2_raw_model_output.txt
+D	runs/2026-03-01-gpt-test/llama-3.1-8b-instant/pcs-on/run-0004/run.json
+D	runs/2026-03-01-gpt-test/llama-3.1-8b-instant/pcs-on/run-0005/outputs/decision_record.json
+D	runs/2026-03-01-gpt-test/llama-3.1-8b-instant/pcs-on/run-0005/outputs/enforcement_trace.json
+D	runs/2026-03-01-gpt-test/llama-3.1-8b-instant/pcs-on/run-0005/outputs/enforcement_trace_legacy.json
+D	runs/2026-03-01-gpt-test/llama-3.1-8b-instant/pcs-on/run-0005/outputs/final_user_output.txt
+D	runs/2026-03-01-gpt-test/llama-3.1-8b-instant/pcs-on/run-0005/outputs/session1_output.txt
+D	runs/2026-03-01-gpt-test/llama-3.1-8b-instant/pcs-on/run-0005/outputs/session2_extracted_commitment.json
+D	runs/2026-03-01-gpt-test/llama-3.1-8b-instant/pcs-on/run-0005/outputs/session2_output.txt
+D	runs/2026-03-01-gpt-test/llama-3.1-8b-instant/pcs-on/run-0005/outputs/session2_raw_model_output.txt
+D	runs/2026-03-01-gpt-test/llama-3.1-8b-instant/pcs-on/run-0005/run.json
+D	runs/2026-03-01-hardened/avs-2c-summary.json
+D	runs/2026-03-01-structural/avs-2c-summary.json
+D	runs/2026-03-01-structural/claude-sonnet-4-6/pcs-off/run-0001/outputs/session1_output.txt
+D	runs/2026-03-01-structural/claude-sonnet-4-6/pcs-off/run-0001/outputs/session2_output.txt
+D	runs/2026-03-01-structural/claude-sonnet-4-6/pcs-off/run-0001/run.json
+D	runs/2026-03-01-structural/claude-sonnet-4-6/pcs-off/run-0002/outputs/session1_output.txt
+D	runs/2026-03-01-structural/claude-sonnet-4-6/pcs-off/run-0002/outputs/session2_output.txt
+D	runs/2026-03-01-structural/claude-sonnet-4-6/pcs-off/run-0002/run.json
+D	runs/2026-03-01-structural/claude-sonnet-4-6/pcs-off/run-0003/outputs/session1_output.txt
+D	runs/2026-03-01-structural/claude-sonnet-4-6/pcs-off/run-0003/outputs/session2_output.txt
+D	runs/2026-03-01-structural/claude-sonnet-4-6/pcs-off/run-0003/run.json
+D	runs/2026-03-01-structural/claude-sonnet-4-6/pcs-off/run-0004/outputs/session1_output.txt
+D	runs/2026-03-01-structural/claude-sonnet-4-6/pcs-off/run-0004/outputs/session2_output.txt
+D	runs/2026-03-01-structural/claude-sonnet-4-6/pcs-off/run-0004/run.json
+D	runs/2026-03-01-structural/claude-sonnet-4-6/pcs-off/run-0005/outputs/session1_output.txt
+D	runs/2026-03-01-structural/claude-sonnet-4-6/pcs-off/run-0005/outputs/session2_output.txt
+D	runs/2026-03-01-structural/claude-sonnet-4-6/pcs-off/run-0005/run.json
+D	runs/2026-03-01-structural/claude-sonnet-4-6/pcs-on/run-0001/outputs/enforcement_trace.json
+D	runs/2026-03-01-structural/claude-sonnet-4-6/pcs-on/run-0001/outputs/session1_output.txt
+D	runs/2026-03-01-structural/claude-sonnet-4-6/pcs-on/run-0001/outputs/session2_output.txt
+D	runs/2026-03-01-structural/claude-sonnet-4-6/pcs-on/run-0001/run.json
+D	runs/2026-03-01-structural/claude-sonnet-4-6/pcs-on/run-0002/outputs/enforcement_trace.json
+D	runs/2026-03-01-structural/claude-sonnet-4-6/pcs-on/run-0002/outputs/session1_output.txt
+D	runs/2026-03-01-structural/claude-sonnet-4-6/pcs-on/run-0002/outputs/session2_output.txt
+D	runs/2026-03-01-structural/claude-sonnet-4-6/pcs-on/run-0002/run.json
+D	runs/2026-03-01-structural/claude-sonnet-4-6/pcs-on/run-0003/outputs/enforcement_trace.json
+D	runs/2026-03-01-structural/claude-sonnet-4-6/pcs-on/run-0003/outputs/session1_output.txt
+D	runs/2026-03-01-structural/claude-sonnet-4-6/pcs-on/run-0003/outputs/session2_output.txt
+D	runs/2026-03-01-structural/claude-sonnet-4-6/pcs-on/run-0003/run.json
+D	runs/2026-03-01-structural/claude-sonnet-4-6/pcs-on/run-0004/outputs/enforcement_trace.json
+D	runs/2026-03-01-structural/claude-sonnet-4-6/pcs-on/run-0004/outputs/session1_output.txt
+D	runs/2026-03-01-structural/claude-sonnet-4-6/pcs-on/run-0004/outputs/session2_output.txt
+D	runs/2026-03-01-structural/claude-sonnet-4-6/pcs-on/run-0004/run.json
+D	runs/2026-03-01-structural/claude-sonnet-4-6/pcs-on/run-0005/outputs/enforcement_trace.json
+D	runs/2026-03-01-structural/claude-sonnet-4-6/pcs-on/run-0005/outputs/session1_output.txt
+D	runs/2026-03-01-structural/claude-sonnet-4-6/pcs-on/run-0005/outputs/session2_output.txt
+D	runs/2026-03-01-structural/claude-sonnet-4-6/pcs-on/run-0005/run.json
+D	runs/2026-03-01-structural/llama-3.1-8b-instant/pcs-off/run-0001/outputs/session1_output.txt
+D	runs/2026-03-01-structural/llama-3.1-8b-instant/pcs-off/run-0001/outputs/session2_output.txt
+D	runs/2026-03-01-structural/llama-3.1-8b-instant/pcs-off/run-0001/run.json
+D	runs/2026-03-01-structural/llama-3.1-8b-instant/pcs-off/run-0002/outputs/session1_output.txt
+D	runs/2026-03-01-structural/llama-3.1-8b-instant/pcs-off/run-0002/outputs/session2_output.txt
+D	runs/2026-03-01-structural/llama-3.1-8b-instant/pcs-off/run-0002/run.json
+D	runs/2026-03-01-structural/llama-3.1-8b-instant/pcs-off/run-0003/outputs/session1_output.txt
+D	runs/2026-03-01-structural/llama-3.1-8b-instant/pcs-off/run-0003/outputs/session2_output.txt
+D	runs/2026-03-01-structural/llama-3.1-8b-instant/pcs-off/run-0003/run.json
+D	runs/2026-03-01-structural/llama-3.1-8b-instant/pcs-off/run-0004/outputs/session1_output.txt
+D	runs/2026-03-01-structural/llama-3.1-8b-instant/pcs-off/run-0004/outputs/session2_output.txt
+D	runs/2026-03-01-structural/llama-3.1-8b-instant/pcs-off/run-0004/run.json
+D	runs/2026-03-01-structural/llama-3.1-8b-instant/pcs-off/run-0005/outputs/session1_output.txt
+D	runs/2026-03-01-structural/llama-3.1-8b-instant/pcs-off/run-0005/outputs/session2_output.txt
+D	runs/2026-03-01-structural/llama-3.1-8b-instant/pcs-off/run-0005/run.json
+D	runs/2026-03-01-structural/llama-3.1-8b-instant/pcs-on/run-0001/outputs/enforcement_trace.json
+D	runs/2026-03-01-structural/llama-3.1-8b-instant/pcs-on/run-0001/outputs/session1_output.txt
+D	runs/2026-03-01-structural/llama-3.1-8b-instant/pcs-on/run-0001/outputs/session2_output.txt
+D	runs/2026-03-01-structural/llama-3.1-8b-instant/pcs-on/run-0001/run.json
+D	runs/2026-03-01-structural/llama-3.1-8b-instant/pcs-on/run-0002/outputs/enforcement_trace.json
+D	runs/2026-03-01-structural/llama-3.1-8b-instant/pcs-on/run-0002/outputs/session1_output.txt
+D	runs/2026-03-01-structural/llama-3.1-8b-instant/pcs-on/run-0002/outputs/session2_output.txt
+D	runs/2026-03-01-structural/llama-3.1-8b-instant/pcs-on/run-0002/run.json
+D	runs/2026-03-01-structural/llama-3.1-8b-instant/pcs-on/run-0003/outputs/enforcement_trace.json
+D	runs/2026-03-01-structural/llama-3.1-8b-instant/pcs-on/run-0003/outputs/session1_output.txt
+D	runs/2026-03-01-structural/llama-3.1-8b-instant/pcs-on/run-0003/outputs/session2_output.txt
+D	runs/2026-03-01-structural/llama-3.1-8b-instant/pcs-on/run-0003/run.json
+D	runs/2026-03-01-structural/llama-3.1-8b-instant/pcs-on/run-0004/outputs/enforcement_trace.json
+D	runs/2026-03-01-structural/llama-3.1-8b-instant/pcs-on/run-0004/outputs/session1_output.txt
+D	runs/2026-03-01-structural/llama-3.1-8b-instant/pcs-on/run-0004/outputs/session2_output.txt
+D	runs/2026-03-01-structural/llama-3.1-8b-instant/pcs-on/run-0004/run.json
+D	runs/2026-03-01-structural/llama-3.1-8b-instant/pcs-on/run-0005/outputs/enforcement_trace.json
+D	runs/2026-03-01-structural/llama-3.1-8b-instant/pcs-on/run-0005/outputs/session1_output.txt
+D	runs/2026-03-01-structural/llama-3.1-8b-instant/pcs-on/run-0005/outputs/session2_output.txt
+D	runs/2026-03-01-structural/llama-3.1-8b-instant/pcs-on/run-0005/run.json
+D	runs/2026-03-01/avs-2c-summary.json
+D	runs/2026-03-01/claude-sonnet-4-6/pcs-off/run-0001/outputs/session1_output.txt
+D	runs/2026-03-01/claude-sonnet-4-6/pcs-off/run-0001/outputs/session2_output.txt
+D	runs/2026-03-01/claude-sonnet-4-6/pcs-off/run-0001/run.json
+D	runs/2026-03-01/claude-sonnet-4-6/pcs-off/run-0002/outputs/session1_output.txt
+D	runs/2026-03-01/claude-sonnet-4-6/pcs-off/run-0002/outputs/session2_output.txt
+D	runs/2026-03-01/claude-sonnet-4-6/pcs-off/run-0002/run.json
+D	runs/2026-03-01/claude-sonnet-4-6/pcs-off/run-0003/outputs/session1_output.txt
+D	runs/2026-03-01/claude-sonnet-4-6/pcs-off/run-0003/outputs/session2_output.txt
+D	runs/2026-03-01/claude-sonnet-4-6/pcs-off/run-0003/run.json
+D	runs/2026-03-01/claude-sonnet-4-6/pcs-off/run-0004/outputs/session1_output.txt
+D	runs/2026-03-01/claude-sonnet-4-6/pcs-off/run-0004/outputs/session2_output.txt
+D	runs/2026-03-01/claude-sonnet-4-6/pcs-off/run-0004/run.json
+D	runs/2026-03-01/claude-sonnet-4-6/pcs-off/run-0005/outputs/session1_output.txt
+D	runs/2026-03-01/claude-sonnet-4-6/pcs-off/run-0005/outputs/session2_output.txt
+D	runs/2026-03-01/claude-sonnet-4-6/pcs-off/run-0005/run.json
+D	runs/2026-03-01/claude-sonnet-4-6/pcs-on/run-0001/outputs/enforcement_trace.json
+D	runs/2026-03-01/claude-sonnet-4-6/pcs-on/run-0001/outputs/session1_output.txt
+D	runs/2026-03-01/claude-sonnet-4-6/pcs-on/run-0001/outputs/session2_output.txt
+D	runs/2026-03-01/claude-sonnet-4-6/pcs-on/run-0001/run.json
+D	runs/2026-03-01/claude-sonnet-4-6/pcs-on/run-0002/outputs/enforcement_trace.json
+D	runs/2026-03-01/claude-sonnet-4-6/pcs-on/run-0002/outputs/session1_output.txt
+D	runs/2026-03-01/claude-sonnet-4-6/pcs-on/run-0002/outputs/session2_output.txt
+D	runs/2026-03-01/claude-sonnet-4-6/pcs-on/run-0002/run.json
+D	runs/2026-03-01/claude-sonnet-4-6/pcs-on/run-0003/outputs/enforcement_trace.json
+D	runs/2026-03-01/claude-sonnet-4-6/pcs-on/run-0003/outputs/session1_output.txt
+D	runs/2026-03-01/claude-sonnet-4-6/pcs-on/run-0003/outputs/session2_output.txt
+D	runs/2026-03-01/claude-sonnet-4-6/pcs-on/run-0003/run.json
+D	runs/2026-03-01/claude-sonnet-4-6/pcs-on/run-0004/outputs/enforcement_trace.json
+D	runs/2026-03-01/claude-sonnet-4-6/pcs-on/run-0004/outputs/session1_output.txt
+D	runs/2026-03-01/claude-sonnet-4-6/pcs-on/run-0004/outputs/session2_output.txt
+D	runs/2026-03-01/claude-sonnet-4-6/pcs-on/run-0004/run.json
+D	runs/2026-03-01/claude-sonnet-4-6/pcs-on/run-0005/outputs/enforcement_trace.json
+D	runs/2026-03-01/claude-sonnet-4-6/pcs-on/run-0005/outputs/session1_output.txt
+D	runs/2026-03-01/claude-sonnet-4-6/pcs-on/run-0005/outputs/session2_output.txt
+D	runs/2026-03-01/claude-sonnet-4-6/pcs-on/run-0005/run.json
+D	runs/2026-03-01/llama-3.1-8b-instant/pcs-off/run-0001/outputs/session1_output.txt
+D	runs/2026-03-01/llama-3.1-8b-instant/pcs-off/run-0001/outputs/session2_output.txt
+D	runs/2026-03-01/llama-3.1-8b-instant/pcs-off/run-0001/run.json
+D	runs/2026-03-01/llama-3.1-8b-instant/pcs-off/run-0002/outputs/session1_output.txt
+D	runs/2026-03-01/llama-3.1-8b-instant/pcs-off/run-0002/outputs/session2_output.txt
+D	runs/2026-03-01/llama-3.1-8b-instant/pcs-off/run-0002/run.json
+D	runs/2026-03-01/llama-3.1-8b-instant/pcs-off/run-0003/outputs/session1_output.txt
+D	runs/2026-03-01/llama-3.1-8b-instant/pcs-off/run-0003/outputs/session2_output.txt
+D	runs/2026-03-01/llama-3.1-8b-instant/pcs-off/run-0003/run.json
+D	runs/2026-03-01/llama-3.1-8b-instant/pcs-off/run-0004/outputs/session1_output.txt
+D	runs/2026-03-01/llama-3.1-8b-instant/pcs-off/run-0004/outputs/session2_output.txt
+D	runs/2026-03-01/llama-3.1-8b-instant/pcs-off/run-0004/run.json
+D	runs/2026-03-01/llama-3.1-8b-instant/pcs-off/run-0005/outputs/session1_output.txt
+D	runs/2026-03-01/llama-3.1-8b-instant/pcs-off/run-0005/outputs/session2_output.txt
+D	runs/2026-03-01/llama-3.1-8b-instant/pcs-off/run-0005/run.json
+D	runs/2026-03-01/llama-3.1-8b-instant/pcs-on/run-0001/outputs/enforcement_trace.json
+D	runs/2026-03-01/llama-3.1-8b-instant/pcs-on/run-0001/outputs/session1_output.txt
+D	runs/2026-03-01/llama-3.1-8b-instant/pcs-on/run-0001/outputs/session2_output.txt
+D	runs/2026-03-01/llama-3.1-8b-instant/pcs-on/run-0001/run.json
+D	runs/2026-03-01/llama-3.1-8b-instant/pcs-on/run-0002/outputs/enforcement_trace.json
+D	runs/2026-03-01/llama-3.1-8b-instant/pcs-on/run-0002/outputs/session1_output.txt
+D	runs/2026-03-01/llama-3.1-8b-instant/pcs-on/run-0002/outputs/session2_output.txt
+D	runs/2026-03-01/llama-3.1-8b-instant/pcs-on/run-0002/run.json
+D	runs/2026-03-01/llama-3.1-8b-instant/pcs-on/run-0003/outputs/enforcement_trace.json
+D	runs/2026-03-01/llama-3.1-8b-instant/pcs-on/run-0003/outputs/session1_output.txt
+D	runs/2026-03-01/llama-3.1-8b-instant/pcs-on/run-0003/outputs/session2_output.txt
+D	runs/2026-03-01/llama-3.1-8b-instant/pcs-on/run-0003/run.json
+D	runs/2026-03-01/llama-3.1-8b-instant/pcs-on/run-0004/outputs/enforcement_trace.json
+D	runs/2026-03-01/llama-3.1-8b-instant/pcs-on/run-0004/outputs/session1_output.txt
+D	runs/2026-03-01/llama-3.1-8b-instant/pcs-on/run-0004/outputs/session2_output.txt
+D	runs/2026-03-01/llama-3.1-8b-instant/pcs-on/run-0004/run.json
+D	runs/2026-03-01/llama-3.1-8b-instant/pcs-on/run-0005/outputs/enforcement_trace.json
+D	runs/2026-03-01/llama-3.1-8b-instant/pcs-on/run-0005/outputs/session1_output.txt
+D	runs/2026-03-01/llama-3.1-8b-instant/pcs-on/run-0005/outputs/session2_output.txt
+D	runs/2026-03-01/llama-3.1-8b-instant/pcs-on/run-0005/run.json
+D	runs/2026-07-04/claude-sonnet-3.5/pcs-off/run-0001/outputs/integrity.json
+D	runs/2026-07-04/claude-sonnet-3.5/pcs-off/run-0001/outputs/model_output.txt
+D	runs/2026-07-04/claude-sonnet-3.5/pcs-off/run-0001/outputs/tool_trace.json
+D	runs/2026-07-04/claude-sonnet-3.5/pcs-off/run-0001/run.json
+D	runs/2026-07-04/claude-sonnet-3.5/pcs-on/run-0001/outputs/integrity.json
+D	runs/2026-07-04/claude-sonnet-3.5/pcs-on/run-0001/outputs/model_output.txt
+D	runs/2026-07-04/claude-sonnet-3.5/pcs-on/run-0001/outputs/tool_trace.json
+D	runs/2026-07-04/claude-sonnet-3.5/pcs-on/run-0001/run.json
+D	runs/2026-07-04/claude-sonnet-3.5/pcs-on/run-0002/outputs/integrity.json
+D	runs/2026-07-04/claude-sonnet-3.5/pcs-on/run-0002/outputs/model_output.txt
+D	runs/2026-07-04/claude-sonnet-3.5/pcs-on/run-0002/outputs/tool_trace.json
+D	runs/2026-07-04/claude-sonnet-3.5/pcs-on/run-0002/run.json
+D	runs/2026-07-04/claude-sonnet-3.5/pcs-on/run-0003/outputs/integrity.json
+D	runs/2026-07-04/claude-sonnet-3.5/pcs-on/run-0003/outputs/model_output.txt
+D	runs/2026-07-04/claude-sonnet-3.5/pcs-on/run-0003/outputs/tool_trace.json
+D	runs/2026-07-04/claude-sonnet-3.5/pcs-on/run-0003/run.json
+D	runs/2026-07-04/claude-sonnet-3.5/pcs-on/run-0004/outputs/integrity.json
+D	runs/2026-07-04/claude-sonnet-3.5/pcs-on/run-0004/outputs/model_output.txt
+D	runs/2026-07-04/claude-sonnet-3.5/pcs-on/run-0004/outputs/tool_trace.json
+D	runs/2026-07-04/claude-sonnet-3.5/pcs-on/run-0004/run.json
+D	runs/2026-07-04/claude-sonnet-3.5/pcs-on/run-0005/outputs/integrity.json
+D	runs/2026-07-04/claude-sonnet-3.5/pcs-on/run-0005/outputs/model_output.txt
+D	runs/2026-07-04/claude-sonnet-3.5/pcs-on/run-0005/outputs/tool_trace.json
+D	runs/2026-07-04/claude-sonnet-3.5/pcs-on/run-0005/run.json
+D	runs/2026-07-04/claude-sonnet-3.5/pcs-on/run-0006/outputs/integrity.json
+D	runs/2026-07-04/claude-sonnet-3.5/pcs-on/run-0006/outputs/model_output.txt
+D	runs/2026-07-04/claude-sonnet-3.5/pcs-on/run-0006/outputs/tool_trace.json
+D	runs/2026-07-04/claude-sonnet-3.5/pcs-on/run-0006/run.json
+D	runs/2026-07-04/claude-sonnet-3.5/pcs-on/run-0007/outputs/integrity.json
+D	runs/2026-07-04/claude-sonnet-3.5/pcs-on/run-0007/outputs/model_output.txt
+D	runs/2026-07-04/claude-sonnet-3.5/pcs-on/run-0007/outputs/tool_trace.json
+D	runs/2026-07-04/claude-sonnet-3.5/pcs-on/run-0007/run.json
+D	runs/2026-07-04/claude-sonnet-3.5/pcs-on/run-0008/outputs/integrity.json
+D	runs/2026-07-04/claude-sonnet-3.5/pcs-on/run-0008/outputs/model_output.txt
+D	runs/2026-07-04/claude-sonnet-3.5/pcs-on/run-0008/outputs/tool_trace.json
+D	runs/2026-07-04/claude-sonnet-3.5/pcs-on/run-0008/run.json
+D	runs/2026-07-04/claude-sonnet-3.5/pcs-on/run-0009/outputs/integrity.json
+D	runs/2026-07-04/claude-sonnet-3.5/pcs-on/run-0009/outputs/model_output.txt
+D	runs/2026-07-04/claude-sonnet-3.5/pcs-on/run-0009/outputs/tool_trace.json
+D	runs/2026-07-04/claude-sonnet-3.5/pcs-on/run-0009/run.json
+D	runs/2026-07-04/claude-sonnet-3.5/pcs-on/run-0010/outputs/integrity.json
+D	runs/2026-07-04/claude-sonnet-3.5/pcs-on/run-0010/outputs/model_output.txt
+D	runs/2026-07-04/claude-sonnet-3.5/pcs-on/run-0010/outputs/tool_trace.json
+D	runs/2026-07-04/claude-sonnet-3.5/pcs-on/run-0010/run.json
+D	runs/2026-07-04/claude-sonnet-3.5/pcs-on/run-0011/outputs/integrity.json
+D	runs/2026-07-04/claude-sonnet-3.5/pcs-on/run-0011/outputs/model_output.txt
+D	runs/2026-07-04/claude-sonnet-3.5/pcs-on/run-0011/outputs/tool_trace.json
+D	runs/2026-07-04/claude-sonnet-3.5/pcs-on/run-0011/run.json
+D	runs/2026-07-04/claude-sonnet-3.5/pcs-on/run-0012/outputs/integrity.json
+D	runs/2026-07-04/claude-sonnet-3.5/pcs-on/run-0012/outputs/model_output.txt
+D	runs/2026-07-04/claude-sonnet-3.5/pcs-on/run-0012/outputs/tool_trace.json
+D	runs/2026-07-04/claude-sonnet-3.5/pcs-on/run-0012/run.json
+D	runs/2026-07-04/claude-sonnet-3.5/pcs-on/run-0013/outputs/integrity.json
+D	runs/2026-07-04/claude-sonnet-3.5/pcs-on/run-0013/outputs/model_output.txt
+D	runs/2026-07-04/claude-sonnet-3.5/pcs-on/run-0013/outputs/tool_trace.json
+D	runs/2026-07-04/claude-sonnet-3.5/pcs-on/run-0013/run.json
+D	runs/2026-07-04/claude-sonnet-3.5/pcs-on/run-0014/outputs/integrity.json
+D	runs/2026-07-04/claude-sonnet-3.5/pcs-on/run-0014/outputs/model_output.txt
+D	runs/2026-07-04/claude-sonnet-3.5/pcs-on/run-0014/outputs/tool_trace.json
+D	runs/2026-07-04/claude-sonnet-3.5/pcs-on/run-0014/run.json
+D	runs/2026-07-04/claude-sonnet-3.5/pcs-on/run-0015/outputs/integrity.json
+D	runs/2026-07-04/claude-sonnet-3.5/pcs-on/run-0015/outputs/model_output.txt
+D	runs/2026-07-04/claude-sonnet-3.5/pcs-on/run-0015/outputs/tool_trace.json
+D	runs/2026-07-04/claude-sonnet-3.5/pcs-on/run-0015/run.json
+D	runs/2026-07-04/claude-sonnet-3.5/pcs-on/run-0016/outputs/integrity.json
+D	runs/2026-07-04/claude-sonnet-3.5/pcs-on/run-0016/outputs/model_output.txt
+D	runs/2026-07-04/claude-sonnet-3.5/pcs-on/run-0016/outputs/tool_trace.json
+D	runs/2026-07-04/claude-sonnet-3.5/pcs-on/run-0016/run.json
+D	runs/2026-07-04/claude-sonnet-3.5/pcs-on/run-0017/outputs/integrity.json
+D	runs/2026-07-04/claude-sonnet-3.5/pcs-on/run-0017/outputs/model_output.txt
+D	runs/2026-07-04/claude-sonnet-3.5/pcs-on/run-0017/outputs/tool_trace.json
+D	runs/2026-07-04/claude-sonnet-3.5/pcs-on/run-0017/run.json
+D	runs/2026-07-04/claude-sonnet-3.5/pcs-on/run-0018/outputs/integrity.json
+D	runs/2026-07-04/claude-sonnet-3.5/pcs-on/run-0018/outputs/model_output.txt
+D	runs/2026-07-04/claude-sonnet-3.5/pcs-on/run-0018/outputs/tool_trace.json
+D	runs/2026-07-04/claude-sonnet-3.5/pcs-on/run-0018/run.json
+D	runs/2026-07-04/claude-sonnet-3.5/pcs-on/run-0019/outputs/integrity.json
+D	runs/2026-07-04/claude-sonnet-3.5/pcs-on/run-0019/outputs/model_output.txt
+D	runs/2026-07-04/claude-sonnet-3.5/pcs-on/run-0019/outputs/tool_trace.json
+D	runs/2026-07-04/claude-sonnet-3.5/pcs-on/run-0019/run.json
+D	runs/2026-07-04/claude-sonnet-3.5/pcs-on/run-0020/outputs/integrity.json
+D	runs/2026-07-04/claude-sonnet-3.5/pcs-on/run-0020/outputs/model_output.txt
+D	runs/2026-07-04/claude-sonnet-3.5/pcs-on/run-0020/outputs/tool_trace.json
+D	runs/2026-07-04/claude-sonnet-3.5/pcs-on/run-0020/run.json
+D	runs/2026-07-04/claude-sonnet-3.5/pcs-on/run-0021/outputs/integrity.json
+D	runs/2026-07-04/claude-sonnet-3.5/pcs-on/run-0021/outputs/model_output.txt
+D	runs/2026-07-04/claude-sonnet-3.5/pcs-on/run-0021/outputs/tool_trace.json
+D	runs/2026-07-04/claude-sonnet-3.5/pcs-on/run-0021/run.json
+D	runs/2026-07-04/claude-sonnet-3.5/pcs-on/run-0022/outputs/integrity.json
+D	runs/2026-07-04/claude-sonnet-3.5/pcs-on/run-0022/outputs/model_output.txt
+D	runs/2026-07-04/claude-sonnet-3.5/pcs-on/run-0022/outputs/tool_trace.json
+D	runs/2026-07-04/claude-sonnet-3.5/pcs-on/run-0022/run.json
+D	runs/2026-07-04/claude-sonnet-3.5/pcs-on/run-0023/outputs/integrity.json
+D	runs/2026-07-04/claude-sonnet-3.5/pcs-on/run-0023/outputs/model_output.txt
+D	runs/2026-07-04/claude-sonnet-3.5/pcs-on/run-0023/outputs/tool_trace.json
+D	runs/2026-07-04/claude-sonnet-3.5/pcs-on/run-0023/run.json
+D	runs/2026-07-04/claude-sonnet-3.5/pcs-on/run-0024/outputs/integrity.json
+D	runs/2026-07-04/claude-sonnet-3.5/pcs-on/run-0024/outputs/model_output.txt
+D	runs/2026-07-04/claude-sonnet-3.5/pcs-on/run-0024/outputs/tool_trace.json
+D	runs/2026-07-04/claude-sonnet-3.5/pcs-on/run-0024/run.json
+D	runs/2026-07-04/claude-sonnet-3.5/pcs-on/run-0025/outputs/integrity.json
+D	runs/2026-07-04/claude-sonnet-3.5/pcs-on/run-0025/outputs/model_output.txt
+D	runs/2026-07-04/claude-sonnet-3.5/pcs-on/run-0025/outputs/tool_trace.json
+D	runs/2026-07-04/claude-sonnet-3.5/pcs-on/run-0025/run.json
+D	runs/2026-07-04/claude-sonnet-3.5/pcs-on/run-0026/outputs/integrity.json
+D	runs/2026-07-04/claude-sonnet-3.5/pcs-on/run-0026/outputs/model_output.txt
+D	runs/2026-07-04/claude-sonnet-3.5/pcs-on/run-0026/outputs/tool_trace.json
+D	runs/2026-07-04/claude-sonnet-3.5/pcs-on/run-0026/run.json
+D	runs/2026-07-04/claude-sonnet-3.5/pcs-on/run-0027/outputs/integrity.json
+D	runs/2026-07-04/claude-sonnet-3.5/pcs-on/run-0027/outputs/model_output.txt
+D	runs/2026-07-04/claude-sonnet-3.5/pcs-on/run-0027/outputs/tool_trace.json
+D	runs/2026-07-04/claude-sonnet-3.5/pcs-on/run-0027/run.json
+D	runs/2026-07-04/claude-sonnet-3.5/pcs-on/run-0028/outputs/integrity.json
+D	runs/2026-07-04/claude-sonnet-3.5/pcs-on/run-0028/outputs/model_output.txt
+D	runs/2026-07-04/claude-sonnet-3.5/pcs-on/run-0028/outputs/tool_trace.json
+D	runs/2026-07-04/claude-sonnet-3.5/pcs-on/run-0028/run.json
+D	runs/2026-07-04/claude-sonnet-3.5/pcs-on/run-0029/outputs/integrity.json
+D	runs/2026-07-04/claude-sonnet-3.5/pcs-on/run-0029/outputs/model_output.txt
+D	runs/2026-07-04/claude-sonnet-3.5/pcs-on/run-0029/outputs/tool_trace.json
+D	runs/2026-07-04/claude-sonnet-3.5/pcs-on/run-0029/run.json
+D	runs/2026-07-04/claude-sonnet-3.5/pcs-on/run-0030/outputs/integrity.json
+D	runs/2026-07-04/claude-sonnet-3.5/pcs-on/run-0030/outputs/model_output.txt
+D	runs/2026-07-04/claude-sonnet-3.5/pcs-on/run-0030/outputs/tool_trace.json
+D	runs/2026-07-04/claude-sonnet-3.5/pcs-on/run-0030/run.json
+D	runs/avs-1p-enhanced/avs-1p-enhanced-results.json
+D	runs/avs-1p-enhanced/neg-01.json
+D	runs/avs-1p-enhanced/neg-02.json
+D	runs/avs-1p-enhanced/pos-01.json
+D	runs/avs-1p-enhanced/pos-02.json
+D	runs/avs-1p/avs-1p-results.json
+D	runs/avs-1p/test1-violation.json
+D	runs/avs-1p/test2-compliance.json
+D	runs/avs-1p/test3-multiple.json
+D	runs/avs-1p/test4-terms.json
+D	runs/avs-1r/avs-1r-results.json
+D	runs/avs-1r/test1-backend.json
+D	runs/avs-1r/test2-dim-1536.json
+D	runs/avs-1r/test2-dim-384.json
+D	runs/avs-1r/test2-dim-768.json
+D	runs/avs-1r/test3-similarity.json
+D	runs/avs-1r/test4-local-1536.json
+D	runs/avs-1r/test4-local-semantic-embeddings-384.json
+D	runs/avs-1r/test4-local-semantic-embeddings-768.json
+D	runs/avs-1r/test4-openai-1536.json
+D	runs/cts-l1-boundary/session-a.json
+D	runs/cts-l1-boundary/session-b.json
+D	runs/cts-l1-boundary/session-boundary-integrity-trace.json
+D	runs/cts-l1-recovery/decision-state-recovery-trace.json
+D	runs/cts-l1-recovery/shared-state.json
+D	runs/cts-l2-enforcement/policy-enforcement-trace.json
+D	runs/cts-l2-enforcement/shared-state.json
+D	runs/cts-l3-cmcc/model-transition-trace.json
+D	runs/cts-l3-cmcc/shared-state.json
+D	runs/cts-l4-federation/decision-replication-trace.json
+D	runs/cts-l4-federation/node-a.json
+D	runs/cts-l4-federation/node-b.json
+D	runs/evs8/pcs-off.json
+D	runs/evs8/pcs-on-session1.json
+D	runs/evs8/pcs-on-session2.json
+D	runs/evs8/vision-anchor-store.json
+D	runs/evs9/phase1-session1.json
+D	runs/evs9/phase1-shared.json
+D	runs/evs9/phase2.json
+D	runs/legacy-equiv-1.json
+D	runs/legacy-equiv-2.json
+D	runs/legacy-trace-1.json
+D	runs/legacy-trace-2.json
+D	runs/test-debug.json
+D	runs/test-policy-debug.json
+M	runtime/START_HERE.md
+D	test-data/evs10-store.json
+D	test-data/test-avs2c-off.json
+D	test-data/test-avs2c.json
+
+## Analysis:
+- Added RELEASE.md (unified release identity)
+- Added VALIDATION_DIFF.txt (documentation of this diff)
+- Removed runs/, audit-artifacts/, test-data/, .env.example (internal development artifacts)
+- Updated 40 .md files (documentation cleanup)

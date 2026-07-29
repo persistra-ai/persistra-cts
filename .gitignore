@@ -1,0 +1,57 @@
+output/
+
+# NDA-only confidential materials
+internal/nda-only/
+
+# Internal planning and assessment documents
+CIOSO_PILOT_PROPOSAL.md
+ENGINEERING_COFOUNDER_ONBOARDING.md
+EXTERNAL_REPO_VERIFICATION.md
+FINAL_RELEASE_SUMMARY.md
+PCS_PHASE_4_BUILD_SPEC.md
+PILOT_EVALUATION_TEMPLATE.md
+REPOSITORY_UPLOAD_CHECKLIST.md
+VALKYRIE_VALIDATION_GUIDE.md
+WEEK_*_*.md
+pilots/
+
+# Test artifacts and audit data
+audit-artifacts/
+test-data/
+runs/cts-l4-distributed/
+
+# Environment variables (contains API keys)
+.env
+
+# Runtime data and traces (generated during tests)
+runtime/data/
+runtime/traces/
+
+# macOS
+.DS_Store
+
+# Environment variables (ALL variations except .env.example)
+.env.local
+.env.*.local
+.env.development
+.env.production
+.env.test
+**/.env.local
+**/.env.*
+!.env.example
+
+# Test results with personal information
+evs/results/
+avs/results/
+runs/
+!runs/.gitkeep
+
+# Internal documentation with personal paths
+CTS_L1_COMPLETION.md
+LICENSE_DEPLOYMENT_SUMMARY.md
+EXTERNAL_REPO_VERIFICATION.md
+VALKYRIE_VALIDATION_GUIDE.md
+WEEK_*_*.md
+FINAL_RELEASE_SUMMARY.md
+PCS_PRE_RELEASE_VALIDATION_BRIEF.md
+node_modules/

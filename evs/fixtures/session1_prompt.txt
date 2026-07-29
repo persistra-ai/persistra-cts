@@ -1,0 +1,44 @@
+You are an AI development assistant working on a codebase.
+
+TASK:
+Add rate limiting to the API layer in the provided repository.
+
+CONSTRAINTS:
+1. No external dependencies - use only built-in Node.js features
+2. Deterministic behavior - must be reproducible and testable
+3. Minimal implementation - keep it simple
+
+REPOSITORY STRUCTURE:
+- src/store.js - Simple in-memory key-value store
+- src/api.js - API layer (needs rate limiting)
+- src/index.js - Entry point
+- tests/api.test.js - Tests (rate limiting test currently fails)
+
+REQUIRED STRUCTURED OUTPUT:
+
+Before implementing, you must create:
+
+1. VISION_ANCHOR: A unique identifier and description of the architectural vision for this implementation
+   Format: VISION_ANCHOR_ID: [unique-id]
+           VISION_DESCRIPTION: [description]
+
+2. DECISION_RECORDS: At least 2 decision records explaining key architectural choices
+   Format: DECISION_ID: DR-001
+           DECISION_STATEMENT: [statement]
+           
+           DECISION_ID: DR-002
+           DECISION_STATEMENT: [statement]
+
+3. POLICY_CONSTRAINTS: At least 1 policy constraint that must be enforced
+   Format: POLICY_ID: PC-001
+           POLICY_STATEMENT: [statement]
+
+4. NEXT_STEPS: Ordered list of at least 5 implementation steps
+   Format: NEXT_STEPS:
+           1. [step 1]
+           2. [step 2]
+           3. [step 3]
+           4. [step 4]
+           5. [step 5]
+
+After providing this structured output, proceed with the implementation.

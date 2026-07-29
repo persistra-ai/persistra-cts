@@ -1,0 +1,15 @@
+{
+  "decisions": [
+    {
+      "id": "DR-001",
+      "namespace": "namespace-beta",
+      "statement": "Beta decision",
+      "metadata": null,
+      "timestamp": "2026-07-25T21:16:16.265Z"
+    }
+  ],
+  "policies": [],
+  "runtimeState": {
+    "lastSeenModel": null
+  }
+}

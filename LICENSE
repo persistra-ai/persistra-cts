@@ -1,0 +1,71 @@
+# Persistent Cognitive Standard (PCS) - Source-Available License
+
+**Version:** 1.0  
+**Effective Date:** May 26, 2026  
+**Copyright:** © 2026 Exocortical Concepts, Inc. All rights reserved.
+
+---
+
+## 1. Grant of Copyright License
+
+Subject to the terms and conditions of this License, Exocortical Concepts, Inc. ("Licensor") hereby grants you a worldwide, royalty-free, non-exclusive, non-transferable license to:
+
+- **View** the source code
+- **Use** the source code for evaluation, testing, and non-commercial research purposes
+- **Modify** the source code for your own internal use
+- **Distribute** modified versions only under the terms of this License
+
+## 2. Restrictions
+
+You may NOT:
+
+- Use this software for commercial purposes without a separate commercial license
+- Remove or alter any copyright, trademark, or patent notices
+- Claim that your implementation is "PCS-compliant" or "PCS-certified" without passing PCS-CTS and obtaining certification
+- Sublicense, sell, or transfer this software to third parties for commercial use
+
+## 3. Patent Notice
+
+**IMPORTANT:** This License does NOT grant any patent rights.
+
+Implementation of the Persistra Cognitive Standard (PCS) may require licenses to patents owned by Exocortical Concepts, Inc. and/or other parties. This software is provided as a reference implementation to demonstrate PCS feasibility and support conformance testing.
+
+**Patent Disclosure:** See PATENT_NOTICE.md and RFC-PCS-0007 for patent disclosure framework and FRAND licensing terms.
+
+**Commercial Use:** For commercial deployment, contact ip@persistra.ai regarding patent licensing.
+
+## 4. Trademark Notice
+
+"Persistra," "PCS," "Persistent Cognitive Substrate," and related marks are trademarks of Exocortical Concepts, Inc. Use of these marks requires prior written permission.
+
+## 5. Conformance and Certification
+
+- Claiming "PCS conformance" requires passing PCS-CTS (Conformance Test Suite) as defined in RFC-PCS-0004
+- Claiming "PCS certification" requires certification from the PCS Certification Authority as defined in RFC-PCS-0006
+- Unauthorized conformance or certification claims constitute misrepresentation
+
+## 6. Disclaimer of Warranty
+
+THIS SOFTWARE IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, AND NONINFRINGEMENT.
+
+## 7. Limitation of Liability
+
+IN NO EVENT SHALL THE LICENSOR BE LIABLE FOR ANY CLAIM, DAMAGES, OR OTHER LIABILITY ARISING FROM THE USE OF THIS SOFTWARE.
+
+## 8. Termination
+
+This License terminates automatically if you violate any of its terms. Upon termination, you must cease all use and destroy all copies.
+
+## 9. Governing Law
+
+This License is governed by the laws of the State of Delaware, United States.
+
+---
+
+**For Commercial Licensing:** partnerships@persistra.ai  
+**For Patent Licensing:** licensing@persistra.ai  
+**For Certification:** licensing@persistra.ai
+
+---
+
+**This is a source-available license, not an open-source license. It permits viewing and evaluation but restricts commercial use and does not grant patent rights.**

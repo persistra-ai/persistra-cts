@@ -1,0 +1,15 @@
+{
+  "decisions": [
+    {
+      "id": "DR-001",
+      "namespace": "avs2a-test3",
+      "statement": "Use MongoDB for document storage",
+      "metadata": null,
+      "timestamp": "2026-07-25T21:16:16.263Z"
+    }
+  ],
+  "policies": [],
+  "runtimeState": {
+    "lastSeenModel": null
+  }
+}

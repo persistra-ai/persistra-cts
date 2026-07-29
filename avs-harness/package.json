@@ -1,0 +1,19 @@
+{
+  "name": "avs-harness",
+  "version": "1.0.0",
+  "description": "Minimal harness for AVS validation runs",
+  "main": "run-avs.js",
+  "scripts": {
+    "phase-2a": "node run-avs.js --phase 2a --date 2026-02-17",
+    "phase-2": "node run-avs.js --phase 2 --date 2026-02-17"
+  },
+  "dependencies": {
+    "@anthropic-ai/sdk": "^0.20.0",
+    "ajv": "^8.12.0",
+    "ajv-formats": "^3.0.1",
+    "openai": "^4.28.0"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}

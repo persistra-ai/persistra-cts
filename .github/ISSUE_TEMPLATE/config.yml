@@ -1,0 +1,14 @@
+blank_issues_enabled: false
+contact_links:
+  - name: 💬 GitHub Discussions
+    url: https://github.com/persistra-ai/persistra-cts/discussions
+    about: Ask questions, share ideas, or discuss PCS architecture
+  - name: 📖 Documentation
+    url: https://github.com/persistra-ai/persistra-cts/blob/main/START_HERE.md
+    about: Read the documentation before opening an issue
+  - name: 🔧 Troubleshooting Guide
+    url: https://github.com/persistra-ai/persistra-cts/blob/main/TROUBLESHOOTING.md
+    about: Check common issues and solutions
+  - name: ❓ FAQ
+    url: https://github.com/persistra-ai/persistra-cts/blob/main/FAQ.md
+    about: Frequently asked questions

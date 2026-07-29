@@ -1,0 +1,13 @@
+{
+  "default:policy:POL-ZXM3M7NB": {
+    "type": "policy",
+    "id": "POL-ZXM3M7NB",
+    "constraint": "Elasticsearch and all search engines are forbidden due to licensing concerns.",
+    "metadata": {
+      "nonce": "B3OX",
+      "namespace": null
+    },
+    "timestamp": 1771166879151,
+    "namespace": "default"
+  }
+}

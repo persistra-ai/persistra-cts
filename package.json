@@ -1,0 +1,24 @@
+{
+  "name": "persistra-cts",
+  "version": "0.1.0",
+  "description": "Conformance Test Suite for Persistent Cognitive Substrate (PCS)",
+  "main": "index.js",
+  "scripts": {
+    "test": "node runners/run-cts.js",
+    "test:all": "./run_all.sh",
+    "test:all:audit": "./run_all.sh --mode audit",
+    "test:all:verbose": "./run_all.sh --verbose",
+    "test:quick": "./scripts/quick-validation.sh",
+    "preflight": "./scripts/preflight.sh",
+    "validate:quick": "./scripts/validate-quick.sh",
+    "clean": "./scripts/clean-test-artifacts.sh"
+  },
+  "keywords": [],
+  "author": "Exocortical Concepts Inc.",
+  "license": "SEE LICENSE IN LICENSE",
+  "dependencies": {
+    "@anthropic-ai/sdk": "^0.32.1",
+    "axios": "^1.13.5",
+    "openai": "^4.20.1"
+  }
+}

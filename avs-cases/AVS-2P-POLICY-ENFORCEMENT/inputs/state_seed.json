@@ -1,0 +1,11 @@
+{
+  "policies": [
+    {
+      "policy_id": "POL-ve2024",
+      "policy_version": "1.0.0",
+      "content": "VendorX is excluded from all procurement recommendations.",
+      "created_at": "2026-02-15T09:00:00Z"
+    }
+  ],
+  "excludedVendor": "VendorX"
+}

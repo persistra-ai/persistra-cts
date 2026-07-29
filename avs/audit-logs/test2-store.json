@@ -1,0 +1,24 @@
+{
+  "decisions": [
+    {
+      "id": "DR-001",
+      "namespace": "avs2a-test2",
+      "statement": "Use Redis for caching",
+      "metadata": null,
+      "timestamp": "2026-07-25T21:16:16.262Z"
+    }
+  ],
+  "policies": [
+    {
+      "id": "POL-1",
+      "constraint": "No secrets in logs",
+      "metadata": null,
+      "namespace": "avs2a-test2",
+      "createdAt": 1785014176262,
+      "_legacy": true
+    }
+  ],
+  "runtimeState": {
+    "lastSeenModel": null
+  }
+}
