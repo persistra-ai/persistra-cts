@@ -101,6 +101,20 @@ class PolicyEnforcementPoint {
       violatedTerms = policyViolationResult.violatedTerms || [];
     }
     
+    // Track enforcement metadata (for authority calculation)
+    if (!allowed) {
+      // Violation was blocked - increment enforcement counts
+      if (existingDecision && contradictionResult.contradicts) {
+        // Decision was enforced against contradiction
+        this.decisionStore.incrementEnforcementCount(existingDecision.id);
+      }
+      
+      if (violatedPolicy) {
+        // Policy was enforced against violation
+        this.decisionStore.incrementPolicyEnforcementCount(violatedPolicy);
+      }
+    }
+    
     // Get backend info for retrieval introspection (AVS-1R)
     const backendInfo = this.decisionStore.getBackendInfo();
     

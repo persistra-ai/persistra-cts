@@ -448,6 +448,66 @@ class DecisionStore {
   }
   
   /**
+   * Increment enforcement count for a decision (tracks how many times PEP enforced it)
+   * @param {string} decisionId - Decision ID to increment
+   */
+  incrementEnforcementCount(decisionId) {
+    const decisions = this.loadDecisions();
+    const decision = decisions.find(d => d.id === decisionId);
+    
+    if (decision) {
+      if (!decision.metadata) {
+        decision.metadata = {};
+      }
+      decision.metadata.enforcement_count = (decision.metadata.enforcement_count || 0) + 1;
+      decision.metadata.last_enforced = new Date().toISOString();
+      this.saveDecisions(decisions);
+    }
+  }
+  
+  /**
+   * Increment enforcement count for a policy
+   * @param {string} policyId - Policy ID to increment
+   */
+  incrementPolicyEnforcementCount(policyId) {
+    const policies = this.loadPolicies();
+    const policy = policies.find(p => p.id === policyId);
+    
+    if (policy) {
+      if (!policy.metadata) {
+        policy.metadata = {};
+      }
+      policy.metadata.enforcement_count = (policy.metadata.enforcement_count || 0) + 1;
+      policy.metadata.last_enforced = new Date().toISOString();
+      this.savePolicies(policies);
+    }
+  }
+  
+  /**
+   * Get enforcement metadata for a decision
+   * @param {string} decisionId - Decision ID
+   * @returns {object} Enforcement metadata
+   */
+  getEnforcementMetadata(decisionId) {
+    const decisions = this.loadDecisions();
+    const decision = decisions.find(d => d.id === decisionId);
+    
+    if (decision && decision.metadata) {
+      return {
+        enforcement_count: decision.metadata.enforcement_count || 0,
+        violation_attempts: decision.metadata.violation_attempts || 0,
+        last_enforced: decision.metadata.last_enforced || null
+      };
+    }
+    
+    return {
+      enforcement_count: 0,
+      violation_attempts: 0,
+      last_enforced: null
+    };
+  }
+  
+  /**
    * Clear all decisions and policies (for testing)
    */
   clear() {

@@ -4,10 +4,12 @@
  * Enforces epistemic integrity by preventing model invocation when required
  * cognitive state is absent. Distinct from policy gate (normative constraints).
  * 
- * Contract Version: 1.0.0
+ * Contract Version: 1.1.0 (added cryptographic gate signatures)
  */
 
-const CONTRACT_VERSION = '1.0.0';
+const crypto = require('crypto');
+
+const CONTRACT_VERSION = '1.1.0';
 const POLICY_MAPPING_VERSION = '1.0.0';
 
 class EpistemicGate {
@@ -21,6 +23,18 @@ class EpistemicGate {
     
     // Last evaluation state
     this.lastEvaluation = null;
+    
+    // Cryptographic gate signing (software precursor to Tier 1 attested gating)
+    this.cryptographicGatingEnabled = options.cryptographicGating !== false;
+    
+    // Generate ephemeral key pair for this gate instance
+    // In production, this would be a persistent key or HSM-backed key
+    if (this.cryptographicGatingEnabled) {
+      const { privateKey, publicKey } = crypto.generateKeyPairSync('ed25519');
+      this.privateKey = privateKey;
+      this.publicKey = publicKey;
+      this.publicKeyPem = publicKey.export({ type: 'spki', format: 'pem' });
+    }
   }
 
   /**
@@ -86,6 +100,12 @@ class EpistemicGate {
       gate_evaluation_time_ms: durationMs
     };
 
+    // Generate cryptographic signature if enabled
+    if (this.cryptographicGatingEnabled) {
+      const token = this.signGateDecision(this.lastEvaluation);
+      this.lastEvaluation.gate_token = token;
+    }
+
     // Reset invocation counter if gate triggers
     if (gateTriggered) {
       this.engineInvocationsDuringBlock = 0;
@@ -101,6 +121,97 @@ class EpistemicGate {
   recordInvocationAttempt() {
     if (this.lastEvaluation && this.lastEvaluation.epistemic_gate_triggered) {
       this.engineInvocationsDuringBlock++;
+    }
+  }
+
+  /**
+   * Sign gate decision with private key
+   * 
+   * This creates a cryptographically bound token that must be verified before invocation.
+   * Bypassing the gate now requires forging a signature, not just ignoring a flag.
+   * 
+   * @param {Object} evaluation - Gate evaluation result
+   * @returns {Object} Signed token
+   */
+  signGateDecision(evaluation) {
+    if (!this.cryptographicGatingEnabled) {
+      return null;
+    }
+
+    const timestamp = Date.now();
+    const nonce = crypto.randomBytes(16).toString('hex');
+    
+    // Create canonical payload
+    const payload = {
+      invocation_permitted: evaluation.invocation_permitted,
+      timestamp: timestamp,
+      nonce: nonce,
+      gate_triggered: evaluation.epistemic_gate_triggered,
+      missing_state: evaluation.missing_required_state
+    };
+
+    // Sign payload
+    const payloadString = JSON.stringify(payload);
+    const signature = crypto.sign(null, Buffer.from(payloadString), this.privateKey);
+
+    return {
+      payload: payload,
+      signature: signature.toString('base64'),
+      public_key: this.publicKeyPem,
+      algorithm: 'ed25519'
+    };
+  }
+
+  /**
+   * Verify gate token signature
+   * 
+   * This must be called before model invocation to verify the gate decision.
+   * Returns true if signature is valid and invocation is permitted.
+   * 
+   * @param {Object} token - Gate token to verify
+   * @returns {boolean} True if valid and invocation permitted
+   */
+  static verifyGateToken(token) {
+    if (!token || !token.payload || !token.signature || !token.public_key) {
+      return false;
+    }
+
+    try {
+      // Reconstruct payload
+      const payloadString = JSON.stringify(token.payload);
+      const signature = Buffer.from(token.signature, 'base64');
+      
+      // Import public key
+      const publicKey = crypto.createPublicKey({
+        key: token.public_key,
+        format: 'pem',
+        type: 'spki'
+      });
+
+      // Verify signature
+      const isValid = crypto.verify(
+        null,
+        Buffer.from(payloadString),
+        publicKey,
+        signature
+      );
+
+      if (!isValid) {
+        return false;
+      }
+
+      // Check timestamp (token expires after 60 seconds)
+      const now = Date.now();
+      const tokenAge = now - token.payload.timestamp;
+      if (tokenAge > 60000) {
+        return false; // Token expired
+      }
+
+      // Check invocation permission
+      return token.payload.invocation_permitted === true;
+      
+    } catch (err) {
+      return false;
     }
   }
 

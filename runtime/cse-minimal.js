@@ -63,13 +63,14 @@ class MinimalCSE {
     this.config = {
       recencyWeight: config.recencyWeight ?? 0.4,
       importanceWeight: config.importanceWeight ?? 0.6,
+      authorityWeight: config.authorityWeight ?? 0.0, // Optional authority weighting
       recencyDecayHours: config.recencyDecayHours ?? 168 // 7 days
     };
     
-    // Validate weights sum to 1.0
-    const weightSum = this.config.recencyWeight + this.config.importanceWeight;
-    if (Math.abs(weightSum - 1.0) > 0.001) {
-      throw new Error(`CSE_CONFIG_ERROR: Weights must sum to 1.0 (got ${weightSum})`);
+    // Validate weights sum to 1.0 (with floating point tolerance)
+    const weightSum = this.config.recencyWeight + this.config.importanceWeight + this.config.authorityWeight;
+    if (Math.abs(weightSum - 1.0) > 0.01) {
+      throw new Error(`CSE_CONFIG_ERROR: Weights must sum to 1.0 (got ${weightSum.toFixed(3)})`);
     }
   }
   
@@ -92,6 +93,28 @@ class MinimalCSE {
   }
   
   /**
+   * Calculate authority score from enforcement metadata
+   * @param {MemoryItem} item - Memory item
+   * @returns {number} Authority score [0-1]
+   */
+  calculateAuthority(item) {
+    if (!item.metadata) {
+      return 0;
+    }
+    
+    const enforcementCount = item.metadata.enforcement_count ?? 0;
+    const violationAttempts = item.metadata.violation_attempts ?? 0;
+    
+    // Authority derived from enforcement history
+    // More enforcements = higher authority
+    // More violation attempts = higher authority (frequently violated = important to enforce)
+    const enforcementAuthority = Math.min(1.0, enforcementCount / 10);
+    const violationAuthority = Math.min(1.0, violationAttempts / 5);
+    
+    return (enforcementAuthority + violationAuthority) / 2;
+  }
+  
+  /**
    * Calculate salience score for a memory item
    * @param {MemoryItem} item - Memory item
    * @param {number} now - Current timestamp (ms, optional)
@@ -100,11 +123,13 @@ class MinimalCSE {
   calculateSalience(item, now = Date.now()) {
     const recencyScore = this.calculateRecencyScore(item.timestamp, now);
     const importanceScore = item.importance ?? 0.5;
+    const authorityScore = this.config.authorityWeight > 0 ? this.calculateAuthority(item) : 0;
     
     // Weighted sum
     const salience = 
       (this.config.recencyWeight * recencyScore) +
-      (this.config.importanceWeight * importanceScore);
+      (this.config.importanceWeight * importanceScore) +
+      (this.config.authorityWeight * authorityScore);
     
     return salience;
   }

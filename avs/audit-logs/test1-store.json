@@ -5,7 +5,7 @@
       "namespace": "avs2a-test1",
       "statement": "Use PostgreSQL for persistence",
       "metadata": null,
-      "timestamp": "2026-07-25T21:16:16.259Z"
+      "timestamp": "2026-08-14T13:30:30.991Z"
     }
   ],
   "policies": [
@@ -14,7 +14,7 @@
       "constraint": "No hardcoded credentials",
       "metadata": null,
       "namespace": "avs2a-test1",
-      "createdAt": 1785014176260,
+      "createdAt": 1786714230992,
       "_legacy": true
     }
   ],

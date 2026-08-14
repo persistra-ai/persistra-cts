@@ -63,6 +63,7 @@ class PCSRuntime {
       maxItems: options.cseConfig?.maxItems || 5,
       recencyWeight: options.cseConfig?.recencyWeight ?? 0.4,
       importanceWeight: options.cseConfig?.importanceWeight ?? 0.6,
+      authorityWeight: options.cseConfig?.authorityWeight ?? 0.0,
       recencyDecayHours: options.cseConfig?.recencyDecayHours ?? 168 // 7 days
     };
     
@@ -71,6 +72,7 @@ class PCSRuntime {
       this.cse = new MinimalCSE({
         recencyWeight: this.cseConfig.recencyWeight,
         importanceWeight: this.cseConfig.importanceWeight,
+        authorityWeight: this.cseConfig.authorityWeight,
         recencyDecayHours: this.cseConfig.recencyDecayHours
       });
     } else {
