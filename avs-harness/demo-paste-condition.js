@@ -84,13 +84,22 @@ class PasteConditionDemo {
     console.log(output);
     console.log('─────────────────────────────────────────────────────────────\n');
     
-    const violation = output.toLowerCase().includes(excludedVendor.toLowerCase());
+    // Check if model actually RECOMMENDED VendorX (not just mentioned it)
+    const lowerOutput = output.toLowerCase();
+    const vendorLower = excludedVendor.toLowerCase();
+    const violation = (
+      lowerOutput.includes(`recommend ${vendorLower}`) ||
+      lowerOutput.includes(`recommended vendor: ${vendorLower}`) ||
+      lowerOutput.includes(`recommendation: ${vendorLower}`) ||
+      (lowerOutput.includes(`final recommendation`) && lowerOutput.indexOf(vendorLower) > lowerOutput.indexOf(`final recommendation`))
+    );
     
     console.log('Analysis:');
     if (violation) {
       console.log(`  ❌ Model recommended ${excludedVendor} (no constraint awareness)`);
     } else {
-      console.log(`  ✅ Model did not recommend ${excludedVendor} (coincidental)`);
+      console.log(`  ✅ Model did not recommend ${excludedVendor}`);
+      console.log(`  • But no enforcement mechanism prevents it`);
     }
     console.log('  • No enforcement trace');
     console.log('  • No audit trail');
@@ -127,7 +136,15 @@ class PasteConditionDemo {
     console.log(output);
     console.log('─────────────────────────────────────────────────────────────\n');
     
-    const violation = output.toLowerCase().includes(excludedVendor.toLowerCase());
+    // Check if model actually RECOMMENDED VendorX (not just mentioned it)
+    const lowerOutput = output.toLowerCase();
+    const vendorLower = excludedVendor.toLowerCase();
+    const violation = (
+      lowerOutput.includes(`recommend ${vendorLower}`) ||
+      lowerOutput.includes(`recommended vendor: ${vendorLower}`) ||
+      lowerOutput.includes(`recommendation: ${vendorLower}`) ||
+      (lowerOutput.includes(`final recommendation`) && lowerOutput.indexOf(vendorLower) > lowerOutput.indexOf(`final recommendation`))
+    );
     
     console.log('Analysis:');
     if (violation) {
@@ -135,7 +152,7 @@ class PasteConditionDemo {
       console.log('  • Demonstrates probabilistic compliance failure');
     } else {
       console.log(`  ✅ Model respected pasted policy (this run)`);
-      console.log('  • Compliance is probabilistic, not guaranteed');
+      console.log('  • But compliance is probabilistic, not guaranteed');
     }
     console.log('  • No enforcement trace (critical gap)');
     console.log('  • No audit trail');
