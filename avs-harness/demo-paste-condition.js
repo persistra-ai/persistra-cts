@@ -226,9 +226,7 @@ class PasteConditionDemo {
         // Execute all tools and collect results
         const toolResults = [];
         for (const toolUse of toolUses) {
-          console.log(`  [${toolUse.name}] Input:`, JSON.stringify(toolUse.input, null, 2));
-          
-          // Execute tool
+          // Execute tool (tool executor logs input internally)
           const toolResult = await toolExecutor.executeCheckPolicy(
             toolUse.input,
             { policy, excludedVendor }
