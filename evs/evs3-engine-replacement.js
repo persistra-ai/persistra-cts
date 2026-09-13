@@ -31,7 +31,7 @@
  * Demonstration Narrative (Incident Remediation):
  *   1. Model A (Claude) actively developing a system
  *   2. Mid-workflow, Model A becomes unavailable (simulated outage)
- *   3. Model B (Llama) is injected
+ *   3. Model B (Groq Compound Mini) is injected
  *   4. Workflow continues coherently
  *   5. Model B never receives original task context
  *   6. Continuity occurs solely via substrate retrieval
@@ -118,9 +118,9 @@ const SCENARIO = Object.freeze({
     prompt: "Begin implementation plan for the backend system"
   },
   
-  // Phase 2: Model B (Llama) engine replacement
+  // Phase 2: Model B (Groq Compound Mini) engine replacement
   phase2: {
-    model: "llama-3.1-8b-instant",
+    model: "groq/compound-mini",
     provider: "openai", // Groq via OpenAI-compatible API
     prompt: "continue" // CRITICAL: No context, no state, no hints
   }
@@ -331,7 +331,7 @@ async function main() {
 
   console.log(`\n[EVS-3] Engine Replacement / Incident Remediation Test`);
   console.log(`Mode: ${mode}`);
-  console.log(`Scenario: Model A (Claude) → Simulated Outage → Model B (Llama)`);
+  console.log(`Scenario: Model A (Claude) → Simulated Outage → Model B (Groq Compound Mini)`);
   console.log(`Claim: Cognitive continuity persists across engine replacement\n`);
 
   let recorder = null;
@@ -395,7 +395,7 @@ async function main() {
   console.log(`[EVS-3] 🔄 Initiating engine replacement...`);
 
   // --- PHASE 2: Model B (Llama) Engine Replacement
-  console.log(`\n[EVS-3] Phase 2: Model B (Llama) - Engine Replacement`);
+  console.log(`\n[EVS-3] Phase 2: Model B (Groq Compound Mini) - Engine Replacement`);
   
   const phase2Dir = path.join(runDir, "phase2_model_b");
   fs.mkdirSync(phase2Dir, { recursive: true });
@@ -532,7 +532,7 @@ async function main() {
     "",
     "🔥 SIMULATED OUTAGE",
     "",
-    "PHASE 2 (Model B - Llama):",
+    "PHASE 2 (Model B - Groq Compound Mini):",
     `  Model: ${SCENARIO.phase2.model}`,
     `  Prompt: "${SCENARIO.phase2.prompt}" (NO CONTEXT)`,
     `  Model transition detected: ${resultB.trace.continuityEvent?.confirmed}`,
