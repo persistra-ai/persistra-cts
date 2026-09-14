@@ -11,23 +11,23 @@
 PCS validation tests and demos require API keys for multiple services:
 
 1. **ANTHROPIC_API_KEY** - Claude API (Anthropic) - **REQUIRED**
-2. **OPENAI_API_KEY** - OpenAI API (for embeddings) - **REQUIRED for EVS-7**
-3. **GROQ_API_KEY** - Llama models (Groq) - **OPTIONAL**
+2. **GROQ_API_KEY** - Groq API (for local models) - **REQUIRED for EVS-3**
+3. **OPENAI_API_KEY** - OpenAI API (for embeddings) - **REQUIRED for EVS-7**
 
 **Why multiple providers?** PCS is model-agnostic. Tests validate that the substrate works with multiple model providers, demonstrating that state, constraints, and governance are external to the model.
 
 ### Which Keys Do I Need?
 
-**For most tests (24/25):**
-- ✅ ANTHROPIC_API_KEY only
+**For Paste Condition demo and EVS-3:**
+- ✅ ANTHROPIC_API_KEY (workspace-scoped)
+- ✅ GROQ_API_KEY
 
 **For EVS-7 (Semantic Retrieval):**
 - ✅ ANTHROPIC_API_KEY
 - ✅ OPENAI_API_KEY (for embeddings)
 
-**For EVS-3 (Engine Replacement with Llama fallback):**
-- ✅ ANTHROPIC_API_KEY
-- ✅ GROQ_API_KEY (optional - test will skip Llama if not set)
+**For most other tests:**
+- ✅ ANTHROPIC_API_KEY only
 
 ---
 
@@ -42,7 +42,7 @@ export ANTHROPIC_API_KEY=your_anthropic_key_here
 # Required for EVS-7 (Semantic Retrieval)
 export OPENAI_API_KEY=your_openai_key_here
 
-# Optional for EVS-3 Llama fallback
+# Required for EVS-3 (Engine Replacement)
 export GROQ_API_KEY=your_groq_key_here
 
 # Verify
@@ -67,7 +67,7 @@ Add to your shell profile (`~/.bashrc`, `~/.zshrc`, or `~/.profile`):
 # Add these lines
 export ANTHROPIC_API_KEY=your_anthropic_key_here
 export OPENAI_API_KEY=your_openai_key_here
-export GROQ_API_KEY=your_groq_key_here  # Optional
+export GROQ_API_KEY=your_groq_key_here  # Required for EVS-3
 ```
 
 Then reload:
@@ -125,7 +125,13 @@ export GROQ_API_KEY=your_groq_key_here  # Optional
 2. Sign up or log in
 3. Navigate to "API Keys"
 4. Click "Create Key"
-5. Copy the key (starts with `sk-ant-...`)
+5. **IMPORTANT:** Under "Scope", select **"Default Workspace"** (NOT "Organization")
+   - Organization-scoped keys require additional workspace ID headers
+   - Workspace-scoped keys work directly with the demos
+6. Copy the key (starts with `sk-ant-...`)
+
+**Models used:**
+- `claude-sonnet-4-6` (current working model for EVS-3 and Paste Condition demo)
 
 **Pricing:**
 - Free tier: $5 credit for new accounts
@@ -159,7 +165,7 @@ export GROQ_API_KEY=your_groq_key_here  # Optional
 
 ---
 
-### 3. Groq API Key (Llama)
+### 3. Groq API Key (Local Models)
 
 **Where to get:**
 1. Go to https://console.groq.com/
@@ -168,10 +174,14 @@ export GROQ_API_KEY=your_groq_key_here  # Optional
 4. Click "Create API Key"
 5. Copy the key (starts with `gsk_...`)
 
+**Models used:**
+- `groq/compound-mini` (EVS-3 Phase 2 - local model)
+- Demonstrates frontier (Claude) → local (Groq) model transition
+
 **Pricing:**
 - Free tier: Generous rate limits
 - Pay-as-you-go: Very low cost
-- Full validation suite: ~$0.10-0.25 total
+- EVS-3 test: ~$0.05-0.10 total
 
 **Documentation:** https://console.groq.com/docs
 
@@ -208,11 +218,11 @@ npm run preflight
 ```
 [4/7] Checking API keys...
 ✅ ANTHROPIC_API_KEY is set
-✅ OPENAI_API_KEY is set (optional for EVS-7)
-⚠️  GROQ_API_KEY not set (optional for EVS-3)
+✅ GROQ_API_KEY is set (required for EVS-3)
+⚠️  OPENAI_API_KEY not set (optional, needed for EVS-7)
 ```
 
-**Note:** GROQ_API_KEY is optional. Most tests (24/25) only need ANTHROPIC_API_KEY.
+**Note:** GROQ_API_KEY is required for EVS-3 (Engine Replacement demo). OPENAI_API_KEY is optional, only needed for EVS-7.
 
 ---
 
@@ -353,10 +363,10 @@ Error: Rate limit exceeded
 ## FAQ
 
 ### Q: Do I need all three keys?
-**A:** No. For most tests (24/25), you only need ANTHROPIC_API_KEY. For EVS-7 (Semantic Retrieval), you also need OPENAI_API_KEY. GROQ_API_KEY is optional for EVS-3 Llama fallback.
+**A:** For the main demos (EVS-3 and Paste Condition), you need ANTHROPIC_API_KEY and GROQ_API_KEY. For EVS-7 (Semantic Retrieval), you also need OPENAI_API_KEY.
 
 ### Q: What's the minimum to get started?
-**A:** Just ANTHROPIC_API_KEY. This runs 24/25 tests. Add OPENAI_API_KEY later if you want to run EVS-7.
+**A:** ANTHROPIC_API_KEY (workspace-scoped) and GROQ_API_KEY. This runs the main demos including EVS-3 and Paste Condition. Add OPENAI_API_KEY later if you want to run EVS-7.
 
 ### Q: I set OPENAI_API_KEY but EVS-7 fails with "Invalid API key"
 **A:** Check that you're using a real OpenAI key (starts with `sk-proj-` or `sk-`), not a Groq key (starts with `gsk_`). This is a common mistake.
@@ -380,10 +390,12 @@ Error: Rate limit exceeded
 
 ## Next Steps
 
-1. **Get API keys** from Anthropic and Groq
+1. **Get API keys** from Anthropic (workspace-scoped) and Groq
 2. **Set keys** using one of the methods above
 3. **Verify** with `npm run preflight`
-4. **Run validation** with `npm run test:quick`
+4. **Run demos:**
+   - EVS-3: `./run-with-env.sh node evs/evs3-engine-replacement.js --mode live`
+   - Paste Condition: `./run-with-env.sh node avs-harness/demo-paste-condition.js`
 
 **For full validation checklist:** See [ENGINEERING_VALIDATION_CHECKLIST.md](ENGINEERING_VALIDATION_CHECKLIST.md)
 
