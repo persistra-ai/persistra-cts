@@ -582,6 +582,30 @@ class DecisionStore {
   }
   
   /**
+   * Get enforcement metadata for a policy
+   * @param {string} policyId - Policy ID
+   * @returns {object} Enforcement metadata
+   */
+  getPolicyEnforcementMetadata(policyId) {
+    const policies = this.loadPolicies();
+    const policy = policies.find(p => p.id === policyId);
+    
+    if (policy && policy.metadata) {
+      return {
+        enforcement_count: policy.metadata.enforcement_count || 0,
+        violation_attempts: policy.metadata.violation_attempts || 0,
+        last_enforced: policy.metadata.last_enforced || null
+      };
+    }
+    
+    return {
+      enforcement_count: 0,
+      violation_attempts: 0,
+      last_enforced: null
+    };
+  }
+  
+  /**
    * Clear all decisions and policies (for testing)
    */
   clear() {
