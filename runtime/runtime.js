@@ -8,6 +8,7 @@
 
 const DecisionStore = require('./decision-store');
 const PolicyEnforcementPoint = require('./policy-enforcement-point');
+const EpistemicGate = require('./epistemic-gate');
 const AuditLog = require('./audit-log');
 const { visionAnchor, VISION_ANCHOR_METHOD } = require('./vision-anchor');
 const { localEmbeddings, EMBEDDER_ID, EMBEDDER_MODE } = require('./local-embeddings');
@@ -108,6 +109,13 @@ class PCSRuntime {
       enabled: options.pepEnabled !== false
     });
     
+    // Initialize EpistemicGate (Gap #2: inline integration)
+    this.epistemicGateEnabled = options.epistemicGateEnabled || false;
+    this.epistemicGate = new EpistemicGate({
+      enabled: this.epistemicGateEnabled,
+      cryptographicGating: options.cryptographicGating !== false
+    });
+    
     // Initialize audit log if enabled
     this.auditLog = null;
     if (options.auditLogPath) {
@@ -180,6 +188,54 @@ class PCSRuntime {
       const graphState = this.memoryGraph.getState(this.namespace);
       // Merge graph state into decision store (simplified)
       // In production, this would be more sophisticated
+    }
+    
+    // Gap #2: Epistemic Gate validation (before model call)
+    // This enforces epistemic integrity by preventing model invocation
+    // when required cognitive state is absent
+    let epistemicGateEvidence = null;
+    if (this.epistemicGateEnabled && this.epistemicGate) {
+      // For now, we'll use a simple classification
+      // In production, this would be a more sophisticated query classifier
+      const classification = {
+        query_type: 'classified',
+        required_state_classes: [] // Empty for now - would be populated by classifier
+      };
+      
+      // Get available state classes from DecisionStore
+      const decisions = this.decisionStore.loadDecisions();
+      const availableStateClasses = decisions.length > 0 ? ['decision'] : [];
+      
+      // Evaluate epistemic gate
+      const gateEvaluation = this.epistemicGate.evaluate(classification, availableStateClasses);
+      
+      // If gate triggers (missing required state), block invocation
+      if (gateEvaluation.epistemic_gate_triggered) {
+        // Gate blocked invocation - return without calling model
+        const blockedTrace = {
+          sessionId: this.sessionId,
+          namespace: this.namespace,
+          boundaryEnforced: true,
+          epistemic_gate_blocked: true,
+          epistemic_gate_evidence: gateEvaluation,
+          enforcement_decision: {
+            emitted: true,
+            decision: 'BLOCK',
+            reason: 'epistemic_gate_triggered'
+          }
+        };
+        
+        return {
+          output: `[Epistemic gate triggered: Missing required state - ${gateEvaluation.missing_required_state.join(', ')}]`,
+          allowed: false,
+          reason: 'epistemic_gate_triggered',
+          trace: blockedTrace,
+          modelOutput: null
+        };
+      }
+      
+      // Gate passed - record evidence
+      epistemicGateEvidence = gateEvaluation;
     }
     
     // EVS-8: Retrieve vision anchor if enabled (before model call)
@@ -366,6 +422,11 @@ class PCSRuntime {
     this.visionSequence++;
     providerMetadata.sequence = this.visionSequence;
     trace.provider = providerMetadata;
+    
+    // Gap #2: Add epistemic gate evidence to trace if enabled
+    if (epistemicGateEvidence) {
+      trace.epistemic_gate_evidence = epistemicGateEvidence;
+    }
     
     // EVS-8: Add vision evidence to trace if enabled
     if (visionEvidence) {
