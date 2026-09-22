@@ -169,14 +169,28 @@ class EpistemicGate {
    * Returns true if signature is valid and invocation is permitted.
    * 
    * @param {Object} token - Gate token to verify
+   * @param {Object} decisionStore - DecisionStore instance for nonce validation (optional but recommended)
    * @returns {boolean} True if valid and invocation permitted
    */
-  static verifyGateToken(token) {
+  static verifyGateToken(token, decisionStore = null) {
     if (!token || !token.payload || !token.signature || !token.public_key) {
       return false;
     }
 
     try {
+      // Validate nonce if DecisionStore provided (replay attack prevention)
+      if (decisionStore && token.payload.nonce) {
+        const nonceValidation = decisionStore.validateNonce(
+          token.payload.nonce,
+          token.payload.timestamp
+        );
+        
+        if (!nonceValidation.valid) {
+          // Nonce already used or invalid - replay attack detected
+          return false;
+        }
+      }
+      
       // Reconstruct payload
       const payloadString = JSON.stringify(token.payload);
       const signature = Buffer.from(token.signature, 'base64');

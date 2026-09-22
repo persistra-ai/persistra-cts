@@ -31,7 +31,8 @@ class DecisionStore {
       fs.writeFileSync(this.storePath, JSON.stringify({ 
         decisions: [], 
         policies: [],
-        runtimeState: { lastSeenModel: null }
+        runtimeState: { lastSeenModel: null },
+        usedNonces: []  // Track used nonces for replay prevention
       }, null, 2));
     }
   }
@@ -52,14 +53,87 @@ class DecisionStore {
     const data = JSON.parse(fs.readFileSync(this.storePath, 'utf8'));
     const policies = data.policies || [];
     const runtimeState = data.runtimeState || { lastSeenModel: null };
-    fs.writeFileSync(this.storePath, JSON.stringify({ decisions, policies, runtimeState }, null, 2));
+    const usedNonces = data.usedNonces || [];
+    fs.writeFileSync(this.storePath, JSON.stringify({ decisions, policies, runtimeState, usedNonces }, null, 2));
   }
   
   savePolicies(policies) {
     const data = JSON.parse(fs.readFileSync(this.storePath, 'utf8'));
     const decisions = data.decisions || [];
     const runtimeState = data.runtimeState || { lastSeenModel: null };
-    fs.writeFileSync(this.storePath, JSON.stringify({ decisions, policies, runtimeState }, null, 2));
+    const usedNonces = data.usedNonces || [];
+    fs.writeFileSync(this.storePath, JSON.stringify({ decisions, policies, runtimeState, usedNonces }, null, 2));
+  }
+  
+  /**
+   * Load used nonces from store
+   * @returns {Array} Array of used nonce objects {nonce, timestamp}
+   */
+  loadUsedNonces() {
+    const data = fs.readFileSync(this.storePath, 'utf8');
+    const parsed = JSON.parse(data);
+    return parsed.usedNonces || [];
+  }
+  
+  /**
+   * Save used nonces to store
+   * @param {Array} usedNonces - Array of used nonce objects
+   */
+  saveUsedNonces(usedNonces) {
+    const data = JSON.parse(fs.readFileSync(this.storePath, 'utf8'));
+    data.usedNonces = usedNonces;
+    fs.writeFileSync(this.storePath, JSON.stringify(data, null, 2));
+  }
+  
+  /**
+   * Validate and record a nonce (replay attack prevention)
+   * @param {string} nonce - The nonce to validate
+   * @param {number} timestamp - The timestamp from the token
+   * @returns {Object} {valid: boolean, reason: string}
+   */
+  validateNonce(nonce, timestamp) {
+    // Load current nonces
+    let usedNonces = this.loadUsedNonces();
+    
+    // Prune expired nonces (older than 60 seconds)
+    const now = Date.now();
+    const NONCE_EXPIRY_MS = 60000;
+    usedNonces = usedNonces.filter(n => (now - n.timestamp) < NONCE_EXPIRY_MS);
+    
+    // Check if nonce already used
+    const alreadyUsed = usedNonces.find(n => n.nonce === nonce);
+    if (alreadyUsed) {
+      return {
+        valid: false,
+        reason: 'REPLAY_ATTACK: Nonce already used'
+      };
+    }
+    
+    // Check if token timestamp is too old
+    const tokenAge = now - timestamp;
+    if (tokenAge > NONCE_EXPIRY_MS) {
+      return {
+        valid: false,
+        reason: 'TOKEN_EXPIRED: Token older than 60 seconds'
+      };
+    }
+    
+    // Check if token is from the future (clock skew attack)
+    if (tokenAge < -5000) { // Allow 5 seconds clock skew
+      return {
+        valid: false,
+        reason: 'INVALID_TIMESTAMP: Token timestamp is in the future'
+      };
+    }
+    
+    // Record nonce as used
+    usedNonces.push({ nonce, timestamp });
+    this.saveUsedNonces(usedNonces);
+    
+    return {
+      valid: true,
+      reason: 'Nonce validated and recorded'
+    };
   }
   
   /**
