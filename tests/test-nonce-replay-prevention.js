@@ -252,6 +252,38 @@ function runTests() {
     failCount++;
   }
   
+  // Test 9: Expired token rejected even with unused nonce (RFC-PCS-0002 Section 4.6 Requirement 5a)
+  try {
+    cleanup();
+    const store = new DecisionStore(TEST_STORE_PATH, 'test-namespace');
+    
+    // Create a token with an old timestamp directly
+    // This simulates a token that was generated 70 seconds ago but never used
+    const oldTimestamp = Date.now() - 70000; // 70 seconds ago (beyond 60 second validity window)
+    const unusedNonce = 'unused-but-expired-nonce';
+    
+    // Use DecisionStore's validateNonce method directly to test the validity window
+    // This is what verifyGateToken calls internally
+    const validation = store.validateNonce(unusedNonce, oldTimestamp);
+    
+    // Verify that token is rejected due to expiration, NOT nonce reuse
+    // The nonce has never been used, but the token is outside validity window
+    assert.strictEqual(validation.valid, false, 'Expired token should be rejected even with unused nonce');
+    assert(validation.reason.includes('TOKEN_EXPIRED'), 'Should indicate token expired');
+    
+    // Verify nonce was NOT recorded (token rejected before nonce recording)
+    const nonces = store.loadUsedNonces();
+    const nonceRecorded = nonces.find(n => n.nonce === unusedNonce);
+    assert.strictEqual(nonceRecorded, undefined, 'Nonce should not be recorded for expired token');
+    assert.strictEqual(nonces.length, 0, 'No nonces should be recorded');
+    
+    console.log('✓ Test 9: Expired token rejected even with unused nonce (RFC-PCS-0002 Section 4.6 Requirement 5a)');
+    passCount++;
+  } catch (err) {
+    console.log(`✗ Test 9 FAILED: ${err.message}`);
+    failCount++;
+  }
+  
   // Cleanup
   cleanup();
   
