@@ -71,15 +71,15 @@ salience = (recencyWeight * recency) +
 
 ---
 
-## Honest Claims
+## Supported and Unsupported Claims
 
 ### Cryptographic Integrity Protection
-✅ **Validated:** "Gate decisions are cryptographically integrity-protected. Signature tampering, payload modification, and replay attacks are detected."
+✅ **SUPPORTED:** "Gate decisions are cryptographically integrity-protected. Signature tampering, payload modification, and replay attacks are detected."
 
-❌ **NOT Validated:** "Invocation is cryptographically gated such that bypass requires signature forgery" (requires Phase 2 hardware verification)
+❌ **UNSUPPORTED:** "Bypass requires signature forgery" (requires Phase 2 hardware verification)
 
 ### Enforcement Metadata
-✅ **Validated:** "PCS tracks enforcement history. When the Policy Enforcement Point blocks a violation, it increments the decision's enforcement_count. The Contextual Salience Engine uses this enforcement history to calculate authority scores, prioritizing frequently-enforced decisions in selection."
+✅ **SUPPORTED:** "PCS tracks enforcement history. When the Policy Enforcement Point blocks a violation, it increments the decision's enforcement_count. The Contextual Salience Engine uses this enforcement history to calculate authority scores, prioritizing frequently-enforced decisions in selection."
 
 ---
 

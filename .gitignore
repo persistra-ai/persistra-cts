@@ -54,4 +54,11 @@ VALKYRIE_VALIDATION_GUIDE.md
 WEEK_*_*.md
 FINAL_RELEASE_SUMMARY.md
 PCS_PRE_RELEASE_VALIDATION_BRIEF.md
+
+# Attestation and diligence artifacts (not for public distribution)
+ATTESTATION_STATUS.md
+*ATTESTATION*.md
+*SAAD*.md
+EMAIL-TO-*.md
+
 node_modules/
