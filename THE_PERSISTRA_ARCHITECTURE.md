@@ -181,8 +181,9 @@ This is the entire PCS thesis.
 
 ## Validation Status
 
-- **25 tests** (13 EVS, 7 AVS, 15 CTS conformance tests)
-- **312 machine-verified assertions** (163 EVS + 149 AVS)
+- **26 tests** at the v1.0.0 freeze (13 EVS, 7 AVS including AVS-2P, 6 CTS)
+- **312 machine-verified assertions** (163 EVS + 149 AVS; CTS tests are pass/fail conformance checks)
+- **5 standalone runtime tests** added post-freeze (52 assertions: cryptographic gating, enforcement metadata, nonce replay prevention, inline gate, PEP-to-CSE flow) — 31 tests / 364 assertions in total
 - **7 architectural invariants** (frozen at v1.0.0)
 - **15 runtime primitives** (6 Tier-1, 9 Tier-2)
 - **One-command reproducibility:** `./run_all.sh --mode audit`
@@ -250,7 +251,7 @@ At scale, PCS enables:
 
 **The cognitive control plane is the missing infrastructure layer for AI systems.**
 
-**And we have 25 tests (312 machine-verified assertions) proving the foundational assumption holds.**
+**And we have 26 tests (312 machine-verified assertions) proving the foundational assumption holds.**
 
 ---
 
@@ -485,7 +486,7 @@ The system becomes something closer to a **cognitive operating system**.
 
 # Part II: The Six Architectural Invariants
 
-All invariants are **frozen at Contract Version 1.0.0** and validated by 25 executable tests (312 machine-verified assertions).
+All invariants are **frozen at Contract Version 1.0.0** and validated by 26 executable tests (312 machine-verified assertions).
 
 ---
 
@@ -1210,7 +1211,7 @@ Infrastructure layers that become $10B+ outcomes share three properties:
 - Ecosystem compounds
 
 **PCS already has the foundation:**
-- 25 tests (frozen at v1.0.0)
+- 26 tests (frozen at v1.0.0)
 - Runtime trace contract (versioned)
 - Primitive layer specification (minimal)
 - Validation evidence (cryptographic)
@@ -1331,13 +1332,14 @@ PCS is positioned as the latter: the missing infrastructure layer that becomes f
 
 ## 6.1 Test Suite Overview
 
-**Total:** 25 tests, 312 machine-verified assertions, all passing
+**Total:** 26 tests, 312 machine-verified assertions, all passing (v1.0.0 freeze); 31 tests, 364 assertions including the 5 post-freeze standalone runtime tests
 
 | Suite | Tests | Assertions | Purpose |
 |-------|-------|------------|---------|
 | **EVS** | 13 | 163 | Exocortical Validation Suite (architectural properties) |
-| **AVS** | 7 | 149 | Architectural Validation Suite (runtime primitives) |
-| **CTS** | 5 | 5 | Conformance Test Suite (contract compliance) |
+| **AVS** | 7 | 149 | Architectural Validation Suite (runtime primitives; includes AVS-2P, 60 assertions, run separately) |
+| **CTS** | 6 | 0 | Conformance Test Suite (pass/fail contract compliance) |
+| **Standalone** | 5 | 52 | Runtime tests in `tests/test-*.js` (post-freeze; run individually) |
 
 **One-command reproducibility:**
 ```bash
@@ -1414,7 +1416,7 @@ Each test validates a specific architectural claim:
 **Epistemic Integrity (Invariant #6):**
 - AVS-3A → Model invocation is gated
 
-**All 6 invariants validated. All 25 tests passing (312 machine-verified assertions).**
+**All 6 invariants validated. All 26 tests passing (312 machine-verified assertions).**
 
 ---
 
@@ -1647,7 +1649,7 @@ Model performs reasoning only
 ## Validation Status
 
 **PCS Runtime Tests:**
-- ✅ **25 tests passing** (312 machine-verified assertions)
+- ✅ **26 tests passing** (312 machine-verified assertions) at the v1.0.0 freeze; 31 tests / 364 assertions including post-freeze standalone runtime tests
 - ✅ **6 invariants validated** (frozen at v1.0.0)
 - ✅ **15 primitives validated** (6 Tier-1, 9 Tier-2)
 - ✅ **Real model validation** (Claude, Llama)

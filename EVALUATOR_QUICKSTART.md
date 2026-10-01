@@ -156,7 +156,7 @@ Phase 4: Generate Combined Manifest
 Output Directory: ./audit-artifacts/combined-run-20260303-151800
 Combined Manifest: ./audit-artifacts/combined-run-20260303-151800/COMBINED_MANIFEST.txt
 
-**Note:** The test suite contains 312 assertions across 25 tests. Additional validation includes hardware compatibility testing and demonstration suite. See [OPTIONAL_TESTS.md](OPTIONAL_TESTS.md) for details.
+**Note:** The main suite (`run_all.sh`) contains 252 assertions across 25 tests; the full repository totals 31 tests and 364 assertions including AVS-2P and standalone runtime tests. Additional validation includes hardware compatibility testing and demonstration suite. See [OPTIONAL_TESTS.md](OPTIONAL_TESTS.md) for details.
 Cryptographic Manifest: ./audit-artifacts/combined-run-20260303-151800/MANIFEST.sha256
 
 Next Steps:

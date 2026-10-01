@@ -14,7 +14,8 @@
 | **AVS** (Architectural Validation) | 6/6 | 89 assertions | ✅ Complete |
 | **AVS-2P** (Paste Condition, separate) | 1/1 | 60 assertions | ✅ Complete |
 | **CTS** (Conformance Test Suite) | 6/6 | 0 assertions | ✅ Complete |
-| **Total** | **26 tests** | **312 assertions** | ✅ **100% Runtime-Bound** |
+| **Standalone** (`tests/test-*.js`, run individually) | 5/5 | 52 assertions | ✅ Complete |
+| **Total** | **31 tests** | **364 assertions** | ✅ **100% Runtime-Bound** |
 
 **All tests:**
 - Use actual PCSRuntime (no reimplementation)

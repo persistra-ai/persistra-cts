@@ -19,7 +19,7 @@
 **Status:** Evaluation release for research and validation purposes.
 
 **What's ready:**
-- ✅ 26 validation tests passing (312+ assertions)
+- ✅ 31 validation tests passing (364 assertions)
 - ✅ Acts 1-9 demo complete
 - ✅ Tenstorrent CSE validation (Phase 1 complete)
 - ✅ Tutorial
@@ -124,7 +124,7 @@ nvm use 18
 - Command: `npm run test:quick`
 
 **Full validation:** ~30 minutes
-- 26 tests (312+ assertions)
+- 31 tests (364 assertions)
 - Comprehensive validation
 - Command: `npm run test:all`
 

@@ -603,7 +603,7 @@ These invariants demonstrate that critical AI system behaviors can be enforced a
 
 **The verification harness provides reproducible evidence for these claims.**
 
-**All 25 tests passing (312 assertions). All 6 invariants validated. All 3 membranes verified.**
+**All 26 tests passing (312 assertions) at the v1.0.0 freeze; 31 tests / 364 assertions including post-freeze standalone runtime tests. All 6 invariants validated. All 3 membranes verified.**
 
 **Contract Version: 1.0.0 (FROZEN)**
 

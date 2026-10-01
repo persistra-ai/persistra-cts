@@ -115,7 +115,7 @@ npm install
 For comprehensive validation of all PCS claims:
 
 ```bash
-# 1. Main test suite (25 tests, 312 assertions, ~30 min)
+# 1. Main test suite (25 tests, 252 assertions, ~30 min)
 cd persistra-cts
 npm run test:all
 

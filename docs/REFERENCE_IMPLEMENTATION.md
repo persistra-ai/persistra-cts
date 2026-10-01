@@ -25,7 +25,8 @@ This repository contains 25 core tests with 252 machine-verified assertions vali
 - **AVS (Architectural Validation Suite):** 6 tests, 89 assertions  
 - **CTS (Conformance Test Suite):** 6 conformance tests
 - **AVS-2P (Paste Condition):** 1 test, 60 assertions (optional, separate due to runtime)
-- **Total:** 26 tests, 312 assertions (252 core + 60 optional)
+- **Standalone runtime tests:** 5 tests, 52 assertions (`tests/test-*.js`, run individually)
+- **Total:** 31 tests, 364 assertions (252 core + 60 optional + 52 standalone)
 
 See [TEST_METHODOLOGY.md](../TEST_METHODOLOGY.md) for complete test methodology and [VERIFICATION_SUITE.md](../VERIFICATION_SUITE.md) for falsification criteria.
 

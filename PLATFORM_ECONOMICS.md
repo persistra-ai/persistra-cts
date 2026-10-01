@@ -45,7 +45,7 @@ Frontier platforms that adapt to substrate-centric economics strengthen, not wea
 
 **For validation evidence:**
 - [VERIFICATION_SUITE.md](VERIFICATION_SUITE.md) - Falsification-based test descriptions
-- [README.md](README.md) - 26 tests, 312 machine-verified assertions
+- [README.md](README.md) - 31 tests, 364 machine-verified assertions
 
 **For evaluation:**
 - See [LICENSE](LICENSE) for evaluation terms

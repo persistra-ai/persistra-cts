@@ -580,7 +580,7 @@ The reference implementation of the primitive layer is intentionally small.
 
 - **Falsifiable claims** (see `VERIFICATION_SUITE.md`)
 - **Minimal reference implementation** (~1,300 lines)
-- **Open verification harness** (25 tests, 312 assertions)
+- **Open verification harness** (31 tests, 364 assertions)
 - **Reproducible results** (`./run_all.sh --mode audit`)
 - **Clear scope boundaries** (see `CLAIMS_BOUNDARY.md`)
 

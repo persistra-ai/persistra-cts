@@ -54,9 +54,10 @@ Controlled validation demonstrates:
 - **Air-gapped substrate operation** (no external API dependencies)
 
 **Empirical results:**
-- **26 tests** comprising **312 machine-verified assertions**
+- **31 tests** comprising **364 machine-verified assertions**
   - 25 tests in main suite (`run_all.sh`: 252 assertions)
   - 1 Paste Condition test (AVS-2P: 60 assertions, run separately)
+  - 5 standalone runtime tests (`tests/test-*.js`: 52 assertions, run individually)
 - **8 hardware compatibility fixtures** (Tenstorrent CSE Phase 1)
 - **9-act demonstration suite** (complete coding workflow)
 - **Developer tutorial** (integration guide)

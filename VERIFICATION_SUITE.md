@@ -19,8 +19,8 @@ This document provides **falsification-based test descriptions** for the EVS (Ex
 **For complete test methodology** (test design, key evidence, architectural significance), see [`TEST_METHODOLOGY.md`](TEST_METHODOLOGY.md).
 
 **Test Suite Status:**
-- **25 tests** (13 EVS, 7 AVS, 15 CTS conformance tests)
-- **312 machine-verified assertions** (163 EVS + 149 AVS)
+- **31 tests** (13 EVS, 7 AVS including AVS-2P, 6 CTS, 5 standalone runtime tests)
+- **364 machine-verified assertions** (163 EVS + 149 AVS + 52 standalone; CTS tests are pass/fail)
 - **100% pass rate**
 
 ---

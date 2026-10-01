@@ -18,8 +18,8 @@ cd persistra-cts
 
 **What this does:**
 - Runs 13 EVS tests (Exocortical Validation Suite)
-- Runs 7 AVS tests (Architectural Validation Suite)
-- Runs 15 CTS tests (Conformance Test Suite)
+- Runs 6 AVS tests (Architectural Validation Suite; AVS-2P runs separately)
+- Runs 6 CTS tests (Conformance Test Suite)
 - Generates combined manifest with pass/fail summary
 - Produces cryptographic verification (SHA256 hashes)
 - Captures git metadata, platform info, source file hashes
@@ -55,7 +55,8 @@ shasum -c MANIFEST.sha256
 - ✅ 15 runtime primitives (6 Tier-1, 9 Tier-2)
 - ✅ 25 core tests (252 assertions, all passing)
 - ✅ 1 optional test (60 assertions, AVS-2P Paste Condition)
-- ✅ Total: 312 assertions (252 core + 60 optional)
+- ✅ 5 standalone runtime tests (52 assertions, `tests/test-*.js`)
+- ✅ Total: 364 assertions (252 core + 60 optional + 52 standalone)
 - ✅ 3 architectural membranes (Engine, Memory, Tool)
 - ✅ 5 threat mitigations (all fail-closed, all tested)
 
@@ -192,7 +193,8 @@ shasum -c MANIFEST.sha256
 - AVS results (6 tests, 89 assertions, all passing)
 - AVS-2P (1 test, 60 assertions, optional)
 - CTS results (6 conformance tests, all passing)
-- Total: 312 assertions (252 core + 60 optional)
+- Standalone runtime tests (5 tests, 52 assertions, `tests/test-*.js`)
+- Total: 364 assertions (252 core + 60 optional + 52 standalone)
 - Real model validation (Claude, Llama, Groq)
 
 **Time:** 30 minutes

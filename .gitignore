@@ -60,5 +60,9 @@ ATTESTATION_STATUS.md
 *ATTESTATION*.md
 *SAAD*.md
 EMAIL-TO-*.md
+EMAIL_TO_*.md
+DRAFT_*.md
+PATENT_APPLICATIONS_REFERENCE.md
+mappings/
 
 node_modules/

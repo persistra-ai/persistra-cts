@@ -1,4 +1,4 @@
-# Persistent Coginitive Substrate: Executive Summary
+# Persistent Cognitive Substrate: Executive Summary
 **Date:** 2026-03-03
 
 ---
@@ -7,10 +7,11 @@
 
 Persistent Cognitive Substrate is a validated runtime architecture for deterministic AI governance. All Tier-1 primitives are implemented and validated through runtime-bound testing.
 
-**Test Suite:** 26 tests, 312+ assertions, 100% runtime-bound
-- **CTS:** 5/5 tests (Core Test Suite - foundational primitives)
-- **AVS:** 5/5 tests (Atomic Validation Suite - primitive isolation)
-- **EVS:** 11/11 tests (End-to-End Validation Suite - integration)
+**Test Suite:** 31 tests, 364 assertions, 100% runtime-bound
+- **EVS:** 13/13 tests, 163 assertions (Exocortical Validation Suite - integration)
+- **AVS:** 7/7 tests, 149 assertions (Architectural Validation Suite - includes AVS-2P, run separately)
+- **CTS:** 6/6 tests (Conformance Test Suite - pass/fail)
+- **Standalone:** 5/5 tests, 52 assertions (`tests/test-*.js`, run individually)
 
 ---
 

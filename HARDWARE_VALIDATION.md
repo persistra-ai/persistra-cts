@@ -271,7 +271,7 @@ Each fixture validates 4 critical properties:
 
 ## Relationship to Main Test Suite
 
-**Main test suite (25 tests, 312 assertions):**
+**Main test suite (25 tests, 252 assertions):**
 - Validates architectural properties
 - Proves runtime enforcement
 - Tests on general-purpose CPUs

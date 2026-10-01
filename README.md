@@ -83,9 +83,10 @@ Controlled validation demonstrates:
 - **Air-gapped substrate operation** (no external API dependencies)
 
 **Empirical results:**
-- **26 tests** comprising **312 machine-verified assertions**
+- **31 tests** comprising **364 machine-verified assertions**
   - 25 tests in main suite (`run_all.sh`: 252 assertions)
   - 1 Paste Condition test (AVS-2P: 60 assertions, run separately)
+  - 5 standalone runtime tests (`tests/test-*.js`: 52 assertions — cryptographic gating 23, enforcement metadata 8, nonce replay prevention 9, inline gate 6, PEP-to-CSE flow 6)
 - **8 hardware compatibility fixtures** (Tenstorrent CSE Phase 1)
 - **9-act demonstration suite** (complete coding workflow)
 - **Developer tutorial** (integration guide)
@@ -181,7 +182,7 @@ These capabilities result from externalizing cognitive state to persistent subst
 
 ---
 
-**Status:** 26 tests passing (312 machine-verified assertions: 25 in main suite + AVS-2P), 9-act demo complete, Tenstorrent hardware validation (Phase 1 complete)
+**Status:** 31 tests passing (364 machine-verified assertions: 25 in main suite + AVS-2P + 5 standalone runtime tests), 9-act demo complete, Tenstorrent hardware validation (Phase 1 complete)
 
 ---
 
@@ -327,6 +328,7 @@ npm run test:all:verbose      # Show errors inline
 
 **Additional validation:**
 - **[PASTE_CONDITION.md](PASTE_CONDITION.md)** — AVS-2P test (architectural proof, quick demo or full validation)
+- **Standalone runtime tests** (`tests/test-*.js`) — 5 tests, 52 assertions: `test-cryptographic-gating.js` (23), `test-enforcement-metadata.js` (8), `test-nonce-replay-prevention.js` (9), `test-epistemic-gate-inline.js` (6), `test-pep-to-cse-flow.js` (6)
 - **[HARDWARE_VALIDATION.md](HARDWARE_VALIDATION.md)** — Tenstorrent silicon compatibility (8 fixtures)
 - **[OPTIONAL_TESTS.md](OPTIONAL_TESTS.md)** — Complete validation workflow guide
 
@@ -591,7 +593,7 @@ PCS provides memory, governance, and state management as integrated infrastructu
 
 **What's proven now:**
 
-**Test Suite (26 tests, 312 machine-verified assertions):**
+**Test Suite (31 tests, 364 machine-verified assertions):**
 - ✅ State persistence across sessions
 - ✅ Policy enforcement at runtime
 - ✅ Model swap continuity (Claude → Llama)
@@ -692,10 +694,11 @@ In the past three months, major AI vendors have shipped memory and governance so
 - ✅ Reproducibility metadata (git, platform, hashes)
 
 ### Test Maturity
-- ✅ 26 executable tests (13 EVS + 7 AVS + 6 CTS)
+- ✅ 31 executable tests (13 EVS + 7 AVS + 6 CTS + 5 standalone)
   - 25 tests in `run_all.sh` (252 assertions)
   - 1 AVS-2P test separate (60 assertions)
-- ✅ 312 machine-verified assertions total
+  - 5 standalone runtime tests in `tests/test-*.js` (52 assertions)
+- ✅ 364 machine-verified assertions total
 - ✅ One-command execution for main suite (`./run_all.sh`)
 - ✅ Cryptographic verification (SHA256 manifests)
 - ✅ Real model validation (Claude, Llama, Groq)

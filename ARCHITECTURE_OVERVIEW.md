@@ -2,7 +2,7 @@
 
 **What PCS Is:** External cognitive infrastructure for AI systems  
 **What This Repo Shows:** The validation suite proving the architecture works  
-**Status:** 26 tests passing, 312+ assertions, Acts 1-9 complete (2026-03-18)
+**Status:** 31 tests passing, 364 assertions, Acts 1-9 complete (2026-03-18)
 
 ---
 
@@ -293,7 +293,7 @@ PCS architecture supports multiple deployment modes:
 
 ## Current Status
 
-**Primitive Layer:** ✅ Validated (26 tests, 312+ assertions)  
+**Primitive Layer:** ✅ Validated (31 tests, 364 assertions)  
 **Software Engineering Demo:** ✅ Acts 1-9 complete (2026-03-18)  
 **Meta-Cognitive Layer:** ✅ Vision-guided + flow-aware proven (Acts 6-7)  
 **Multi-Agent Layer:** ✅ Coordination proven (Act 8)  

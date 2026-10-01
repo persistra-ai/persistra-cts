@@ -111,8 +111,8 @@
 ## Validation Status
 
 **Test suite:**
-- 25 tests (13 EVS, 7 AVS, 15 CTS)
-- 312 machine-verified assertions
+- 31 tests (13 EVS, 7 AVS, 6 CTS, 5 standalone runtime tests)
+- 364 machine-verified assertions
 - 100% pass rate
 
 **Hardware validation:**
