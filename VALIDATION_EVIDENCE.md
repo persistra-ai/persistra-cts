@@ -10,12 +10,12 @@
 
 | Suite | Tests | Assertions | Status |
 |-------|-------|------------|--------|
-| **EVS** (Exocortical Validation) | 13/13 | 163 assertions | ✅ Complete |
+| **EVS** (Exocortical Validation) | 13/13 | 160 assertions | ✅ Complete |
 | **AVS** (Architectural Validation) | 6/6 | 89 assertions | ✅ Complete |
 | **AVS-2P** (Paste Condition, separate) | 1/1 | 60 assertions | ✅ Complete |
 | **CTS** (Conformance Test Suite) | 6/6 | 0 assertions | ✅ Complete |
 | **Standalone** (`tests/test-*.js`, run individually) | 5/5 | 52 assertions | ✅ Complete |
-| **Total** | **31 tests** | **364 assertions** | ✅ **100% Runtime-Bound** |
+| **Total** | **31 tests** | **361 assertions** | ✅ **100% Runtime-Bound** |
 
 **All tests:**
 - Use actual PCSRuntime (no reimplementation)
@@ -97,16 +97,21 @@ For architectural scope, see [IMPLEMENTATION_SCOPE.md](IMPLEMENTATION_SCOPE.md).
 
 ---
 
-### EVS-4: Parameter Inversion ✅
+### EVS-4: Cross-Provider Continuity ✅
 
-**Claim:** Substrate continuity invariant across model scale
+**Claim:** Cross-model continuity with structural equivalence across a model provider boundary (Anthropic → Groq)
 
-**Results:** 16/16 assertions passing (14 PCS-ON, 2 PCS-OFF)
-- Session 1: Claude 3 Haiku (frontier)
-- Session 2: Llama 3.1 8B via Groq (edge)
-- Cross-model retrieval + enforcement with model transition detection
+**Results:** 13/13 assertions passing (11 PCS-ON, 2 PCS-OFF)
+- PCS-ON basic continuity (A1-A7: 7 assertions)
+- Structural equivalence (SE1-SE4: 4 assertions): retrieval method, retrieval trigger, decision ID, enforcement class
+- PCS-OFF control (N1-N2: 2 assertions)
+- Session 2 prompt = `"continue"` (zero state injection)
 
-**Evidence:** `continuityEvent` with substrate-derived source model
+**Models:**
+- Original evaluation: Claude 3 Haiku (Anthropic) → Llama 3.1 8B (Groq)
+- Reproduced 2026-10-02: Claude Sonnet 4.6 (Anthropic) → GPT-OSS-20b (Groq), substituted after Groq retired Llama 3.1 8B on 2026-08-16. Run `evs4-runtime-1790953977832` at `main @ feb3d90f`, 13/13 passing.
+
+**Evidence:** `retrieval_evidence.retrieved`, `retrieval_evidence.method`, `retrieval_evidence.trigger`, `enforcement_decision.emitted`, `boundaryEnforced`
 
 ---
 
@@ -553,12 +558,15 @@ All primitives frozen at **Contract Version 1.0.0**:
 ## Real Model Validation
 
 **Models tested:**
-- Claude 3 Haiku (Anthropic)
-- Llama 3.1 8B (Groq)
+- Claude 3 Haiku (Anthropic) — original evaluation
+- Llama 3.1 8B (Groq) — original evaluation; retired by Groq 2026-08-16
+- Claude Sonnet 4.6 (Anthropic) — 2026-10-02 reproduction
+- GPT-OSS-20b (Groq) — 2026-10-02 reproduction
 - Mock (deterministic test doubles)
 
 **Cross-model scenarios:**
-- Claude → Llama transition (EVS-3, EVS-4)
+- Claude → Llama transition (EVS-3, EVS-4), original evaluation
+- Claude Sonnet 4.6 → GPT-OSS-20b transition (EVS-3, EVS-4), 2026-10-02 reproduction
 - Session continuity with real models (EVS-2, EVS-6)
 - Deterministic replay with real models (EVS-5)
 

@@ -31,7 +31,7 @@
  * Demonstration Narrative (Incident Remediation):
  *   1. Model A (Claude) actively developing a system
  *   2. Mid-workflow, Model A becomes unavailable (simulated outage)
- *   3. Model B (Groq Compound Mini) is injected
+ *   3. Model B (GPT-OSS 20B via Groq) is injected
  *   4. Workflow continues coherently
  *   5. Model B never receives original task context
  *   6. Continuity occurs solely via substrate retrieval
@@ -118,9 +118,9 @@ const SCENARIO = Object.freeze({
     prompt: "Begin implementation plan for the backend system"
   },
   
-  // Phase 2: Model B (Groq Compound Mini) engine replacement
+  // Phase 2: Model B (GPT-OSS 20B via Groq) engine replacement
   phase2: {
-    model: "groq/compound-mini",
+    model: "openai/gpt-oss-20b",
     provider: "openai", // Groq via OpenAI-compatible API
     prompt: "continue" // CRITICAL: No context, no state, no hints
   }
@@ -331,7 +331,7 @@ async function main() {
 
   console.log(`\n[EVS-3] Engine Replacement / Incident Remediation Test`);
   console.log(`Mode: ${mode}`);
-  console.log(`Scenario: Model A (Claude) → Simulated Outage → Model B (Groq Compound Mini)`);
+  console.log(`Scenario: Model A (Claude) → Simulated Outage → Model B (GPT-OSS 20B via Groq)`);
   console.log(`Claim: Cognitive continuity persists across engine replacement\n`);
 
   let recorder = null;
@@ -380,6 +380,9 @@ async function main() {
       });
   
   const resultA = await runtimeA.execute(modelFnA, SCENARIO.phase1.prompt);
+  if (resultA.reason === "provider_binding_failed") {
+    throw new Error(`[EVS-3] Phase 1 provider binding failed (${SCENARIO.phase1.model}): ${resultA.output}`);
+  }
   ensureNoReimplementationSignals(resultA.trace);
   
   writeJson(path.join(phase1Dir, "result.json"), resultA);
@@ -395,8 +398,8 @@ async function main() {
   console.log(`\n[EVS-3] 🔥 SIMULATED OUTAGE: Model A unavailable`);
   console.log(`[EVS-3] 🔄 Initiating engine replacement...`);
 
-  // --- PHASE 2: Model B (Llama) Engine Replacement
-  console.log(`\n[EVS-3] Phase 2: Model B (Groq Compound Mini) - Engine Replacement`);
+  // --- PHASE 2: Model B (GPT-OSS 20B via Groq) Engine Replacement
+  console.log(`\n[EVS-3] Phase 2: Model B (GPT-OSS 20B via Groq) - Engine Replacement`);
   
   const phase2Dir = path.join(runDir, "phase2_model_b");
   fs.mkdirSync(phase2Dir, { recursive: true });
@@ -442,6 +445,9 @@ async function main() {
   }
   
   const resultB = await runtimeB.execute(modelFnB, phase2Prompt);
+  if (resultB.reason === "provider_binding_failed") {
+    throw new Error(`[EVS-3] Phase 2 provider binding failed (${SCENARIO.phase2.model}): ${resultB.output}`);
+  }
   ensureNoReimplementationSignals(resultB.trace);
   
   writeJson(path.join(phase2Dir, "result.json"), resultB);
@@ -537,6 +543,7 @@ async function main() {
   }
 
   // --- SUMMARY
+  const mark = (key) => (assertions[key] === true ? "✅" : "❌");
   const receipt = [
     `EVS-3 ENGINE REPLACEMENT / INCIDENT REMEDIATION RECEIPT`,
     "======================================================================",
@@ -545,7 +552,7 @@ async function main() {
     "",
     "SCENARIO:",
     "  Incident: Model A (Claude) becomes unavailable mid-workflow",
-    "  Remediation: Model B (Llama) injected as replacement",
+    "  Remediation: Model B (GPT-OSS 20B via Groq) injected as replacement",
     "  Constraint: Model B receives ZERO context from prior workflow",
     "",
     "PHASE 1 (Model A - Claude):",
@@ -557,7 +564,7 @@ async function main() {
     "",
     "🔥 SIMULATED OUTAGE",
     "",
-    "PHASE 2 (Model B - Groq Compound Mini):",
+    "PHASE 2 (Model B - GPT-OSS 20B via Groq):",
     `  Model: ${SCENARIO.phase2.model}`,
     `  Original prompt: "${SCENARIO.phase2.prompt}" (minimal continuation)`,
     `  Continuation mechanism: Substrate retrieval + context injection`,
@@ -613,26 +620,32 @@ async function main() {
     "  Model transition was detected and recorded by runtime (not inferred by harness).",
     "",
     "ARCHITECTURAL GUARANTEES:",
-    `  ✅ Prompt purity: ${assertions["EVS-3.A1.prompt_purity"]}`,
-    `  ✅ Model transition detected: ${assertions["EVS-3.A2.model_transition_detected"]}`,
-    `    ✅ Source model: ${assertions["EVS-3.A2b.source_model_correct"]}`,
-    `    ✅ Target model: ${assertions["EVS-3.A2c.target_model_correct"]}`,
-    `    ✅ Reason: ${assertions["EVS-3.A2d.reason_correct"]}`,
-    `  ✅ Retrieval evidence: ${assertions["EVS-3.A3.retrieval_evidence_present"]}`,
-    `  ✅ Decision in Phase 1 set: ${assertions["EVS-3.A4.retrieved_decision_in_phase1_set"]}`,
-    `  ✅ No state injection: ${assertions["EVS-3.A5.no_raw_state_injection"]}`,
-    `  ✅ Enforcement active: ${assertions["EVS-3.A6.enforcement_active"]}`,
+    `  ${mark("EVS-3.A1.prompt_purity")} Prompt purity: ${assertions["EVS-3.A1.prompt_purity"]}`,
+    `  ${mark("EVS-3.A2.model_transition_detected")} Model transition detected: ${assertions["EVS-3.A2.model_transition_detected"]}`,
+    `    ${mark("EVS-3.A2b.source_model_correct")} Source model: ${assertions["EVS-3.A2b.source_model_correct"]}`,
+    `    ${mark("EVS-3.A2c.target_model_correct")} Target model: ${assertions["EVS-3.A2c.target_model_correct"]}`,
+    `    ${mark("EVS-3.A2d.reason_correct")} Reason: ${assertions["EVS-3.A2d.reason_correct"]}`,
+    `  ${mark("EVS-3.A3.retrieval_evidence_present")} Retrieval evidence: ${assertions["EVS-3.A3.retrieval_evidence_present"]}`,
+    `  ${mark("EVS-3.A4.retrieved_decision_in_phase1_set")} Decision in Phase 1 set: ${assertions["EVS-3.A4.retrieved_decision_in_phase1_set"]}`,
+    `  ${mark("EVS-3.A5.no_raw_state_injection")} No state injection: ${assertions["EVS-3.A5.no_raw_state_injection"]}`,
+    `  ${mark("EVS-3.A6.enforcement_active")} Enforcement active: ${assertions["EVS-3.A6.enforcement_active"]}`,
     "",
   ].join("\n");
 
   writeText(path.join(runDir, "SUMMARY.txt"), receipt);
 
-  console.log(`\n[EVS-3] ${mode === "live" ? "✅ LIVE RUN COMPLETE" : "✅ REPLAY COMPLETE"}. Results: ${runDir}\n`);
+  const total = Object.keys(assertions).length;
+  console.log(`\n[EVS-3] ${mode === "live" ? "LIVE RUN COMPLETE" : "REPLAY COMPLETE"}. Results: ${runDir}\n`);
   console.log(receipt);
-  console.log(`\n  Total: 9/9 assertions passed\n`);
+  console.log(`\n  Total: ${total - failed.length}/${total} assertions passed\n`);
   
   if (failed.some(([k, v]) => v === "MISSING_FIELD")) {
     console.log(`\n⚠️  NOTE: continuityEvent field should be added to runtime for complete EVS-3 validation`);
+  }
+  
+  if (failed.length) {
+    console.error(`[EVS-3] ❌ ${failed.length}/${total} assertion(s) failed`);
+    process.exit(1);
   }
 }
 

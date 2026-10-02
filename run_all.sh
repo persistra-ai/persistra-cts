@@ -118,21 +118,43 @@ run_test() {
   echo -e "${BLUE}[${TOTAL_TESTS}/25] Running: ${test_name}${NC}"
   
   # Run test and capture output
-  if node "$test_file" > "${OUTPUT_DIR}/${test_name}.log" 2>&1; then
+  local log_file="${OUTPUT_DIR}/${test_name}.log"
+  local exit_code=0
+  node "$test_file" > "$log_file" 2>&1 || exit_code=$?
+  
+  # Extract assertion counts (prefer "X/Y assertions"; fall back to "N assertions")
+  local a_passed=""
+  local a_total=""
+  local ratio=$(grep -oE "[0-9]+/[0-9]+ assertions" "$log_file" | tail -1)
+  if [[ -n "$ratio" ]]; then
+    a_passed=$(echo "$ratio" | grep -oE "^[0-9]+")
+    a_total=$(echo "$ratio" | grep -oE "/[0-9]+" | tr -d '/')
+  else
+    a_total=$(grep -oE "[0-9]+ assertions" "$log_file" | tail -1 | grep -oE "[0-9]+")
+    a_passed="$a_total"
+  fi
+  
+  local fail_reason=""
+  if [[ $exit_code -ne 0 ]]; then
+    fail_reason="exit code ${exit_code}"
+  elif grep -qE "Provider binding failed|provider_binding_failed" "$log_file"; then
+    fail_reason="provider binding failure in log"
+  elif [[ -n "$a_total" && "$a_passed" != "$a_total" ]]; then
+    fail_reason="assertion count mismatch (${a_passed}/${a_total})"
+  fi
+  
+  if [[ -n "$a_total" ]]; then
+    TOTAL_ASSERTIONS=$((TOTAL_ASSERTIONS + a_total))
+    PASSED_ASSERTIONS=$((PASSED_ASSERTIONS + a_passed))
+    FAILED_ASSERTIONS=$((FAILED_ASSERTIONS + a_total - a_passed))
+  fi
+  
+  if [[ -z "$fail_reason" ]]; then
     echo -e "${GREEN}✅ PASS: ${test_name}${NC}"
     PASSED_TESTS=$((PASSED_TESTS + 1))
     TEST_RESULTS+=("PASS|${test_type}|${test_name}")
-    
-    # Extract assertion counts if available
-    if grep -q "assertions" "${OUTPUT_DIR}/${test_name}.log"; then
-      local assertions=$(grep -oE "[0-9]+ assertions" "${OUTPUT_DIR}/${test_name}.log" | tail -1 | grep -oE "[0-9]+")
-      if [[ -n "$assertions" ]]; then
-        TOTAL_ASSERTIONS=$((TOTAL_ASSERTIONS + assertions))
-        PASSED_ASSERTIONS=$((PASSED_ASSERTIONS + assertions))
-      fi
-    fi
   else
-    echo -e "${RED}❌ FAIL: ${test_name}${NC}"
+    echo -e "${RED}❌ FAIL: ${test_name} (${fail_reason})${NC}"
     FAILED_TESTS=$((FAILED_TESTS + 1))
     TEST_RESULTS+=("FAIL|${test_type}|${test_name}")
     
@@ -331,7 +353,7 @@ Architectural Membranes Validated
 Engine Membrane (Model ≠ Identity):
   Status: $(if has_pass "EVS-3"; then echo "✅ VALIDATED"; else echo "❌ FAILED"; fi)
   Evidence: EVS-3 (Engine Replacement), EVS-4 (Parameter Inversion)
-  Proof: Claude → Llama transition with substrate-mediated continuity
+  Proof: Claude (Anthropic) → GPT-OSS 20B (Groq) transition with substrate-mediated continuity
 
 Memory Membrane (Model ≠ Continuity):
   Status: $(if has_pass "EVS-2"; then echo "✅ VALIDATED"; else echo "❌ FAILED"; fi)

@@ -250,8 +250,8 @@ The budget has been approved for Q1 2026 marketing campaign with a focus on Java
     
     // Normalize tool trace
     const toolTrace = providerName === 'anthropic' 
-      ? traceNormalizer.normalizeAnthropic(allToolCalls, pcsResponse, policyResponse)
-      : traceNormalizer.normalizeOpenAI(allToolCalls, pcsResponse, policyResponse);
+      ? traceNormalizer.normalizeAnthropic(allToolCalls, pcsResponse, policyResponse, model)
+      : traceNormalizer.normalizeOpenAI(allToolCalls, pcsResponse, policyResponse, model);
     
     return {
       finalOutput: response.output,
@@ -284,6 +284,7 @@ The budget has been approved for Q1 2026 marketing campaign with a focus on Java
   getModelVersion(model) {
     const versions = {
       'claude-sonnet-3.5': '20241022',
+      'claude-sonnet-4-6': 'claude-sonnet-4-6',
       'gpt-4o': '2024-11-20',
       'llama-3.1-8b-instant': 'meta-llama-3.1-8b'
     };

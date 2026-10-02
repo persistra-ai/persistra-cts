@@ -281,7 +281,7 @@ async function groqModel(prompt) {
       'authorization': `Bearer ${apiKey}`
     },
     body: JSON.stringify({
-      model: process.env.AVS2E_GROQ_MODEL || 'llama-3.1-8b-instant',
+      model: process.env.AVS2E_GROQ_MODEL || 'openai/gpt-oss-20b',
       max_tokens: 50,
       temperature: 0,
       messages: [{ role: 'user', content: prompt }]
@@ -298,7 +298,7 @@ async function groqModel(prompt) {
 
   const out = new String(text);
   out.provider = 'groq';
-  out.model = process.env.AVS2E_GROQ_MODEL || 'llama-3.1-8b-instant';
+  out.model = process.env.AVS2E_GROQ_MODEL || 'openai/gpt-oss-20b';
   out.mode = 'live';
   return out;
 }
@@ -341,7 +341,7 @@ if (realSmokeEnabled) {
     const runtime5b = new PCSRuntime({
       namespace: 'avs2e-real-groq',
       storePath: path.join(storeDir, 'test5b-real-groq-store.json'),
-      modelLabel: process.env.AVS2E_GROQ_MODEL || 'llama-3.1-8b-instant'
+      modelLabel: process.env.AVS2E_GROQ_MODEL || 'openai/gpt-oss-20b'
     });
 
     const result5b = await runtime5b.execute(groqModel, 'Reply with a short greeting.');
@@ -351,7 +351,7 @@ if (realSmokeEnabled) {
       `Real Groq: trace.provider.name === "groq": ${result5b.trace.provider.name}`);
 
     // E5b.2: trace.provider.model matches expected
-    const expectedModel5b = process.env.AVS2E_GROQ_MODEL || 'llama-3.1-8b-instant';
+    const expectedModel5b = process.env.AVS2E_GROQ_MODEL || 'openai/gpt-oss-20b';
     assert('E5b.2', result5b.trace.provider.model === expectedModel5b,
       `Real Groq: trace.provider.model === "${expectedModel5b}": ${result5b.trace.provider.model}`);
 

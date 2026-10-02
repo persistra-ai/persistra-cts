@@ -1,10 +1,10 @@
 class ToolTraceNormalizer {
-  normalize(provider, toolCalls, pcsResponse = null, policyResponse = null) {
+  normalize(provider, toolCalls, pcsResponse = null, policyResponse = null, model = null) {
     const trace = {
       trace_version: '1.0',
       provider: {
         name: provider,
-        model: this.getModelName(provider)
+        model: model || this.getModelName(provider)
       },
       events: []
     };
@@ -81,13 +81,13 @@ class ToolTraceNormalizer {
   }
   
   // Normalize from Anthropic tool use format
-  normalizeAnthropic(toolUses, pcsResponse = null, policyResponse = null) {
-    return this.normalize('anthropic', toolUses, pcsResponse, policyResponse);
+  normalizeAnthropic(toolUses, pcsResponse = null, policyResponse = null, model = null) {
+    return this.normalize('anthropic', toolUses, pcsResponse, policyResponse, model);
   }
   
   // Normalize from OpenAI tool call format
-  normalizeOpenAI(toolCalls, pcsResponse = null, policyResponse = null) {
-    return this.normalize('openai', toolCalls, pcsResponse, policyResponse);
+  normalizeOpenAI(toolCalls, pcsResponse = null, policyResponse = null, model = null) {
+    return this.normalize('openai', toolCalls, pcsResponse, policyResponse, model);
   }
 }
 

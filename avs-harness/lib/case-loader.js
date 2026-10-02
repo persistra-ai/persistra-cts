@@ -29,7 +29,7 @@ class CaseLoader {
   getModels() {
     return [
       'claude-sonnet-4-6',
-      'llama-3.1-8b-instant',
+      'openai/gpt-oss-20b',
       'gpt-4'
     ];
   }

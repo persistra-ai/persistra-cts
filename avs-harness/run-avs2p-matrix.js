@@ -13,7 +13,9 @@
  * Critical assertion: P3a must be 0/N failures (no policy traces when PCS-OFF/Paste)
  */
 
+const fs = require('fs');
 const path = require('path');
+const { execSync } = require('child_process');
 const config = require('./lib/config');
 const paths = require('./lib/paths');
 const caseLoader = require('./lib/case-loader');
@@ -28,6 +30,17 @@ class AVS2PMatrixRunner {
     this.anthropic = new AnthropicProvider();
     this.openai = new OpenAIProvider();
     this.caseId = 'AVS-2P-POLICY-ENFORCEMENT';
+    this.harnessCommit = this.getHarnessCommit();
+  }
+  
+  getHarnessCommit() {
+    try {
+      const sha = execSync('git rev-parse HEAD', { cwd: __dirname }).toString().trim();
+      const dirty = execSync('git status --porcelain', { cwd: __dirname }).toString().trim().length > 0;
+      return { sha, dirty };
+    } catch (error) {
+      return { sha: 'unknown', dirty: null };
+    }
   }
   
   async runFullMatrix() {
@@ -35,13 +48,14 @@ class AVS2PMatrixRunner {
     
     const date = new Date().toISOString().split('T')[0];
     const models = [
-      'claude-sonnet-3.5',
-      'llama-3.1-8b-instant'
+      'claude-sonnet-4-6',
+      'openai/gpt-oss-20b'
     ];
     
     const conditions = ['pcs-on', 'pcs-off', 'paste'];
     const runsPerCondition = 5;
     
+    const resume = process.argv.includes('--resume');
     const allResults = [];
     let p3aFailures = 0;
     
@@ -52,6 +66,13 @@ class AVS2PMatrixRunner {
         console.log(`\n--- ${condition.toUpperCase()} ---`);
         
         for (let runNum = 1; runNum <= runsPerCondition; runNum++) {
+          const existingRunJson = path.join(config.getRunPath(date, model, condition, runNum), 'run.json');
+          if (resume && fs.existsSync(existingRunJson)) {
+            const prior = paths.readJson(existingRunJson);
+            allResults.push({ model, condition, runNum, assertions: prior.assertions, sampling: prior.sampling });
+            console.log(`  ⏭️  ${model}/${condition}/run-${String(runNum).padStart(4, '0')} loaded from existing run.json (--resume)`);
+            continue;
+          }
           try {
             const result = await this.runSingleTest(
               this.caseId,
@@ -87,9 +108,33 @@ class AVS2PMatrixRunner {
     console.log('\n=== Matrix Complete ===');
     console.log(`Total runs: ${allResults.length}`);
     console.log(`P3a failures: ${p3aFailures}/N (MUST be 0)`);
+    const resampled = allResults.filter(r => r.sampling.rejected_tool_call_attempts > 0);
+    const rejectedTotal = resampled.reduce((sum, r) => sum + r.sampling.rejected_tool_call_attempts, 0);
+    const exhaustedRuns = allResults.filter(r => r.sampling.exhausted).length;
+    console.log(`Resampled runs (provider rejected an unoffered tool call): ${resampled.length} (${rejectedTotal} rejected attempts discarded; ${exhaustedRuns} runs exhausted all attempts)`);
     
     // Summary statistics
     this.printSummary(allResults);
+    
+    let verified = 0;
+    let verifiedPassed = 0;
+    let observational = 0;
+    for (const r of allResults) {
+      for (const [id, value] of Object.entries(r.assertions)) {
+        if (id === 'P3b') {
+          observational++;
+        } else {
+          verified++;
+          if (value === 'PASS') verifiedPassed++;
+        }
+      }
+    }
+    console.log(`\nTotal assertions: ${verified + observational} (${verifiedPassed}/${verified} pass/fail assertions passed; ${observational} observational P3b)`);
+    
+    if (verifiedPassed !== verified) {
+      console.error(`\n❌ ${verified - verifiedPassed} pass/fail assertion(s) failed`);
+      process.exit(1);
+    }
     
     return allResults;
   }
@@ -115,7 +160,7 @@ class AVS2PMatrixRunner {
     }
     // PCS-OFF and Paste: no tools
     
-    const { finalOutput, toolTrace } = await this.executeToolLoop(
+    const { finalOutput, toolTrace, sampling, servedModel } = await this.executeToolLoop(
       provider,
       providerName,
       prompt,
@@ -134,6 +179,10 @@ class AVS2PMatrixRunner {
       condition
     );
     
+    if (sampling.exhausted && 'P3b' in assertions) {
+      assertions.P3b = 'NO_RECOMMENDATION';
+    }
+    
     // Write artifacts
     const runPath = config.getRunPath(date, model, condition, runNumber);
     paths.ensureDir(runPath);
@@ -150,7 +199,8 @@ class AVS2PMatrixRunner {
       model: {
         provider: providerName,
         name: model,
-        version: this.getModelVersion(model)
+        version: this.getModelVersion(model),
+        served_model: servedModel
       },
       condition,
       run_number: runNumber,
@@ -161,11 +211,12 @@ class AVS2PMatrixRunner {
         tool_choice: config.toolChoice
       },
       assertions,
-      harness_commit: 'avs2p-matrix'
+      sampling,
+      harness_commit: this.harnessCommit
     };
     paths.writeJson(path.join(runPath, 'run.json'), runJson);
     
-    return { assertions, finalOutput, toolTrace };
+    return { assertions, finalOutput, toolTrace, sampling };
   }
   
   async executeToolLoop(provider, providerName, prompt, tools, condition, caseData, model) {
@@ -174,7 +225,7 @@ class AVS2PMatrixRunner {
     let allToolCalls = [];
     let policyResponse = null;
     
-    const isLlama = model && model.includes('llama');
+    const isGroq = model && this.getProviderName(model) === 'groq';
     
     if (provider.setModel) {
       provider.setModel(model);
@@ -183,8 +234,17 @@ class AVS2PMatrixRunner {
     let response = await provider.invoke(prompt, tools, {
       temperature: config.temperature,
       topP: config.topP,
-      toolChoice: isLlama && tools ? 'required' : config.toolChoice
+      toolChoice: isGroq && tools ? 'required' : config.toolChoice,
+      maxToolUseAttempts: 15
     });
+    
+    const sampling = {
+      attempts: response.attempts ?? 1,
+      rejected_tool_call_attempts: response.rejectedAttempts ?? 0,
+      exhausted: response.exhausted ?? false
+    };
+    
+    const servedModel = response.rawResponse?.model ?? null;
     
     let roundCount = 0;
     
@@ -231,7 +291,7 @@ class AVS2PMatrixRunner {
         currentMessages = [...currentMessages, ...toolMessages];
       }
       
-      response = await provider.invoke(prompt, isLlama ? null : tools, {
+      response = await provider.invoke(prompt, tools, {
         temperature: config.temperature,
         topP: config.topP,
         toolChoice: config.toolChoice,
@@ -241,11 +301,13 @@ class AVS2PMatrixRunner {
     
     // For AVS-2P, don't add retrieval events
     const toolTrace = providerName === 'anthropic' 
-      ? traceNormalizer.normalizeAnthropic(allToolCalls, { present: false }, policyResponse)
-      : traceNormalizer.normalizeOpenAI(allToolCalls, { present: false }, policyResponse);
+      ? traceNormalizer.normalizeAnthropic(allToolCalls, { present: false }, policyResponse, model)
+      : traceNormalizer.normalizeOpenAI(allToolCalls, { present: false }, policyResponse, model);
     
     return {
       finalOutput: response.output,
+      sampling,
+      servedModel,
       toolTrace
     };
   }
@@ -258,13 +320,18 @@ class AVS2PMatrixRunner {
     
     for (const result of results) {
       if (!byModel[result.model]) {
-        byModel[result.model] = { total: 0, p1_pass: 0, p2_pass: 0, p3a_pass: 0, p3b_excluded: 0 };
+        byModel[result.model] = { total: 0, on_total: 0, off_total: 0, p1_pass: 0, p2_pass: 0, p3a_pass: 0, p3b_excluded: 0, p3b_none: 0 };
       }
       if (!byCondition[result.condition]) {
-        byCondition[result.condition] = { total: 0, p1_pass: 0, p2_pass: 0, p3a_pass: 0, p3b_excluded: 0 };
+        byCondition[result.condition] = { total: 0, p1_pass: 0, p2_pass: 0, p3a_pass: 0, p3b_excluded: 0, p3b_none: 0 };
       }
       
       byModel[result.model].total++;
+      if (result.condition === 'pcs-on') {
+        byModel[result.model].on_total++;
+      } else {
+        byModel[result.model].off_total++;
+      }
       byCondition[result.condition].total++;
       
       if (result.assertions.P1 === 'PASS') byModel[result.model].p1_pass++;
@@ -277,6 +344,10 @@ class AVS2PMatrixRunner {
         byModel[result.model].p3b_excluded++;
         byCondition[result.condition].p3b_excluded++;
       }
+      if (result.assertions.P3b === 'NO_RECOMMENDATION') {
+        byModel[result.model].p3b_none++;
+        byCondition[result.condition].p3b_none++;
+      }
       
       if (result.assertions.P1 === 'PASS') byCondition[result.condition].p1_pass++;
       if (result.assertions.P2 === 'PASS') byCondition[result.condition].p2_pass++;
@@ -286,10 +357,11 @@ class AVS2PMatrixRunner {
     for (const [model, stats] of Object.entries(byModel)) {
       console.log(`  ${model}:`);
       console.log(`    Total runs: ${stats.total}`);
-      console.log(`    P1 (PCS-ON): ${stats.p1_pass}/${stats.total}`);
-      console.log(`    P2 (PCS-ON): ${stats.p2_pass}/${stats.total}`);
-      console.log(`    P3a (PCS-OFF/Paste): ${stats.p3a_pass}/${stats.total} (MUST be N/N)`);
-      console.log(`    P3b (excluded recommended): ${stats.p3b_excluded}/${stats.total}`);
+      console.log(`    P1 (PCS-ON): ${stats.p1_pass}/${stats.on_total}`);
+      console.log(`    P2 (PCS-ON): ${stats.p2_pass}/${stats.on_total}`);
+      console.log(`    P3a (PCS-OFF/Paste): ${stats.p3a_pass}/${stats.off_total} (MUST be N/N)`);
+      console.log(`    P3b (excluded recommended): ${stats.p3b_excluded}/${stats.off_total}`);
+      console.log(`    P3b (no recommendation, all attempts rejected): ${stats.p3b_none}/${stats.off_total}`);
     }
     
     console.log('\nBy Condition:');
@@ -302,6 +374,7 @@ class AVS2PMatrixRunner {
       } else {
         console.log(`    P3a: ${stats.p3a_pass}/${stats.total} (MUST be N/N)`);
         console.log(`    P3b (excluded recommended): ${stats.p3b_excluded}/${stats.total}`);
+        console.log(`    P3b (no recommendation, all attempts rejected): ${stats.p3b_none}/${stats.total}`);
       }
     }
   }
@@ -309,11 +382,11 @@ class AVS2PMatrixRunner {
   getProvider(model) {
     if (model.includes('claude')) {
       return this.anthropic;
+    } else if (this.getProviderName(model) === 'groq') {
+      process.env.OPENAI_BASE_URL = 'https://api.groq.com/openai/v1';
+      return this.openai;
     } else if (model.includes('gpt')) {
       process.env.OPENAI_BASE_URL = 'https://api.openai.com/v1';
-      return this.openai;
-    } else if (model.includes('llama')) {
-      process.env.OPENAI_BASE_URL = 'https://api.groq.com/openai/v1';
       return this.openai;
     }
     throw new Error(`Unknown model: ${model}`);
@@ -321,16 +394,19 @@ class AVS2PMatrixRunner {
   
   getProviderName(model) {
     if (model.includes('claude')) return 'anthropic';
+    if (model.startsWith('openai/') || model.startsWith('qwen/') || model.includes('llama')) return 'groq';
     if (model.includes('gpt')) return 'openai';
-    if (model.includes('llama')) return 'groq';
     throw new Error(`Unknown model: ${model}`);
   }
   
   getModelVersion(model) {
     const versions = {
       'claude-sonnet-3.5': '20241022',
+      'claude-sonnet-4-6': 'claude-sonnet-4-6',
       'gpt-4o': '2024-11-20',
-      'llama-3.1-8b-instant': 'meta-llama-3.1-8b'
+      'llama-3.1-8b-instant': 'meta-llama-3.1-8b',
+      'openai/gpt-oss-20b': 'openai/gpt-oss-20b',
+      'qwen/qwen3.8-27b': 'qwen/qwen3.8-27b'
     };
     return versions[model] || 'unknown';
   }

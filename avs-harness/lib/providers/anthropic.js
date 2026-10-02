@@ -9,6 +9,10 @@ class AnthropicProvider {
     this.model = 'claude-sonnet-4-6';
   }
   
+  setModel(modelName) {
+    this.model = modelName;
+  }
+  
   async invoke(prompt, tools, options = {}) {
     const temperature = options.temperature ?? config.temperature;
     const topP = options.topP ?? config.topP;

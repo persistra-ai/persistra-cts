@@ -3,7 +3,7 @@ const config = require('../config');
 
 class OpenAIProvider {
   constructor() {
-    this.model = 'llama-3.1-8b-instant';
+    this.model = 'openai/gpt-oss-20b';
     this.client = null;
     this.initializeClient();
   }
@@ -11,15 +11,21 @@ class OpenAIProvider {
   initializeClient() {
     // Determine base URL based on model
     let baseURL;
-    if (this.model.includes('gpt')) {
+    let apiKey;
+    if (/^gpt-/.test(this.model)) {
       baseURL = 'https://api.openai.com/v1';
+      apiKey = config.openaiApiKey;
     } else {
       baseURL = process.env.OPENAI_BASE_URL || 'https://api.groq.com/openai/v1';
+      apiKey = baseURL.includes('groq.com')
+        ? (process.env.GROQ_API_KEY || config.openaiApiKey)
+        : config.openaiApiKey;
     }
     
     this.client = new OpenAI({
-      apiKey: config.openaiApiKey,
-      baseURL
+      apiKey,
+      baseURL,
+      maxRetries: 6
     });
   }
   
@@ -54,7 +60,33 @@ class OpenAIProvider {
       }
     }
     
-    const response = await this.client.chat.completions.create(params);
+    const maxAttempts = options.maxToolUseAttempts ?? 5;
+    let response;
+    let attempts = 0;
+    let rejectedAttempts = 0;
+    while (!response) {
+      attempts++;
+      try {
+        response = await this.client.chat.completions.create(params);
+      } catch (err) {
+        const isRejectedToolCall = !params.tools && err?.status === 400 && err?.error?.code === 'tool_use_failed';
+        if (!isRejectedToolCall) {
+          throw err;
+        }
+        rejectedAttempts++;
+        if (attempts >= maxAttempts) {
+          return {
+            output: '',
+            toolCalls: [],
+            message: { role: 'assistant', content: '' },
+            rawResponse: null,
+            attempts,
+            rejectedAttempts,
+            exhausted: true
+          };
+        }
+      }
+    }
     
     const message = response.choices[0].message;
     
@@ -69,14 +101,21 @@ class OpenAIProvider {
       output: message.content || '',
       toolCalls,
       message,
-      rawResponse: response
+      rawResponse: response,
+      attempts,
+      rejectedAttempts,
+      exhausted: false
     };
   }
   
   createToolResultMessages(assistantMessage, toolResults) {
     // Create messages array for turn 2
     const messages = [
-      assistantMessage,  // The assistant message with tool_calls
+      {
+        role: 'assistant',
+        content: assistantMessage.content ?? null,
+        tool_calls: assistantMessage.tool_calls
+      },  // The assistant message with tool_calls
       ...toolResults.map(result => ({
         role: 'tool',
         tool_call_id: result.tool_call_id,

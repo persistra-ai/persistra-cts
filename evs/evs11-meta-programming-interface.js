@@ -75,7 +75,7 @@ function generateManifest(results) {
 function generateSummary(results) {
   const totalPassed = results.phase1.passed + results.phase2.passed + results.phase3.passed;
   const totalFailed = results.phase1.failed + results.phase2.failed + results.phase3.failed;
-  const totalAssertions = 18;
+  const totalAssertions = results.phase1.assertions.length + results.phase2.assertions.length + results.phase3.assertions.length;
   
   return `EVS-11: Meta-Programming Interface Test Results
 Generated: ${new Date().toISOString()}
@@ -86,9 +86,9 @@ GUARDRAILS:
   G0: Runtime-only imports ✅
   G1: No harness computation ✅
 
-PHASE 1 — Registry Determinism: ${results.phase1.passed}/6 passed
-PHASE 2 — Intent Routing Determinism: ${results.phase2.passed}/6 passed
-PHASE 3 — Execution Provenance: ${results.phase3.passed}/6 passed
+PHASE 1 — Registry Determinism: ${results.phase1.passed}/${results.phase1.assertions.length} passed
+PHASE 2 — Intent Routing Determinism: ${results.phase2.passed}/${results.phase2.assertions.length} passed
+PHASE 3 — Execution Provenance: ${results.phase3.passed}/${results.phase3.assertions.length} passed
 
 TOTAL: ${totalPassed}/${totalAssertions} assertions passed
 
@@ -244,7 +244,7 @@ async function runTest() {
   if (a6) results.phase1.passed++; else results.phase1.failed++;
   console.log(`${a6 ? '✅' : '❌'} A6: PCS-OFF control (no registry evidence)`);
 
-  console.log(`\n✅ PHASE 1 COMPLETE: ${results.phase1.passed}/6 assertions passed\n`);
+  console.log(`\n✅ PHASE 1 COMPLETE: ${results.phase1.passed}/${results.phase1.assertions.length} assertions passed\n`);
 
   console.log('=== PHASE 2: Intent Routing Determinism ===\n');
 
@@ -377,7 +377,7 @@ async function runTest() {
   if (b6) results.phase2.passed++; else results.phase2.failed++;
   console.log(`${b6 ? '✅' : '❌'} B6: routing strategy string equals "keyword-regex-v1"`);
 
-  console.log(`\n✅ PHASE 2 COMPLETE: ${results.phase2.passed}/6 assertions passed\n`);
+  console.log(`\n✅ PHASE 2 COMPLETE: ${results.phase2.passed}/${results.phase2.assertions.length} assertions passed\n`);
 
   console.log('=== PHASE 3: Execution Provenance ===\n');
 
@@ -495,17 +495,17 @@ async function runTest() {
   if (c6) results.phase3.passed++; else results.phase3.failed++;
   console.log(`${c6 ? '✅' : '❌'} C6: audit log exists (if audit enabled)`);
 
-  console.log(`\n✅ PHASE 3 COMPLETE: ${results.phase3.passed}/6 assertions passed\n`);
+  console.log(`\n✅ PHASE 3 COMPLETE: ${results.phase3.passed}/${results.phase3.assertions.length} assertions passed\n`);
 
   console.log('=== FINAL RESULTS ===\n');
 
   const totalPassed = results.phase1.passed + results.phase2.passed + results.phase3.passed;
   const totalFailed = results.phase1.failed + results.phase2.failed + results.phase3.failed;
 
-  console.log(`Phase 1 (Registry Determinism): ${results.phase1.passed}/6 ${results.phase1.failed === 0 ? '✅' : '❌'}`);
-  console.log(`Phase 2 (Intent Routing): ${results.phase2.passed}/6 ${results.phase2.failed === 0 ? '✅' : '❌'}`);
-  console.log(`Phase 3 (Execution Provenance): ${results.phase3.passed}/6 ${results.phase3.failed === 0 ? '✅' : '❌'}`);
-  console.log(`\nTOTAL: ${totalPassed}/18 assertions passed\n`);
+  console.log(`Phase 1 (Registry Determinism): ${results.phase1.passed}/${results.phase1.assertions.length} ${results.phase1.failed === 0 ? '✅' : '❌'}`);
+  console.log(`Phase 2 (Intent Routing): ${results.phase2.passed}/${results.phase2.assertions.length} ${results.phase2.failed === 0 ? '✅' : '❌'}`);
+  console.log(`Phase 3 (Execution Provenance): ${results.phase3.passed}/${results.phase3.assertions.length} ${results.phase3.failed === 0 ? '✅' : '❌'}`);
+  console.log(`\nTOTAL: ${totalPassed}/${totalPassed + totalFailed} assertions passed\n`);
 
   saveArtifact('assertions.json', {
     phase1: results.phase1.assertions,
