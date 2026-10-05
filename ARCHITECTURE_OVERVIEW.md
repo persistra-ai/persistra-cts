@@ -130,7 +130,7 @@ This creates the **Context Wall**: as projects grow, AI systems lose coherence b
 - **Multi-Agent:** Coordinated collaboration with shared substrate (Act 8)
 - **Institutional Memory:** Query authoritative state with provenance (Act 9)
 
-**Demos:** Acts 1-9 (`demo/ACTS_1-9_COMPLETE.md`)
+**Demos:** Acts 1-9 ([persistra-demos/nine-act-demo](https://github.com/persistra-ai/persistra-demos))
 
 ### Layer 3: Meta-Cognitive Intelligence (Documented, Not Fully Proven)
 **Status:** 📋 Architecture documented, implementation deferred

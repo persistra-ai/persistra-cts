@@ -271,11 +271,12 @@ npm run test:quick     # Run smoke test
 
 ### See It Work (2 minutes)
 
-**Run the demo:**
+**Run the demo** (separate repository: [persistra-demos](https://github.com/persistra-ai/persistra-demos)):
 
 ```bash
-cd demo
-node demo-complete.js
+git clone https://github.com/persistra-ai/persistra-demos.git
+cd persistra-demos/nine-act-demo
+npm run demo:all
 ```
 
 **Shows:** Acts 1-9 (foundation → continuity → meta-cognitive → multi-agent → institutional memory)
@@ -384,9 +385,9 @@ The `npm test` command requires additional flags and is not intended for evaluat
 | `npm run test:all:audit` | Full suite with artifacts | ~35 minutes |
 | `npm run clean` | Clean test artifacts | Interactive |
 
-**For demos:**
+**For demos** (in [persistra-demos](https://github.com/persistra-ai/persistra-demos)):
 ```bash
-cd demo
+cd persistra-demos/nine-act-demo
 npm run demo:validate  # Validate demo is ready
 npm run demo:1-3       # Acts 1-3 (Foundation)
 npm run demo:all       # All 9 acts

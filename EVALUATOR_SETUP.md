@@ -104,10 +104,13 @@ npm run test:all
 
 **Expected:** Complete validation across EVS, AVS, and CVS suites
 
-### Nine-Act Demo
+### Nine-Act Demo (Separate Repository)
+
+The nine-act demo lives in [persistra-demos](https://github.com/persistra-ai/persistra-demos):
 
 ```bash
-cd demo
+git clone https://github.com/persistra-ai/persistra-demos.git
+cd persistra-demos/nine-act-demo
 npm run demo:validate  # Validate demo is ready
 npm run demo:all        # Run all 9 acts
 ```
@@ -137,7 +140,7 @@ npm install
 npm run quick-start
 ```
 
-The tutorial is optional. The nine-act demo in `persistra-cts/demo/` is the primary validation path.
+The tutorial is optional. The nine-act demo in [persistra-demos](https://github.com/persistra-ai/persistra-demos) is the primary demonstration path.
 
 ---
 
@@ -152,7 +155,6 @@ persistra-cts/
 │   └── ...
 ├── evs/                  ← External Validation Suite
 ├── avs-harness/          ← Architectural Validation Suite
-├── demo/                 ← Nine-act demo
 ├── tests/                ← Additional conformance tests
 ├── scripts/              ← Utility scripts
 └── docs/                 ← Documentation
@@ -170,8 +172,8 @@ persistra-cts/
 | `npm run test:quick` | Quick validation smoke test | ~5 minutes |
 | `npm run test:all` | Full validation suite | ~30 minutes |
 | `npm run test:all:audit` | Full suite with artifacts | ~35 minutes |
-| `cd demo && npm run demo:validate` | Validate demo readiness | ~5 seconds |
-| `cd demo && npm run demo:all` | Run nine-act demo | ~15 minutes |
+| `npm run demo:validate` (in `persistra-demos/nine-act-demo`) | Validate demo readiness | ~5 seconds |
+| `npm run demo:all` (in `persistra-demos/nine-act-demo`) | Run nine-act demo | ~15 minutes |
 
 **Do NOT use `npm test` directly** - it requires additional flags. Use the commands above.
 

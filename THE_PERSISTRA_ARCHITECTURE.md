@@ -1681,8 +1681,8 @@ Model performs reasoning only
 
 **For Evaluators:**
 1. Run PCS runtime tests: `./run_all.sh --mode audit`
-2. Run demo suite: `cd demo && node demo-complete-1-8.js`
-3. Run Act 9 demo: `cd demo && node demo-act-9.js`
+2. Run demo suite: `cd persistra-demos/nine-act-demo && node demo-complete-1-8.js` (separate repository: [persistra-demos](https://github.com/persistra-ai/persistra-demos))
+3. Run Act 9 demo: `cd persistra-demos/nine-act-demo && node demo-act-9.js`
 4. Run TT validation: `cd ../pcs-tt-primitive-validation/cse/reference && make oracle`
 5. Review ARCHITECTURE_INVARIANTS.md
 6. Review COMPETITIVE_POSITIONING.md
