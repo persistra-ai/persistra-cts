@@ -44,7 +44,7 @@ shasum -c MANIFEST.sha256
 
 ## What You're Evaluating
 
-**The Persistra Cognitive Substrate (PCS) is a minimal runtime layer that separates:**
+**The Persistent Cognitive Substrate (PCS) is a minimal runtime layer that separates:**
 - **Model reasoning** (stateless, probabilistic)
 - **System governance** (deterministic, runtime-enforced)
 

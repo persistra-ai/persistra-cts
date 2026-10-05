@@ -224,13 +224,18 @@ function writeText(fp, s) {
   fs.writeFileSync(fp, s, "utf8");
 }
 
-function enforceSession2PromptPurity(promptDumpPath) {
+function isSession2PromptPure(promptDumpPath) {
   const dumped = fs.readFileSync(promptDumpPath, "utf8");
   const normalized = dumped.replace(/\r\n/g, "\n");
-  if (!(normalized === "continue\n" || normalized === "continue")) {
+  return normalized === "continue\n" || normalized === "continue";
+}
+
+function enforceSession2PromptPurity(promptDumpPath) {
+  if (!isSession2PromptPure(promptDumpPath)) {
+    const length = fs.readFileSync(promptDumpPath, "utf8").replace(/\r\n/g, "\n").length;
     throw new Error(
       `[EVS-4] Session-2 prompt dump is not pure. Expected exactly "continue". ` +
-      `Got length=${normalized.length}. Refusing to proceed.` 
+      `Got length=${length}. Refusing to proceed.` 
     );
   }
 }
@@ -342,7 +347,7 @@ async function main() {
 
   const assertions = {
     // A. Session Boundary / Prompt Purity
-    "EVS-4.A1.session2_prompt_is_pure_continue": true,
+    "EVS-4.A1.session2_prompt_is_pure_continue": isSession2PromptPure(s2PromptDumpPath),
     "EVS-4.A2.no_raw_state_injection": injectedRaw === false,
 
     // B. Substrate Retrieval Must Occur

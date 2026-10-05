@@ -849,7 +849,7 @@ This software is provided under a **source-available license** for evaluation an
 
 ### Patent Notice
 
-Implementation of the Persistra Cognitive Standard (PCS) may require licenses to patents owned by Exocortical Concepts, Inc. and/or other parties.
+Implementation of the Persistent Cognitive Substrate (PCS) may require licenses to patents owned by Exocortical Concepts, Inc. and/or other parties.
 
 **See:** [PATENT_NOTICE.md](PATENT_NOTICE.md) for complete patent disclosure and FRAND licensing framework (RFC-PCS-0007).
 

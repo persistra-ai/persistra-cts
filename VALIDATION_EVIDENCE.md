@@ -10,12 +10,12 @@
 
 | Suite | Tests | Assertions | Status |
 |-------|-------|------------|--------|
-| **EVS** (Exocortical Validation) | 13/13 | 160 assertions | ✅ Complete |
+| **EVS** (Exocortical Validation) | 13/13 | 163 assertions | ✅ Complete |
 | **AVS** (Architectural Validation) | 6/6 | 89 assertions | ✅ Complete |
 | **AVS-2P** (Paste Condition, separate) | 1/1 | 60 assertions | ✅ Complete |
 | **CTS** (Conformance Test Suite) | 6/6 | 0 assertions | ✅ Complete |
 | **Standalone** (`tests/test-*.js`, run individually) | 5/5 | 52 assertions | ✅ Complete |
-| **Total** | **31 tests** | **361 assertions** | ✅ **100% Runtime-Bound** |
+| **Total** | **31 tests** | **364 assertions** | ✅ **100% Runtime-Bound** |
 
 **All tests:**
 - Use actual PCSRuntime (no reimplementation)
@@ -59,7 +59,7 @@ For architectural scope, see [IMPLEMENTATION_SCOPE.md](IMPLEMENTATION_SCOPE.md).
 
 **Claim:** Architectural enforcement ≠ prompt compliance
 
-**Results:** 5/5 test cases passing
+**Results:** 8/8 assertions passing
 - Policy A (Strict): Blocks only real keys (32+ chars)
 - Policy B (Broad): Blocks all secret-shaped strings
 - Deterministic enforcement with explicit policy control
@@ -86,7 +86,7 @@ For architectural scope, see [IMPLEMENTATION_SCOPE.md](IMPLEMENTATION_SCOPE.md).
 
 **Claim:** Cognitive continuity persists across live engine boundary
 
-**Results:** 6/6 assertions passing
+**Results:** 9/9 assertions passing
 - Model A (Claude 3 Haiku) → Simulated outage → Model B (Llama 3.1 8B)
 - Model B receives zero context, continuity via substrate only
 - Runtime detects and records model transition
@@ -119,7 +119,7 @@ For architectural scope, see [IMPLEMENTATION_SCOPE.md](IMPLEMENTATION_SCOPE.md).
 
 **Claim:** PCSRuntime execution is deterministically reproducible
 
-**Results:** 5/5 assertions passing
+**Results:** 4/4 assertions passing
 - Phase A (RECORD): Capture prompts, outputs, traces, state snapshots
 - Phase B (REPLAY): Zero provider calls, feed cassette outputs
 - Hash equivalence after normalization
@@ -312,7 +312,7 @@ meta_programming_evidence: {
 
 ### AVS-1P: Policy Gate ✅
 
-**Results:** 4/4 tests passing
+**Results:** 17/17 assertions passing
 - Policy violation detection
 - Policy compliance allowed
 - Multiple policies
@@ -324,7 +324,7 @@ meta_programming_evidence: {
 
 ### AVS-1R: Decision Retrieval ✅
 
-**Results:** 4/4 tests passing
+**Results:** 18/18 assertions passing
 - Backend type validation
 - Dimensions validation (384, 768, 1536)
 - Similarity score validation
@@ -592,7 +592,7 @@ See [EVALUATION_FRAMEWORK.md](../persistra-public/EVALUATION_FRAMEWORK.md) for c
 
 ## What This Evidence Proves
 
-1. ✅ **All 25 tests passing** (207+ assertions)
+1. ✅ **All 31 tests passing** (364 assertions)
 2. ✅ **100% runtime-bound** (no reimplementation)
 3. ✅ **Contract versions frozen** (1.0.0 across all primitives)
 4. ✅ **Adversarially hardened** (shuffle invariance, registration-order independence)

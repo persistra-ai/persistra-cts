@@ -6,7 +6,7 @@
 
 ## Overview
 
-This guide provides the complete setup path for evaluating the Persistra Cognitive Substrate (PCS). Follow these steps in order for a clean evaluation experience.
+This guide provides the complete setup path for evaluating the Persistent Cognitive Substrate (PCS). Follow these steps in order for a clean evaluation experience.
 
 ---
 

@@ -11,7 +11,7 @@
 
 ### 1.1 Essential Patents
 
-Implementation of the Persistent Cognitive Standard (PCS) specifications tested by this conformance suite may require licenses to patents that are essential to PCS conformance.
+Implementation of the Persistent Cognitive Substrate (PCS) specifications tested by this conformance suite may require licenses to patents that are essential to PCS conformance.
 
 **Essential Patent Definition:** A patent claim is "essential" if there is no technically feasible, compliant alternative to implementing a PCS normative requirement without infringing that claim.
 

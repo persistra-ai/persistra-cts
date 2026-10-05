@@ -9,7 +9,7 @@
 
 ## Purpose
 
-This document provides the complete test methodology for all 25 tests in the Persistra Cognitive Substrate (PCS) validation suite. Each test includes:
+This document provides the complete test methodology for all 25 tests in the Persistent Cognitive Substrate (PCS) validation suite. Each test includes:
 
 - **Property Validated:** What architectural property is being tested
 - **Test Purpose:** Why this test exists

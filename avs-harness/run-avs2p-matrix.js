@@ -3,7 +3,7 @@
 /**
  * AVS-2P Full Matrix Runner
  * 
- * Runs 5×3 matrix for Claude and Llama:
+ * Runs 5×3 matrix for Claude Sonnet 4.6 (Anthropic) and GPT-OSS-20b (Groq):
  * - 5 runs × PCS-ON (P1, P2)
  * - 5 runs × PCS-OFF (P3a, P3b)
  * - 5 runs × Paste (P3a, P3b)
