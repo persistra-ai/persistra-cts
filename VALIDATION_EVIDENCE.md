@@ -78,7 +78,7 @@ For architectural scope, see [IMPLEMENTATION_SCOPE.md](IMPLEMENTATION_SCOPE.md).
 - PCS-ON: Retrieves decision
 - PCS-OFF: Fails (proves substrate requirement)
 
-**Models:** Mock, Claude 3 Haiku
+**Models:** Mock; Claude Sonnet 4.6 (re-validated 2026-10-26, 8/8 passing; original evaluation: Claude 3 Haiku)
 
 ---
 
@@ -87,7 +87,7 @@ For architectural scope, see [IMPLEMENTATION_SCOPE.md](IMPLEMENTATION_SCOPE.md).
 **Claim:** Cognitive continuity persists across live engine boundary
 
 **Results:** 9/9 assertions passing
-- Model A (Claude 3 Haiku) → Simulated outage → Model B (Llama 3.1 8B)
+- Model A (Claude Sonnet 4.6) → Simulated outage → Model B (GPT-OSS-20B via Groq)
 - Model B receives zero context, continuity via substrate only
 - Runtime detects and records model transition
 
@@ -110,6 +110,7 @@ For architectural scope, see [IMPLEMENTATION_SCOPE.md](IMPLEMENTATION_SCOPE.md).
 **Models:**
 - Original evaluation: Claude 3 Haiku (Anthropic) → Llama 3.1 8B (Groq)
 - Reproduced 2026-10-02: Claude Sonnet 4.6 (Anthropic) → GPT-OSS-20b (Groq), substituted after Groq retired Llama 3.1 8B on 2026-08-16. Run `evs4-runtime-1790953977832` at `main @ feb3d90f`, 13/13 passing.
+- Re-validated 2026-10-26: Claude Sonnet 4.6 (Anthropic) → GPT-OSS-20b (Groq). Run `evs4-runtime-1793031348060`, 13/13 passing.
 
 **Evidence:** `retrieval_evidence.retrieved`, `retrieval_evidence.method`, `retrieval_evidence.trigger`, `enforcement_decision.emitted`, `boundaryEnforced`
 
@@ -126,7 +127,7 @@ For architectural scope, see [IMPLEMENTATION_SCOPE.md](IMPLEMENTATION_SCOPE.md).
 
 **Clarification:** Substrate determinism proven via hash equivalence, not model output determinism
 
-**Models:** Mock, Claude 3 Haiku
+**Models:** Mock; Claude Sonnet 4.6 (re-validated 2026-10-26, 4/4 passing; original evaluation: Claude 3 Haiku)
 
 ---
 
@@ -139,7 +140,7 @@ For architectural scope, see [IMPLEMENTATION_SCOPE.md](IMPLEMENTATION_SCOPE.md).
 - Session 2: Prompt = `"continue"` (no state)
 - Substrate-mediated retrieval, no prompt injection
 
-**Models:** Claude 3 Haiku
+**Models:** Claude Sonnet 4.6 (re-validated 2026-10-26, 9/9 passing; original evaluation: Claude 3 Haiku)
 
 ---
 
@@ -560,8 +561,8 @@ All primitives frozen at **Contract Version 1.0.0**:
 **Models tested:**
 - Claude 3 Haiku (Anthropic) — original evaluation
 - Llama 3.1 8B (Groq) — original evaluation; retired by Groq 2026-08-16
-- Claude Sonnet 4.6 (Anthropic) — 2026-10-02 reproduction
-- GPT-OSS-20b (Groq) — 2026-10-02 reproduction
+- Claude Sonnet 4.6 (Anthropic) — 2026-10-02 reproduction; 2026-10-26 re-validation (EVS-2, EVS-4, EVS-5, EVS-6)
+- GPT-OSS-20b (Groq) — 2026-10-02 reproduction; 2026-10-26 re-validation (EVS-4)
 - Mock (deterministic test doubles)
 
 **Cross-model scenarios:**

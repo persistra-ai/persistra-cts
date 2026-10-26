@@ -37,7 +37,7 @@
  * 
  * Usage:
  *   node evs5-deterministic-reproduction.js --provider mock
- *   node evs5-deterministic-reproduction.js --provider anthropic --model claude-3-haiku-20240307
+ *   node evs5-deterministic-reproduction.js --provider anthropic --model claude-sonnet-4-6
  */
 
 const fs = require("fs");

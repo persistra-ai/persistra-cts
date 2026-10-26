@@ -116,7 +116,7 @@ Cross-model cognitive continuity
 Validate that cognitive state persists across live engine boundary when frontier model is replaced with edge model mid-workflow
 
 ### Test Design
-9 assertions across model transition: Model A (Claude 3 Haiku) → Simulated outage → Model B (Llama 3.1 8B). Validates prompt purity (A1), model transition detection with source/target tracking (A2, A2b, A2c, A2d), retrieval evidence (A3, A4), state injection absence (A5), and enforcement continuity (A6). Model B receives zero context injection.
+9 assertions across model transition: Model A (Claude Sonnet 4.6) → Simulated outage → Model B (GPT-OSS-20B via Groq). Validates prompt purity (A1), model transition detection with source/target tracking (A2, A2b, A2c, A2d), retrieval evidence (A3, A4), state injection absence (A5), and enforcement continuity (A6). Model B receives zero context injection.
 
 ### Key Evidence
 - `continuityEvent.confirmed`
@@ -150,7 +150,7 @@ Cross-model continuity with structural equivalence
 Validate that substrate continuity persists across model provider boundary (Anthropic → Groq) with deterministic structural properties
 
 ### Test Design
-13 assertions across 3 categories: (1) PCS-ON basic continuity (A1-A7: 7 assertions), (2) Structural equivalence validation (SE1-SE4: 4 assertions), (3) PCS-OFF control (N1-N2: 2 assertions). Session 1 with Claude 3 Haiku, Session 2 with Llama 3.1 8B via Groq, pure prompt ("continue") with zero state injection.
+13 assertions across 3 categories: (1) PCS-ON basic continuity (A1-A7: 7 assertions), (2) Structural equivalence validation (SE1-SE4: 4 assertions), (3) PCS-OFF control (N1-N2: 2 assertions). Session 1 with Claude Sonnet 4.6, Session 2 with GPT-OSS-20B via Groq, pure prompt ("continue") with zero state injection.
 
 ### Key Evidence
 - `retrieval_evidence.retrieved`
@@ -544,7 +544,7 @@ Paste condition diagnostic (negative evidence)
 Isolate the enforcement boundary between information access and cognitive authority by demonstrating that context presence alone does not produce structural enforcement
 
 ### Test Design
-60 assertions across 30 runs in three-phase controlled diagnostic: (1) PCS-ON with state creation and cryptographic nonce (P1, P2: 10 runs, 20 assertions), (2) PCS-OFF substrate-inactive control (P3a, P3b: 10 runs, 20 assertions), (3) PASTE injection into fresh session with explicit authoritative framing (P3a, P3b: 10 runs, 20 assertions). Matrix: 2 models (Claude Sonnet 3.5, Llama 3.1 8B) × 3 conditions × 5 runs/condition = 30 runs. Critical assertion: P3a must be 0/20 failures (no policy traces when substrate inactive).
+60 assertions across 30 runs in three-phase controlled diagnostic: (1) PCS-ON with state creation and cryptographic nonce (P1, P2: 10 runs, 20 assertions), (2) PCS-OFF substrate-inactive control (P3a, P3b: 10 runs, 20 assertions), (3) PASTE injection into fresh session with explicit authoritative framing (P3a, P3b: 10 runs, 20 assertions). Matrix: 2 models (Claude Sonnet 4.6, GPT-OSS-20B) × 3 conditions × 5 runs/condition = 30 runs. Critical assertion: P3a must be 0/20 failures (no policy traces when substrate inactive).
 
 ### Key Evidence
 - **PCS-ON:** 100% policy enforcement (P2: policy_check.decision=DENY)

@@ -296,14 +296,14 @@ async function createAnthropicModel() {
   
   return async function anthropicModelFn(prompt) {
     const response = await anthropic.messages.create({
-      model: 'claude-3-haiku-20240307',
+      model: 'claude-sonnet-4-6',
       max_tokens: 100,
       messages: [{ role: 'user', content: prompt }]
     });
     
     const output = new String(response.content[0].text);
     output.provider = 'anthropic';
-    output.model = 'claude-3-haiku-20240307';
+    output.model = 'claude-sonnet-4-6';
     output.mode = 'live';
     return output;
   };
@@ -666,7 +666,7 @@ async function runRealSmoke() {
     return {
       passed: true,
       provider: 'anthropic',
-      model: 'claude-3-haiku-20240307'
+      model: 'claude-sonnet-4-6'
     };
   } catch (err) {
     console.error('\n❌ Real-Model Smoke FAILED:', err.message);

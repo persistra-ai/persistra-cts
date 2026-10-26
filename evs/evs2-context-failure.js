@@ -39,7 +39,7 @@
  * 
  * Usage:
  *   node evs2-context-failure.js --provider mock
- *   node evs2-context-failure.js --provider anthropic --model claude-3-haiku-20240307
+ *   node evs2-context-failure.js --provider anthropic --model claude-sonnet-4-6
  */
 
 const fs = require("fs");

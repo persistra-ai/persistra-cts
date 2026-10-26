@@ -18,8 +18,8 @@
  *  Control:   Edge model with PCS-OFF (no retrieval expected)
  *
  * Usage:
- *   node evs4-runtime-pure.js --session1-provider anthropic --session1-model claude-3-haiku-20240307 \
- *                             --session2-provider mock --session2-model llama-8b
+ *   node evs4-runtime-pure.js --session1-provider anthropic --session1-model claude-sonnet-4-6 \
+ *                             --session2-provider openai --session2-model openai/gpt-oss-20b
  */
 
 const fs = require("fs");
