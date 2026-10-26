@@ -434,7 +434,7 @@ cts-runtime/cts-l4-federation.js
 **What is available for independent evaluation:**
 1. ✅ One-command test execution (`./run_all.sh --mode audit`)
 2. ✅ 10 core documents (~250 pages, frozen at v1.0.0)
-3. ✅ 25 core tests (252 assertions) + optional AVS-2P (60 assertions) = 312 total
+3. ✅ 25 core tests (252 assertions) + optional AVS-2P (60 assertions) + standalone runtime tests (52 assertions) = 364 total
 4. ✅ Cryptographic verification (SHA256 manifests)
 5. ✅ Falsifiable claims (explicit falsification criteria)
 6. ✅ Honest scope boundaries (what we don't prove)

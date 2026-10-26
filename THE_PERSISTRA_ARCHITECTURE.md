@@ -251,7 +251,7 @@ At scale, PCS enables:
 
 **The cognitive control plane is the missing infrastructure layer for AI systems.**
 
-**And we have 26 tests (312 machine-verified assertions) proving the foundational assumption holds.**
+**And we have 31 tests (364 machine-verified assertions) proving the foundational assumption holds.**
 
 ---
 
@@ -486,7 +486,7 @@ The system becomes something closer to a **cognitive operating system**.
 
 # Part II: The Six Architectural Invariants
 
-All invariants are **frozen at Contract Version 1.0.0** and validated by 26 executable tests (312 machine-verified assertions).
+All invariants are **frozen at Contract Version 1.0.0** and validated by 31 executable tests (364 machine-verified assertions; 26 tests at the v1.0.0 freeze plus 5 post-freeze standalone runtime tests).
 
 ---
 
@@ -1416,7 +1416,7 @@ Each test validates a specific architectural claim:
 **Epistemic Integrity (Invariant #6):**
 - AVS-3A → Model invocation is gated
 
-**All 6 invariants validated. All 26 tests passing (312 machine-verified assertions).**
+**All 6 invariants validated. All 31 tests passing (364 machine-verified assertions).**
 
 ---
 
